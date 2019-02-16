@@ -26,7 +26,7 @@ function print_file_name(file_name)
    assert(lfs.attributes(file_name, 'mode') ~= nil)
    if lfs.attributes(file_name, 'mode') == 'directory' then
       return print_files_recursively(file_name)
-   else 
+   else
       return file_name
    end
 end
