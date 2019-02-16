@@ -1,3 +1,5 @@
 # JavaScript/TypeScript
 **/node_modules/
 
+# Haxe
+**/*.n

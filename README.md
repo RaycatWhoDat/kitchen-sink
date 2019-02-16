@@ -20,3 +20,8 @@ Checks `xrandr` for HDMI inputs. If they exist, it will present options to mirro
 **Common Lisp**: requires `sbcl` or an equivalent to run.
 
 Waits for user input and appends the text as an entry to a journal file.
+
+### numberPrinter.hx
+**Haxe**: requires `haxe`, `neko` to build and run.
+
+When run with the `--max` flag set to an safe positive integer, it will create a comprehension between 0 and `--max`, iterate over that comprehension, and print each number.

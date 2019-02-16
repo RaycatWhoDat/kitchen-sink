@@ -1,0 +1,6 @@
+-dce full
+-main NumberPrinterApp
+
+-neko numberPrinter.n
+
+-cmd neko numberPrinter.n --max 5
