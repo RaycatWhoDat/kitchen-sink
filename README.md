@@ -15,3 +15,8 @@ Traverses a given object and will return the value of the property. If the value
 **Tcl**: requires `wish` or an equivalent to run.
 
 Checks `xrandr` for HDMI inputs. If they exist, it will present options to mirror or extend the current display in a direction.
+
+### jrn.lisp
+**Common Lisp**: requires `sbcl` or an equivalent to run.
+
+Waits for user input and appends the text as an entry to a journal file.
