@@ -1,0 +1,5 @@
+-dce full
+-main SummaryCombinator
+-cp ./libs
+
+-x SummaryCombinator
