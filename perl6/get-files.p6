@@ -20,7 +20,7 @@ sub list_files($directory = './') {
         my $should_ignore = False;
         
         for @ignored_paths {
-            $should_ignore = $current_filename ~~ $_;
+            $should_ignore = $current_filename eq $_;
             last if $should_ignore;
         }
 
