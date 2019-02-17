@@ -1,7 +1,7 @@
 local lfs = require('lfs')
 local indent_width = 4
 local max_file_level = -1
-local ignored_paths = { '.', '..', '.git' };
+local ignored_paths = { '.', '..', '.git', 'node_modules' };
 
 function is_ignored_path(path_name)
    for _, ignored_path in pairs(ignored_paths) do
