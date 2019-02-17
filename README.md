@@ -25,3 +25,8 @@ Waits for user input and appends the text as an entry to a journal file.
 **Haxe**: requires `haxe`, `neko` to build and run.
 
 When run with the `--max` flag set to an safe positive integer, it will create a comprehension between 0 and `--max`, iterate over that comprehension, and print each number.
+
+### pipeline-operator.ml
+**OCaml**: requires `ocaml` to build and run.
+
+Runs a set of operations on an array comprehension of 0 and 30.
