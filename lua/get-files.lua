@@ -46,4 +46,4 @@ function print_files_recursively(directory_name)
    end
 end
 
-print_files_recursively('..')
+print_files_recursively()
