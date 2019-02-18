@@ -1,13 +1,18 @@
-(defvar *max-indent-width* 4)
-(defvar *file-level* 0)
-(defvar *ignored-paths* '("." ".." ".git" "node_modules"))
+(defvar *ignored-paths* '("./" "../" ".git/" "node_modules/"))
 
-(defun list-files (&optional (directory-path "./"))
-  "This will list files recursively, starting at the current directory."
-  (let ((files (uiop:directory-files directory-path))
-        (*file-level* (1+ *file-level*)))
-    (loop :for file :in files
-          :do (cond ((not (uiop:directory-pathname-p file))
-                     (format t "~A~:[~;.~A~]~%" (pathname-name file) (pathname-type file) (pathname-type file)))
-                    ((uiop:directory-pathname-p file)
-                     (format t "~A~%" (pathname-name file)))))))
+(labels ((print-file (directory-pathname)
+           (unless (some (lambda (ignored-path)
+                           ;; (print ignored-path)
+                           ;; (print (car (last (pathname-directory directory-pathname))))
+                           (unless (eq (car (last (pathname-directory directory-pathname))) :UP)
+                             (or (search ignored-path (car (last (pathname-directory directory-pathname))))
+                                 (eql ignored-path (car (last (pathname-directory directory-pathname))))))) *ignored-paths*)
+             (format t "~A~%" directory-pathname)
+             (let ((files (uiop:directory-files directory-pathname)))
+               (loop :for file :in files
+                     :do (format t "~A~A~:[~;.~A~]~%"
+                                 directory-pathname
+                                 (pathname-name file)
+                                 (pathname-type file)
+                                 (pathname-type file)))))))
+  (uiop:collect-sub*directories "../" t t #'print-file))
