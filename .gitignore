@@ -1,5 +1,8 @@
 # JavaScript/TypeScript
-**/node_modules/
+javascript/**/node_modules/
 
 # Haxe
-**/*.n
+haxe/**/*.n
+
+# Rust
+rust/**/target/
