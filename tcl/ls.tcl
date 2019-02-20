@@ -23,4 +23,4 @@ proc list_files directory {
     }
 }
 
-list_files "./"
+list_files $argv
