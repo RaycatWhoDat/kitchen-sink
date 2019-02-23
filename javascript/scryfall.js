@@ -14,6 +14,15 @@ if (!query.length) {
 
 https.get(`https://api.scryfall.com/cards/search?q=${query}`, response => {
     let data = '';
+
+    const printCard = ({ name, mana_cost, type_line, oracle_text, power, toughness }, otherCardFace) => {
+        console.log('%s %s', name, mana_cost || '');
+        if (otherCardFace) console.log('(This card transforms into %s.)', otherCardFace.name);
+        console.log(type_line);
+        console.log(oracle_text);
+        if (power != null || toughness != null) console.log('%s/%s', power, toughness);
+        console.log('\n');
+    };
     
     response.on('data', chunk => data += chunk);
     response.on('end', _ => {
@@ -22,13 +31,14 @@ https.get(`https://api.scryfall.com/cards/search?q=${query}`, response => {
         if (!results.length) console.log('No cards found.');
         
         results.forEach(card => {
-            const { name, mana_cost, type_line, oracle_text, power, toughness } = card;
+            const currentCardFaces = card.card_faces || [];
             
-            console.log('%s %s', name, mana_cost);
-            console.log(type_line);
-            console.log(oracle_text);
-            if (power != null || toughness != null) console.log('%s/%s', power, toughness);
-            console.log('\n');
+            currentCardFaces.forEach((cardFace, index, cardFaces) => {
+                const otherCardFace = cardFaces[Number(index === 0)];
+                printCard(cardFace, otherCardFace);
+            });
+
+            if (!currentCardFaces.length) printCard(card);
         });
     });
 }).on("error", error => {
