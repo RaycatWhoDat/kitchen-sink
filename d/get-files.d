@@ -18,7 +18,6 @@ string[] ignoredPaths = ["/.git", "/node_modules", "/target"];
 string generateIndent(int traversalLevel = 0) pure {
   string indentation = "";
   foreach (index; 0 .. IndentationLevel.TWO_SPACES * traversalLevel) indentation ~= " ";
-
   return indentation;
 }
 
