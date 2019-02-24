@@ -1,30 +1,22 @@
-ignoredPaths = Set([".", "..", ".git", "node_modules"])
-indentationWidth = 2
-fileLevel = -1
+ignoredPaths = Set([".", "..", ".git", "node_modules", "target"])
+indentationWidth = 2;
 
-function generateIndent(fileLevel = 0)
+function generateIndent(traversalLevel = 0)
     indentation = "";
-    let index = 0
-        while index < indentationWidth * fileLevel
-            indentation *= " "
-            index += 1
-        end
-    end
+    for index in 0:(indentationWidth * traversalLevel) indentation *= " " end
     return indentation
 end
 
-function listFiles(directoryPath = pwd())
-    global fileLevel += 1
+function listFiles(directoryPath, traversalLevel = 0)
     for entry in readdir(directoryPath)
         if in(entry, ignoredPaths) continue end
-        println(generateIndent(fileLevel) * "$entry")
-        if isdir(abspath("$directoryPath/$entry")) cd(listFiles, abspath("$directoryPath/$entry")) end
+        println(generateIndent(traversalLevel) * "$entry")
+        if isdir(abspath("$directoryPath/$entry"))
+            cd(abspath("$directoryPath/$entry"))
+            listFiles(pwd(), traversalLevel + 1)
+        end
     end
-    global fileLevel -= 1
+    cd(abspath("$directoryPath"))
 end
 
-if length(ARGS) > 0
-    listFiles(popfirst!(ARGS))
-else
-    listFiles()
-end
+length(ARGS) > 0 ? listFiles(popfirst!(ARGS)) : listFiles(pwd())
