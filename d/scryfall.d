@@ -20,6 +20,22 @@ string accessFieldValue(JSONValue card, string fieldName) {
   }
 }
 
+void printCard(JSONValue cardFace, JSONValue otherCardFace = JSONValue(null)) {
+    string name = accessFieldValue(cardFace, "name");
+    string manaCost = accessFieldValue(cardFace, "mana_cost");
+    string typeLine = accessFieldValue(cardFace, "type_line");
+    string oracleText = accessFieldValue(cardFace, "oracle_text");
+    string power = accessFieldValue(cardFace, "power");
+    string toughness = accessFieldValue(cardFace, "toughness");
+    
+    writeln(name ~ " " ~ manaCost);
+    writeln(typeLine);
+    if (!otherCardFace.isNull) writeln("(This card transforms into " ~ otherCardFace["name"].str ~ ".)");
+    if (oracleText.length) writeln(oracleText);
+    if (power.length || toughness.length) writeln((power != "" ? power : "-") ~ "/" ~ (toughness != "" ? toughness : "-"));
+    writeln();
+}
+
 void cardSearch(string query = "") {
   if (!query.length) return writeln(INFO_NO_CARDS_FOUND);
   writeln(INFO_SEARCHING_FOR ~ query);
@@ -35,29 +51,13 @@ void cardSearch(string query = "") {
   }
 
   foreach (card; searchResults) {
-    JSONValue[] cardFaces;
-
     try {
-      cardFaces = card["card_faces"].array;
+      JSONValue cardFaces = card["card_faces"].array;
+      printCard(cardFaces[0], cardFaces[1]);
+      printCard(cardFaces[1], cardFaces[0]);
     } catch (JSONException exception) {
-      cardFaces = [];
+      printCard(card);
     }
-
-    JSONValue _card = cardFaces.length ? cardFaces[0] : card;
-    
-    string name = accessFieldValue(_card, "name");
-    string manaCost = accessFieldValue(_card, "mana_cost");
-    string typeLine = accessFieldValue(_card, "type_line");
-    string oracleText = accessFieldValue(_card, "oracle_text");
-    string power = accessFieldValue(_card, "power");
-    string toughness = accessFieldValue(_card, "toughness");
-    
-    writeln(name ~ " " ~ manaCost);
-    writeln(typeLine);
-    if (cardFaces.length) writeln("(This card transforms into " ~ cardFaces[1]["name"].str ~ ".)");
-    if (oracleText.length) writeln(oracleText);
-    if (power.length || toughness.length) writeln((power != "" ? power : "-") ~ "/" ~ (toughness != "" ? toughness : "-"));
-    writeln();
   }
 }
 
