@@ -28,11 +28,11 @@ void printCard(JSONValue cardFace, JSONValue otherCardFace = JSONValue(null)) {
     string power = accessFieldValue(cardFace, "power");
     string toughness = accessFieldValue(cardFace, "toughness");
     
-    writeln(name ~ " " ~ manaCost);
+    writeln(name, " ", manaCost);
     writeln(typeLine);
-    if (!otherCardFace.isNull) writeln("(This card transforms into " ~ otherCardFace["name"].str ~ ".)");
+    if (!otherCardFace.isNull) writeln("(This card transforms into ", otherCardFace["name"].str, ".)");
     if (oracleText.length) writeln(oracleText);
-    if (power.length || toughness.length) writeln((power != "" ? power : "-") ~ "/" ~ (toughness != "" ? toughness : "-"));
+    if (power.length || toughness.length) writeln(power != "" ? power : "-", "/", toughness != "" ? toughness : "-");
     writeln();
 }
 
