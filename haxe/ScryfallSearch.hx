@@ -1,9 +1,10 @@
 using haxe.Http;
+using Lambda;
 
 class ScryfallSearch {
   static function main() {
     var query: String = StringTools
-                        .urlEncode("sne attack")//Sys.args().join(" "))
+                        .urlEncode(Sys.args().join(" "))
                         .split("%20")
                         .join("+");
 
@@ -11,32 +12,35 @@ class ScryfallSearch {
       trace("No cards found.");
       return;
     }
-    
-    // var results: Array<Dynamic> = haxe.Json.parse(Http.requestUrl("https://api.scryfall.com/cards/search?q=" + query)).data;
 
-    var results: Array<Dynamic> = haxe.Json.parse(Http.requestUrl("https://jsonplaceholder.typicode.com/posts"));
+    var searchRequest = Http.requestUrl("https://api.scryfall.com/cards/search?q=" + query);
+    var parsedResults: Array<Dynamic> = haxe.Json.parse(searchRequest).data;
 
-    if (results.length <= 0) {
-      // trace("No cards found.");
+    if (parsedResults.length <= 0) {
+      trace("No cards found.");
       return;
     }
-    
-    // for (card in results) {
-    //   Sys.println(card.name + " " + card.mana_cost);
-    //   Sys.println(card.type_line);
-    //   Sys.println(card.oracle_text);
-      
-    //   if (card.power != null || card.toughness != null) {
-    //     Sys.println(card.power + "/" + card.toughness);
-    //   }
-    // }
 
-    for (post in results) {
-      Sys.println(post.id + " | " + post.userId);
+    function printCard(cardFace, ?otherCardFace) {
+      Sys.print(cardFace.name + " ");
+      cardFace.mana_cost != null ? Sys.println(cardFace.mana_cost) : Sys.println("");
+      if (otherCardFace != null) Sys.println("(This card transforms into " + otherCardFace.name + ".)");
+      Sys.println(cardFace.type_line);
+      Sys.println(cardFace.oracle_text);
+      
+      if (cardFace.power != null || cardFace.toughness != null) {
+        Sys.println(cardFace.power + "/" + cardFace.toughness);
+      }
       Sys.println("");
-      Sys.println(post.title);
-      Sys.println(post.body);
-      Sys.println("");
+    }
+    
+    for (card in parsedResults) {
+      if (card.card_faces != null && card.card_faces.length > 1) {
+        printCard(card.card_faces[0], card.card_faces[1]);
+        printCard(card.card_faces[1], card.card_faces[0]);
+      } else {
+        printCard(card);
+      }
     }
   }
 }
