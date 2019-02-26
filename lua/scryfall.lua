@@ -1,4 +1,3 @@
-local inspect = require("inspect")
 local http_request = require("http.request")
 local JSON = require("JSON")
 
@@ -41,7 +40,6 @@ function print_card(card_face, other_card_face)
    
    io.write("\n")
 end
-
 
 if #arg <= 0 then no_cards_found() end
 local query = url_encode(arg[1])
