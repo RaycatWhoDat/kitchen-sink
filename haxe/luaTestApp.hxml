@@ -1,0 +1,4 @@
+-main LuaTestApp
+-lua luaTestApp.lua
+-D luajit
+-cmd "luajit luaTestApp.lua" 

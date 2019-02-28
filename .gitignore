@@ -3,6 +3,7 @@ javascript/**/node_modules/
 
 # Haxe
 haxe/**/*.n
+haxe/**/*.lua
 
 # Rust
 rust/**/target/
