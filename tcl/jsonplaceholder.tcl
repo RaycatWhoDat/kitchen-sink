@@ -15,5 +15,5 @@ dict for {key post} $posts {
 }
 
 # Local Variables:
-# compile-command: "tclsh jsonplaceholder.tcl"
+# compile-command: "./tclkit jsonplaceholder.tcl"
 # End:

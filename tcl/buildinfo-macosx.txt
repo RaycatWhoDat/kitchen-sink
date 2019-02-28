@@ -1,0 +1,1 @@
+Tcl 8.6.9, KitCreator 0.11.0, Platform macosx-amd64, Unthreaded, Packages: itcl, mk4tcl, tcllib, tclx, tdom, tk, tls
