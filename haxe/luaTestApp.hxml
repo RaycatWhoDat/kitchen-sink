@@ -1,4 +1,6 @@
+-cp libs
+-cp love
 -main LuaTestApp
--lua luaTestApp.lua
+-lua testGame/main.lua
 -D luajit
--cmd "luajit luaTestApp.lua" 
+-cmd "love testGame" 
