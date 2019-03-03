@@ -8,3 +8,6 @@ haxe/love/
 
 # Rust
 rust/**/target/
+
+# Emacs Lisp
+emacs-lisp/funda-haxe-mode.el
