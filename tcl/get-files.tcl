@@ -2,9 +2,12 @@
 # the next line restarts using tclsh \
     exec tclsh "$0" ${1+"$@"}
 
+set indentation_level 2
+
 proc generate_indent { traversal_level } {
+    global indentation_level
     set indentation ""
-    for {set index 0} {$index < [expr $traversal_level * 2]} {incr index} {
+    for {set index 0} {$index < [expr $traversal_level * $indentation_level]} {incr index} {
         append indentation " "
     }
     return $indentation
