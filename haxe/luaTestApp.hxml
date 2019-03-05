@@ -1,6 +1,0 @@
--cp libs
--cp love
--main LuaTestApp
--lua testGame/main.lua
--D luajit
--cmd "love testGame" 

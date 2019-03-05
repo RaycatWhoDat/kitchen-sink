@@ -1,0 +1,8 @@
+-debug
+-dce full
+-cp src/
+-cp src/test-game
+-D luajit
+-main Game
+-lua dist/test-game/main.lua
+-cmd "love dist/test-game"

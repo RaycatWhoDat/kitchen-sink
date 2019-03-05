@@ -1,6 +1,5 @@
 -dce full
+-cp src/number-printer
 -main NumberPrinterApp
-
--neko numberPrinter.n
-
--cmd neko numberPrinter.n --max 5
+-neko dist/numberPrinter.n
+-cmd neko dist/numberPrinter.n --max 5

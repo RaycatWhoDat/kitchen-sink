@@ -1,5 +1,5 @@
 -dce full
+-cp src/libs
+-cp src/summary-combinator
 -main SummaryCombinator
--cp ./libs
-
--x SummaryCombinator
+-x dist/SummaryCombinator

@@ -16,7 +16,7 @@ proc generate_indent { traversal_level } {
 proc list_files { directory traversal_level } {
     set excluded_paths { ".git" "node_modules" "target" }
 
-    if { $directory == "" } { set directory "./" }
+    if { $directory == "" } { set directory "." }
 
     foreach file [lsort -increasing [glob -nocomplain -directory $directory *]] {
         set should_be_excluded 0
