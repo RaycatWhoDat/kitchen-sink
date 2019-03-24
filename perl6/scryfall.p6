@@ -1,5 +1,5 @@
 use WWW;
-use URI::Encode;
+use URI::Escape;
 
 my $scryfall-url = 'https://api.scryfall.com/cards/search?q=';
 
@@ -12,7 +12,7 @@ sub print-card(%card-face, %other-card-face?) {
 }
 
 sub MAIN(*@query) {
-    my %search-results = jget $scryfall-url ~ uri_encode(@query.join(' '));
+    my %search-results = jget $scryfall-url ~ uri-escape(@query.join(' '));
     CATCH {
         default { put "No cards found."; }
     }
