@@ -1,15 +1,15 @@
-my Int $max_indent_level = 2;
-my Str @ignored_paths = <. .. .git node_modules target love test_app zef>;
+my Int $max-indent-level = 2;
+my Str @ignored-paths = <. .. .git node_modules target love test_app zef>;
 
-sub list_files(IO() $directory, Int $file_level = 0, &callback = { .say }) {
-    for $directory.dir(test => none @ignored_paths) -> $current_file {
-	&callback($current_file.basename.indent($max_indent_level * $file_level));
-	list_files($current_file.path, $file_level + 1) if $current_file.d;
+sub list-files(IO() $directory, Int $file-level = 0, &callback = { .put }) {
+    for $directory.dir(test => none @ignored-paths) -> $current-file {
+	&callback($current-file.basename.indent($max-indent-level * $file-level));
+	list-files($current-file.path, $file-level + 1) if $current-file.d;
     }
 }
 
 sub MAIN(IO() $directory = './') {
-    list_files($directory);
+    list-files($directory);
 }
 
 # Local Variables:
