@@ -17,7 +17,7 @@ sub MAIN(*@query) {
         default { say "No cards found."; }
     }
 
-    return if ! %search_results;
+    return if not %search_results;
     
     for %search_results{'data'}.flat -> %card {
         print_card(%card{'card_faces'}[0], %card{'card_faces'}[1]) if %card{'card_faces'};
