@@ -1,17 +1,24 @@
--*- compile-command: "./red test.red"; eval: (setq tab-width 2)  -*-
+-*- mode: red; compile-command: "./red test-script.red"; eval: (setq tab-width 2)  -*-
 
 Red [
   title:    "A minimal Red test script"
   author:   "Ray Perry"
-  needs:    view
 ]
 
 ; This is a test comment.
 
+comment {
+  This is a test of the dumb version of this mode. This takes
+  any word that's in Red and highlights it. It's not the best but at
+  least it's something.
+}
+
 prefix: "Hello,"
 message: "world."
 
-another-test: {This is another test.}
+another-test: {
+  This is another test.
+}
 
 hello-world: function [
   "This repeats 'Hello, world.' ITERATIONS times."
@@ -25,10 +32,3 @@ hello-world: function [
 ]
 
 call/console "ls"
-
-view [
-  below
-  base
-  button
-  field
-]
