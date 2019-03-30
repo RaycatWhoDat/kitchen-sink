@@ -11,3 +11,6 @@ rust/**/target/
 
 # Emacs Lisp
 emacs-lisp/funda-haxe-mode.el
+
+# Red
+red/red
