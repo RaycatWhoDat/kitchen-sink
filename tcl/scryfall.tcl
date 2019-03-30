@@ -44,7 +44,7 @@ proc printCard {cardFace {otherCardFace ""}} {
     puts [accessCardValue $cardFace oracle_text]\n
 }
 
-if {[expr $argc < 2]} noCardsFound
+if {[expr $argc < 1]} noCardsFound
 
 set query [urlEncode $argv]
 
