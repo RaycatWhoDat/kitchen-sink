@@ -20,6 +20,3 @@ find(\&list_files, $directory);
 # Local Variables:
 # compile-command: "perl ./get-files.pl .."
 # End:
-
-    
-    
