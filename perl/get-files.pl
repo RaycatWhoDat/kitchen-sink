@@ -1,8 +1,4 @@
-# Let's just guess at stuff until it works.
-
-use strict;
-use warnings;
-
+use strict; use warnings;
 use File::Find "find";
 
 my $max_indent_level = 2;
@@ -20,7 +16,6 @@ sub list_files {
 }
 
 find(\&list_files, $directory);
-
 
 # Local Variables:
 # compile-command: "perl ./get-files.pl .."
