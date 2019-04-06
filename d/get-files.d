@@ -2,32 +2,30 @@
 
 module getfiles;
 
-import std.array: replace;
+import std.array: replace, join;
 import std.file: dirEntries, getcwd, SpanMode;
 import std.string: indexOf;
 import std.stdio: writeln;
 import std.getopt;
+import std.range: generate, take, array;
+import std.regex: regex, matchFirst;
 
 enum IndentationLevel {
   TWO_SPACES = 2,
   FOUR_SPACES = 4
 }
 
-string[] ignoredPaths = ["/.git", "/node_modules", "/target"];
+auto ignoredPaths = regex("/(.git|node_modules|target|love)");
 
 string generateIndent(int traversalLevel = 0) pure {
-  string indentation = "";
-  foreach (index; 0 .. IndentationLevel.TWO_SPACES * traversalLevel) indentation ~= " ";
-  return indentation;
+  return generate(() => " ").take(IndentationLevel.TWO_SPACES * traversalLevel).array().join("");
 }
 
 void printFiles(string directoryPath, int traversalLevel = 0) {
 iterateOverFiles:
   foreach (entry; dirEntries(directoryPath, SpanMode.shallow)) {
-    foreach (pathToIgnore; ignoredPaths) {
-      if (indexOf(entry.name, pathToIgnore) >= 0) break iterateOverFiles;
-    }
-    writeln(generateIndent(traversalLevel), entry.name.replace(directoryPath, ""), entry.isDir ? "/" : "");
+    if (!directoryPath.matchFirst(ignoredPaths).empty) break iterateOverFiles;
+    writeln(traversalLevel.generateIndent(), entry.name.replace(directoryPath, ""), entry.isDir ? "/" : "");
     if (entry.isDir) printFiles(entry.name ~ "/", traversalLevel + 1);
   }
 }
@@ -35,7 +33,7 @@ iterateOverFiles:
 void main(string[] args) {
   string directoryPath = getcwd();
   getopt(args, "directory", &directoryPath);
-  printFiles(directoryPath);
+  directoryPath.printFiles();
 }
 
 // Local Variables:
