@@ -2,30 +2,26 @@
 
 module getfiles;
 
-import std.array: replace, join;
+import std.algorithm: canFind;
 import std.file: dirEntries, getcwd, SpanMode;
-import std.string: indexOf;
+import std.string: replace, join;
 import std.stdio: writeln;
-import std.getopt;
-import std.range: generate, take, array;
-import std.regex: regex, matchFirst;
+import std.getopt: getopt;
+import std.range: repeat;
 
-enum IndentationLevel {
-  TWO_SPACES = 2,
-  FOUR_SPACES = 4
-}
+const string INDENTATION_CHARACTER = " ";
+const int TWO_SPACES = 2, FOUR_SPACES = 4;
 
-auto ignoredPaths = regex("/(.git|node_modules|target|love)");
-
-string generateIndent(int traversalLevel = 0) pure {
-  return generate(() => " ").take(IndentationLevel.TWO_SPACES * traversalLevel).array().join("");
-}
+string[] ignoredPaths = [".git", "node_modules", "target", "love"];
 
 void printFiles(string directoryPath, int traversalLevel = 0) {
-iterateOverFiles:
   foreach (entry; dirEntries(directoryPath, SpanMode.shallow)) {
-    if (!directoryPath.matchFirst(ignoredPaths).empty) break iterateOverFiles;
-    writeln(traversalLevel.generateIndent(), entry.name.replace(directoryPath, ""), entry.isDir ? "/" : "");
+    string currentEntry = entry.name.replace(directoryPath, "");
+    if (ignoredPaths.canFind(currentEntry.replace("/", ""))) continue;
+    INDENTATION_CHARACTER
+        .repeat(TWO_SPACES * traversalLevel)
+        .join("")
+        .writeln(currentEntry);
     if (entry.isDir) printFiles(entry.name ~ "/", traversalLevel + 1);
   }
 }
