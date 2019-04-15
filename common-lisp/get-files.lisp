@@ -1,4 +1,4 @@
-(let ((ignored-paths '("./" "../" ".git/" "node_modules/")))
+(let ((ignored-paths '("./" "../" ".git/" "node_modules/" "love/" "target/")))
   (labels ((print-file (directory-pathname)
              (if (map nil (lambda (ignored-path)
                              (let ((current-directory-name (car (last (pathname-directory directory-pathname)))))
