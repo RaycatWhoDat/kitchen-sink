@@ -5,7 +5,7 @@ module scryfall;
 import std.stdio: write, writeln;
 import std.net.curl: get, HTTPStatusException;
 import std.json: parseJSON, JSONValue, JSONException;
-import std.getopt;
+import std.getopt: getopt;
 import std.uri: encode;
 
 const INFO_NO_CARDS_FOUND = "No cards found.";
