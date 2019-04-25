@@ -3,15 +3,15 @@ use std::fs::read_dir;
 use std::path::Path;
 
 fn print_files(directory: &Path) -> Result<()> {
-    if directory.is_dir() {
-        for entry in read_dir(directory)? {
-            let entry = entry?;
-            println!("{:?}", entry.path());
-        }
+    for entry in read_dir(directory)? {
+        let entry = entry?;
+        println!("{:?}", entry.path());
+        // let entryPath = Path::new(&entry);
+        // if entryPath.is_dir() { print_files(entryPath); }
     }
     Ok(())
 }
 
 fn main() {
-    print_files(Path::new("../"));
+    assert!(print_files(Path::new("../")).is_ok());
 }
