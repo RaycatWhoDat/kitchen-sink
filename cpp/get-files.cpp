@@ -5,7 +5,7 @@ namespace fs = std::filesystem;
 
 int main() {
   std::string const DIRECTORY_PATH = "..";
-  std::string ignored_paths[4] = {".git", "love", "target", "node_modules"};
+  std::string ignored_paths[] = {".git", "love", "target", "node_modules"};
   
   for (auto& entry : fs::recursive_directory_iterator(DIRECTORY_PATH)) {
     bool should_skip = false;
