@@ -1,0 +1,17 @@
+{
+    "authors": [
+	"Ray Perry"
+    ],
+    "copyright": "Copyright © 2019, Ray Perry",
+    "dependencies": {
+	"bindbc-sdl": "~>0.8.0"
+    },
+    "versions": [
+        "BindSDL_Image",
+        "BindSDL_Mixer",
+        "BindSDL_TTF"
+    ],
+    "description": "A test game.",
+    "license": "MIT",
+    "name": "test-game"
+}
