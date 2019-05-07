@@ -2,7 +2,7 @@
 
 Red []
 
-ignored-paths: [".git/" "node_modules/" "target/" "love/" ".dub/"]
+ignored-paths: [".git/" "node_modules/" "target/" "love/" ".dub/" "dist/"]
 
 get-files: function [
   "This takes a directory path."

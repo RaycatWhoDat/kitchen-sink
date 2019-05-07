@@ -8,7 +8,7 @@ import std.range: array;
 import std.string: indexOf;
 import std.getopt: getopt;
 
-class Todo {
+struct Todo {
   DirEntry filePath;
   size_t lineNumber;
   string todoText;
@@ -32,7 +32,7 @@ void main(string[] args) {
     foreach (lineNumber, line; lines) {
       size_t foundIndex = line.indexOf("TODO");
       if (foundIndex == -1) continue;
-      allTodos ~= new Todo(fileEntry, lineNumber + 1, line[foundIndex .. $]);
+      allTodos ~= Todo(fileEntry, lineNumber + 1, line[foundIndex .. $]);
       writeln(fileEntry ~ " | " ~ line[foundIndex .. $]);
     }
   }
