@@ -43,7 +43,7 @@ void update() {
   SDL_Texture *bitmapTexture = SDL_CreateTextureFromSurface(renderer, SDL_LoadBMP("./image.bmp"));
 
   bool isRunning = true;
-  
+
   while (isRunning) {
     SDL_Event currentEvent;
     if (SDL_PollEvent(&currentEvent)) {
