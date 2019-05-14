@@ -3,17 +3,9 @@ import std.string;
 
 import bindbc.sdl;
 
-import bindbc.sdl.image;
-import bindbc.sdl.mixer;
-import bindbc.sdl.ttf;
-
 void init() {
-  loadSDL();
+  SDL_Init(SDL_INIT_VIDEO);
   
-  loadSDLImage();
-  loadSDLMixer();
-  loadSDLTTF();
-
   auto window = SDL_CreateWindow(
       toStringz("This is a test."),
       SDL_WINDOWPOS_UNDEFINED,

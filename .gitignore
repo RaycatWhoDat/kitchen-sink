@@ -14,3 +14,6 @@ emacs-lisp/funda-haxe-mode.el
 
 # Red
 red/red
+
+# Lua
+lua/libs

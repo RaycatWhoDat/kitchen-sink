@@ -7,9 +7,16 @@
 	"bindbc-sdl": "~>0.8.0"
     },
     "versions": [
+        "BindSDL_Static",
         "BindSDL_Image",
         "BindSDL_Mixer",
         "BindSDL_TTF"
+    ],
+    "subConfigurations": {
+        "bindbc-sdl": "staticBC"
+    },
+    "libs": [
+        "SDL2"
     ],
     "description": "A test game.",
     "license": "MIT",
