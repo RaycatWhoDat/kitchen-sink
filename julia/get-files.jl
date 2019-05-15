@@ -1,22 +1,19 @@
-ignoredPaths = Set([".", "..", ".git", "node_modules", "target"])
 indentationWidth = 2;
+ignoredPaths = [".", "..", ".git", "node_modules", "target"];
 
-function generateIndent(traversalLevel = 0)
-    indentation = "";
-    for index in 0:(indentationWidth * traversalLevel) indentation *= " " end
-    return indentation
-end
-
-function listFiles(directoryPath, traversalLevel = 0)
+function doFiles(directoryPath = pwd(), traversalLevel = 0, callback = println)
     for entry in readdir(directoryPath)
-        if in(entry, ignoredPaths) continue end
-        println(generateIndent(traversalLevel) * "$entry")
-        if isdir(abspath("$directoryPath/$entry"))
+        callback(' '^(indentationWidth * traversalLevel) * "$entry")
+        if isdir(abspath("$directoryPath/$entry")) && !in(entry, ignoredPaths)
             cd(abspath("$directoryPath/$entry"))
-            listFiles(pwd(), traversalLevel + 1)
+            doFiles(pwd(), traversalLevel + 1, callback)
         end
     end
     cd(abspath("$directoryPath"))
 end
 
-length(ARGS) > 0 ? listFiles(popfirst!(ARGS)) : listFiles(pwd())
+length(ARGS) > 0 ? doFiles(popfirst!(ARGS)) : doFiles(pwd())
+
+# Local Variables:
+# compile-command: "julia ./get-files.jl .."
+# End:
