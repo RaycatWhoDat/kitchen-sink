@@ -9,9 +9,9 @@ def doFiles(directoryPath = ".", traversalLevel = 0, callback = print):
         if entry.is_dir() and not entry.name in IGNORED_PATHS:
             doFiles(directoryPath + "/" + entry.name, traversalLevel + 1, callback)
 
-printFiles = doFiles("..", 0, print)
+printFiles = lambda directoryPath: doFiles(directoryPath, 0, print)
 
-printFiles()
+printFiles('..')
 
 # Local Variables:
 # compile-command: "python3 ./get-files.py"
