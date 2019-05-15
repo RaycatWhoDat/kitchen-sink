@@ -1,5 +1,5 @@
 indentationWidth = 2;
-ignoredPaths = [".", "..", ".git", "node_modules", "target"];
+ignoredPaths = [".", "..", ".git", "node_modules", "target", "love", ".dub", "dist"];
 
 function doFiles(directoryPath = pwd(), traversalLevel = 0, callback = println)
     for entry in readdir(directoryPath)
