@@ -2,22 +2,51 @@ local lg = love.graphics
 local lk = love.keyboard
 local le = love.event
 
-local player = {
-   x = 0,
-   y = 0,
-   width = 32,
-   height = 32,
-   speed = 128,
-   color = {
-      r = 255,
-      b = 0,
-      g = 0
+local player = {}
+
+function resetPlayer()
+   player = {
+      x = 0,
+      y = 0,
+      width = 32,
+      height = 32,
+      speed = 128,
+      color = {
+         r = 255,
+         b = 0,
+         g = 0
+      }
    }
-}
+end
+
+function toggleColor()
+   if player.color.r > 0 then
+      player.color.r = 0
+      player.color.g = 255
+   elseif player.color.g > 0 then
+      player.color.g = 0
+      player.color.b = 255
+   elseif player.color.b > 0 then
+      player.color.b = 0
+      player.color.r = 255
+   end
+end
+
+function love.load()
+   resetPlayer()
+end
 
 function love.keypressed(key)
-   if key == "esc" or key == "q" then
+   if key == "escape" then
       le.quit()
+   end
+
+   if key == "return" then
+      resetPlayer()
+   end
+
+   if key == "space" then
+      toggleColor()
    end
 end
 
