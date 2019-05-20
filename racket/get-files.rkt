@@ -1,3 +1,5 @@
+#!/usr/bin/env racket
+
 #lang racket/base
 
 (require racket/path racket/string)
