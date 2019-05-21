@@ -10,4 +10,3 @@
       (directory-files current-directory)))
 
 (get-files)
-
