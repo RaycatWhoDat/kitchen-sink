@@ -1,10 +1,13 @@
-(use-modules (ice-9 ftw))
-
-(for-each (lambda (entry) (display entry) (newline)) (file-system-tree ".."))
+(use-modules
+  (ice-9 ftw)
+  (ice-9 regex))
 
 (define* (get-files #:key (directory-path ".."))
   "Iterates over DIRECTORY-PATH."
-  (display (string-append "I'll iterate over " directory-path " when implemented."))
-  (newline))
+  (ftw directory-path
+    (lambda (filename statinfo flag)
+      (display filename)
+      (newline)
+      #t)))
 
 (get-files)
