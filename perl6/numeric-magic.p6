@@ -15,7 +15,7 @@ class Deck {
     has Seq $.cards;
 
     method shuffle {
-        $!cards = ((1..10; 'J', 'Q', 'K', 'A').flat xx 4).pairs.map({ my $suit = <H D C S>[$_.key()]; $_.value().map({ Card.new(suit => $suit, value => $_); }); }).flat.pick: 52;
+        $!cards = ((2..10; 'J', 'Q', 'K', 'A').flat xx 4).pairs.map({ my $suit = <H D C S>[$_.key()]; $_.value().map({ Card.new(suit => $suit, value => $_); }); }).flat.pick: 52;
     }
 }
 
