@@ -12,10 +12,27 @@ class Card {
 }
 
 class Deck {
-    has Seq $.cards;
+    has $.cards = [];
 
     method shuffle {
-        $!cards = ((2..10; 'J', 'Q', 'K', 'A').flat xx 4).pairs.map({ my $suit = <H D C S>[$_.key()]; $_.value().map({ Card.new(suit => $suit, value => $_); }); }).flat.pick: 52;
+        if ($!cards.elems == 0) {
+            (('A', 2..10, 'J', 'Q', 'K').flat xx 4)
+            ==> pairs()
+            ==> map({
+                    my $suit = <♥ ♦ ♣ ♠>[$_.key()];
+                    $_.value()
+                    ==> map({ Card.new(suit => $suit, value => $_); });
+                })
+            ==> flat()
+            ==> pick(52)
+            ==> $!cards;
+
+            return;
+        }
+
+        $!cards
+        ==> pick(52)
+        ==> $!cards;
     }
 }
 
@@ -42,7 +59,9 @@ sub use-deck-of-cards() {
     
     my $deck = Deck.new();
     $deck.shuffle();
-    say $deck.cards[^5];
+    for $deck.cards[^5] -> $card {
+        say $card.get-value() ~ $card.get-suit();
+    }
     say "This took " ~ (time - CHECK time) ~ " seconds to finish.\n";
 }
 
@@ -53,6 +72,6 @@ sub MAIN() {
     use-deck-of-cards();
 }
 
-# Local Variables:
+# Local Variableslast:
 # compile-command: "perl6 numeric-magic.p6"
 # End:
