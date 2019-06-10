@@ -72,6 +72,6 @@ sub MAIN() {
     use-deck-of-cards();
 }
 
-# Local Variableslast:
+# Local Variables:
 # compile-command: "perl6 numeric-magic.p6"
 # End:
