@@ -26,8 +26,6 @@ class Deck {
             ==> flat()
             ==> pick(52)
             ==> $!cards;
-
-            return;
         }
 
         $!cards
