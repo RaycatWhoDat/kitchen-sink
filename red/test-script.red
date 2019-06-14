@@ -22,13 +22,13 @@ another-test: {
 
 hello-world: function [
   "This repeats 'Hello, world.' ITERATIONS times."
-  iterations [integer!] "The number of times 'Hello, world.' should be repeated."
+  /times iterations [integer!] "The number of times 'Hello, world.' should be repeated."
 ][
-  iterations: either [iterations][5]
+  iterations: either times [iterations][5]
   while [iterations > 0][
     print [prefix message]
     iterations: iterations - 1
   ]
 ]
 
-call/console "ls"
+hello-world/times 13
