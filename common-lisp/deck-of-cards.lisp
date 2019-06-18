@@ -11,6 +11,16 @@
 (defun make-card (value suit)
   (make-instance 'card :value value :suit suit))
 
+(defgeneric pretty-print-value (card-face)
+  (:documentation "Returns the display value of the given CARD.")
+  (:method ((card-face card))
+    (let ((raw-value (value card-face)))
+      (cond ((= raw-value 1) 'A)
+        ((= raw-value 11) 'J)
+        ((= raw-value 12) 'Q)
+        ((= raw-value 13) 'K)
+        (t raw-value)))))
+
 ;; DECK
 
 (defclass deck ()
