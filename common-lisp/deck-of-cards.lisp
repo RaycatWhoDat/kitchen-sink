@@ -28,8 +28,8 @@
      :initarg :cards
      :accessor cards)))
 
-(defun make-deck (cards)
-  (make-instance 'deck :cards cards))
+(defun make-deck-of-cards (list-of-cards)
+  (make-instance 'deck :cards list-of-cards))
 
 (defgeneric shuffle (deck-of-cards)
   (:documentation "Returns DECK with CARDS in a randomized order.")
@@ -38,7 +38,8 @@
       (sort (cards deck-of-cards)
         #'(lambda (card1 card2)
             (declare (ignore card1 card2))
-            (zerop (random 2)))))))
+            (zerop (random 2)))))
+    deck-of-cards))
 
 (defgeneric look-at-top-card (deck-of-cards)
   (:documentation "Returns the value of top card of the DECK.")
@@ -48,7 +49,10 @@
 (defgeneric draw-card (deck-of-cards)
   (:documentation "Returns the top card of the DECK.")
   (:method ((deck-of-cards deck))
-    (values (look-at-top-card deck-of-cards) (cdr (cards deck-of-cards)))))
+    (let ((drawn-card (look-at-top-card deck-of-cards))
+          (rest-of-cards (cdr (cards deck-of-cards))))
+      (setf (cards deck-of-cards) rest-of-cards)
+      drawn-card)))
 
 (defgeneric remaining-cards (deck-of-cards)
   (:documentation "Returns the remaining number of CARDS in the DECK.")
@@ -66,10 +70,10 @@
     for suit = (nth (mod value 4) '(♥ ♦ ♠ ♣))
     collect (make-card value suit)))
   
-(let ((deck (make-deck (make-list-of-cards))))
-  (shuffle deck)
+(let ((deck (shuffle (make-deck (make-list-of-cards)))))
   (loop repeat 5
     do (multiple-value-bind (drawn-card rest-of-cards) (draw-card deck)
          (declare (ignore drawn-card))
          (setf (cards deck) rest-of-cards)))
   (remaining-cards deck))
+
