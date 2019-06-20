@@ -30,11 +30,10 @@
 
 (defun make-deck-of-cards ()
   (make-instance 'deck-of-cards
-    :cards (loop for index to 51
-             for value = (+ (mod index 13) 1)
-             for suit = (nth (mod value 4) '(♥ ♠ ♦ ♣))
-             for color = (nth (mod value 2) '(red black))
-             collect (make-instance 'card :value value :suit suit :color color))))
+    :cards (loop for index from 1 to 52
+             for (suit-value face-value) = (multiple-value-list (floor index 13))
+             for (color suit) = (nth suit-value '((red ♥) (black ♠) (red ♦) (black ♣)))
+             collect (make-instance 'card :value (1+ face-value) :suit suit :color color))))
 
 (defgeneric shuffle (deck-of-cards)
   (:documentation "Returns DECK with CARDS in a randomized order.")
@@ -72,8 +71,6 @@
 ;;   (loop repeat 5 do (draw-card deck))
 ;;   (remaining-cards deck))
 
-;; TODO: Fix the card generation.
-
 (loop for card in (cards (shuffle (make-deck-of-cards)))
   if (equal (color card) 'black)
   collect card into black-cards
@@ -81,4 +78,3 @@
   else collect card into red-cards
   and count t into number-of-red-cards
   finally (return (values number-of-black-cards black-cards number-of-red-cards red-cards)))
-
