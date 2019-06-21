@@ -14,12 +14,12 @@
 (defgeneric pretty-print-value (card)
   (:documentation "Returns the display value of the given CARD.")
   (:method (card)
-    (let ((raw-value (value card)))
-      (cond ((= raw-value 1) 'A)
-        ((= raw-value 11) 'J)
-        ((= raw-value 12) 'Q)
-        ((= raw-value 13) 'K)
-        (t raw-value)))))
+    (case (value card)
+      (1 'A)
+      (11 'J)
+      (12 'Q)
+      (13 'K)
+      (t (value card)))))
 
 ;; DECK
 
@@ -79,8 +79,8 @@
 
 (defclass hand-of-cards (deck-of-cards) ())
 
-(defun make-hand-of-cards (deck)
-  (make-instance 'hand-of-cards :cards (loop repeat 5 collect (draw-card deck))))
+(defun make-hand-of-cards (deck-of-cards)
+  (make-instance 'hand-of-cards :cards (loop repeat 5 collect (draw-card deck-of-cards))))
 
 (defgeneric show-cards-in-hand (hand-of-cards)
   (:documentation "Returns the pretty-printed version of the CARDS in HAND-OF-CARDS.")
