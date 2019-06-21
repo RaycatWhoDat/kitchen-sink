@@ -33,7 +33,10 @@
     :cards (loop for index from 1 to 52
              for (suit-value face-value) = (multiple-value-list (floor index 13))
              for (color suit) = (nth suit-value '((red ♥) (black ♠) (red ♦) (black ♣)))
-             collect (make-instance 'card :value (1+ face-value) :suit suit :color color))))
+             collect (make-instance 'card
+                       :value (if (= face-value 0) 13 face-value)
+                       :suit (if suit suit '♣)
+                       :color (if color color 'black)))))
 
 (defgeneric shuffle (deck-of-cards)
   (:documentation "Returns DECK with CARDS in a randomized order.")
@@ -63,6 +66,28 @@
   (:method (deck-of-cards)
     (length (cards deck-of-cards))))
 
+(defgeneric separate-cards-by-color (deck-of-cards)
+  (:documentation "Returns two lists of cards, separated by COLOR.")
+  (:method (deck-of-cards)
+    (loop for card in (cards deck-of-cards)
+      if (equal (color card) 'black)
+      collect card into black-cards
+      else collect card into red-cards
+      finally (return (values black-cards red-cards)))))
+
+;; HAND
+
+(defclass hand-of-cards (deck-of-cards) ())
+
+(defun make-hand-of-cards (deck)
+  (make-instance 'hand-of-cards :cards (loop repeat 5 collect (draw-card deck))))
+
+(defgeneric show-cards-in-hand (hand-of-cards)
+  (:documentation "Returns the pretty-printed version of the CARDS in HAND-OF-CARDS.")
+  (:method (hand-of-cards)
+    (dolist (card (cards hand-of-cards))
+      (format t "~a~a~%" (pretty-print-value card) (suit card)))))
+
 ;;;
 ;;; TEST FUNCTIONS
 ;;;
@@ -70,11 +95,3 @@
 ;; (let ((deck (shuffle (make-deck-of-cards))))
 ;;   (loop repeat 5 do (draw-card deck))
 ;;   (remaining-cards deck))
-
-(loop for card in (cards (shuffle (make-deck-of-cards)))
-  if (equal (color card) 'black)
-  collect card into black-cards
-  and count t into number-of-black-cards
-  else collect card into red-cards
-  and count t into number-of-red-cards
-  finally (return (values number-of-black-cards black-cards number-of-red-cards red-cards)))
