@@ -1,18 +1,16 @@
 #lang racket
 
-(define suits '(♥ ♦ ♠ ♣))
 (define deck-of-cards
-  (for/list ([value (range 1 14)]
-             #:when (zero? (remainder (length suits) 4))
-             [suit suits])
-    (cons value suit)))
+  (for/list ([value (range 52)])
+    (list (+ (remainder value 13) 1)
+          (list-ref '(♥ ♦ ♠ ♣) (floor (/ value 13))))))
 
 (define (show-hand cards-in-hand)
   "Print each card in CARDS-IN-HAND."
   (for-each
     (lambda (card)
-      (let ([value (car card)]
-             [suit (symbol->string (cdr card))])
+      (let ([value (first card)]
+             [suit (symbol->string (last card))])
         (print
           (format "~a~a"
             (cond [(= value 1) "A"]
