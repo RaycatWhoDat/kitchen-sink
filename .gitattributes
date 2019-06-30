@@ -2,3 +2,4 @@ tcl/* linguist-vendored
 emacs-lisp/red-keywords.el linguist-vendored
 lua/* linguist-vendored
 d/* linguist-vendored
+cpp/* linguist-vendored
