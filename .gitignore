@@ -18,3 +18,8 @@ red/red
 # Lua
 lua/libs
 lua/terra
+
+# OCaml
+ocaml/**/*.cmx
+ocaml/**/*.cmi
+ocaml/**/*.o
