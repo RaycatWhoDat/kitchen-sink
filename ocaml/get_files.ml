@@ -1,13 +1,19 @@
-let ignored_paths = [".git"; "target"; "dist"; "build"; "love"; "node_modules"]
+open Printf
 
-let rec generate_indent indentation iterations =
-  if iterations = 0 then "" else indentation ^ generate_indent indentation (iterations - 1)
+module IgnoredPaths = Set.Make(String)
 
-let spacing = generate_indent " "
-
+let ignored_paths =
+  IgnoredPaths.(empty
+                |> add ".git"
+                |> add "target"
+                |> add "dist"
+                |> add "build"
+                |> add "love"
+                |> add "node_modules")
+    
 let rec get_files directory_path traversal_level =
-  let current_listing = Array.to_list (Sys.readdir directory_path) in
-  List.iter (iterator directory_path traversal_level) current_listing
+  let current_listing = Sys.readdir directory_path in
+  Array.iter (iterator directory_path traversal_level) current_listing
     
 and is_directory directory_path entry traversal_level =
   let current_directory = directory_path ^ "/" ^ entry in
@@ -15,8 +21,8 @@ and is_directory directory_path entry traversal_level =
   then get_files current_directory (traversal_level + 1)
 
 and iterator directory_path traversal_level = fun entry ->
-  print_endline ((spacing traversal_level) ^ entry);
-  if not (List.exists (fun path_to_ignore -> entry = path_to_ignore) ignored_paths)
+  printf "%.*s%s\n" (traversal_level * 2) "" entry;
+  if not (IgnoredPaths.subset (IgnoredPaths.singleton entry) ignored_paths)
   then is_directory directory_path entry traversal_level
   else ()
 
