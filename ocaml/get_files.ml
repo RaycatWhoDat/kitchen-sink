@@ -3,13 +3,7 @@ open Printf
 module IgnoredPaths = Set.Make(String)
 
 let ignored_paths =
-  IgnoredPaths.(empty
-                |> add ".git"
-                |> add "target"
-                |> add "dist"
-                |> add "build"
-                |> add "love"
-                |> add "node_modules")
+  IgnoredPaths.(empty |> add ".git" |> add "target" |> add "dist" |> add "build" |> add "love" |> add "node_modules")
     
 let rec get_files directory_path traversal_level =
   let current_listing = Sys.readdir directory_path in
