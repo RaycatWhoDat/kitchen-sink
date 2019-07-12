@@ -12,7 +12,7 @@ import std.range: repeat;
 const string INDENTATION_CHARACTER = " ";
 const int TWO_SPACES = 2, FOUR_SPACES = 4;
 
-string[] ignoredPaths = [".git", "node_modules", "target", "love"];
+string[] ignoredPaths = [".git", "node_modules", "target", "love", "dist", ".dub"];
 
 void printFiles(string directoryPath, int traversalLevel = 0) {
   foreach (entry; dirEntries(directoryPath, SpanMode.shallow)) {
