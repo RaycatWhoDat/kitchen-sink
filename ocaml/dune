@@ -1,0 +1,3 @@
+(executable
+  (name parse_csv)
+  (libraries csv))
