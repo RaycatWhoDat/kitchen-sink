@@ -1,0 +1,8 @@
+EXCLUDE_QUERY_DIR
+B /Users/rayperry/.opam/4.08.0/lib/bytes
+B /Users/rayperry/.opam/4.08.0/lib/csv
+B _build/default/.parse_csv.eobjs/byte
+S /Users/rayperry/.opam/4.08.0/lib/bytes
+S /Users/rayperry/.opam/4.08.0/lib/csv
+S .
+FLG -w @a-4-29-40-41-42-44-45-48-58-59-60-40 -strict-sequence -strict-formats -short-paths -keep-locs

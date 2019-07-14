@@ -1,9 +1,14 @@
-open Printf
-
 module IgnoredPaths = Set.Make(String)
 
 let ignored_paths =
-  IgnoredPaths.(empty |> add ".git" |> add "target" |> add "dist" |> add "build" |> add "love" |> add "node_modules")
+  IgnoredPaths.(empty
+                |> add ".git"
+                |> add "target"
+                |> add "dist"
+                |> add "build"
+                |> add "love"
+                |> add "node_modules"
+                |> add "_build")
     
 let rec get_files directory_path traversal_level =
   let current_listing = Sys.readdir directory_path in
@@ -15,7 +20,7 @@ and is_directory directory_path entry traversal_level =
   then get_files current_directory (traversal_level + 1)
 
 and iterator directory_path traversal_level = fun entry ->
-  printf "%.*s%s\n" (traversal_level * 2) "" entry;
+  Printf.printf "%*s%s\n" (traversal_level * 2) "" entry;
   if not (IgnoredPaths.subset (IgnoredPaths.singleton entry) ignored_paths)
   then is_directory directory_path entry traversal_level
   else ()
