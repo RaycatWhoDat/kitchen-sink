@@ -1,5 +1,5 @@
+-v
 -dce full
 -cp src/get-files
 -main GetFiles
 -cpp dist/get-files
--cmd dist/get-files/GetFiles ..
