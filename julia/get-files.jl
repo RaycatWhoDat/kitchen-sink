@@ -5,11 +5,9 @@ function doFiles(directoryPath = pwd(), traversalLevel = 0, callback = println)
     for entry in readdir(directoryPath)
         callback(' '^(indentationWidth * traversalLevel) * "$entry")
         if isdir(abspath("$directoryPath/$entry")) && !in(entry, ignoredPaths)
-            cd(abspath("$directoryPath/$entry"))
-            doFiles(pwd(), traversalLevel + 1, callback)
+            doFiles(abspath("$directoryPath/$entry"), traversalLevel + 1, callback)
         end
     end
-    cd(abspath("$directoryPath"))
 end
 
 length(ARGS) > 0 ? doFiles(popfirst!(ARGS)) : doFiles(pwd())
