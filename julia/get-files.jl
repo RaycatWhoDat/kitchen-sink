@@ -2,11 +2,12 @@ indentationWidth = 2;
 ignoredPaths = [".", "..", ".git", "node_modules", "target", "love", ".dub", "dist"];
 
 function doFiles(directoryPath = pwd(), traversalLevel = 0, callback = println)
+    indentation = ' '^(indentationWidth * traversalLevel)
     for entry in readdir(directoryPath)
-        callback(' '^(indentationWidth * traversalLevel) * "$entry")
-        if isdir(abspath("$directoryPath/$entry")) && !in(entry, ignoredPaths)
-            doFiles(abspath("$directoryPath/$entry"), traversalLevel + 1, callback)
-        end
+        callback(indentation * "$entry")
+        fullPath = abspath("$directoryPath/$entry")
+        if !isdir(fullPath) || in(entry, ignoredPaths) continue end
+        doFiles(fullPath, traversalLevel + 1, callback)
     end
 end
 
