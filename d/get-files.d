@@ -12,14 +12,13 @@ import std.range: repeat;
 const string INDENTATION_CHARACTER = " ";
 const int TWO_SPACES = 2, FOUR_SPACES = 4;
 
-string[] ignoredPaths = [".git", "node_modules", "target", "love", "dist", ".dub"];
+string[] ignoredPaths = [".git", "node_modules", "target", "love", "dist", ".dub", "build", "_build"];
 
 void printFiles(string directoryPath, int traversalLevel = 0) {
   foreach (entry; dirEntries(directoryPath, SpanMode.shallow)) {
     string currentEntry = entry.name.replace(directoryPath, "");
     if (ignoredPaths.canFind(currentEntry.replace("/", ""))) continue;
-    INDENTATION_CHARACTER
-        .repeat(TWO_SPACES * traversalLevel)
+    repeat(INDENTATION_CHARACTER, TWO_SPACES * traversalLevel)
         .join("")
         .writeln(currentEntry);
     if (entry.isDir) printFiles(entry.name ~ "/", traversalLevel + 1);

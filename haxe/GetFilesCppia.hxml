@@ -1,0 +1,6 @@
+-v
+-dce full
+-cp src/get-files
+-main GetFiles
+-cppia dist/get-files.cppia
+
