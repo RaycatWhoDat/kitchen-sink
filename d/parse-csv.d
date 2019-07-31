@@ -9,7 +9,7 @@ import std.range: split, back;
 int main(string[] args) {
   if (args.length != 2) return 1;
   File(args.back, "r")
-      .byLine()
+      .byLine
       .each!(record => writefln("%(%s, %)", record.split(',')));
 
   return 0;
