@@ -6,13 +6,13 @@ import std.stdio: writefln, File;
 import std.algorithm: each;
 import std.range: split, back;
 
-void main(string[] args) {
-  string filename = args.length > 1 ? args.back : "no_file.csv";
-  auto csv_file = File(filename, "r").byLine();
+int main(string[] args) {
+  if (args.length != 2) return 1;
+  File(args.back, "r")
+      .byLine()
+      .each!(record => writefln("%(%s, %)", record.split(',')));
 
-  foreach (record; csv_file) {
-    writefln("%(%s, %)", record.split(','));
-  }
+  return 0;
 }
 
 // Local Variables:
