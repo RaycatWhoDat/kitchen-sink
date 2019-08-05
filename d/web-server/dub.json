@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"Ray Perry"
+	],
+	"copyright": "Copyright © 2019, Ray Perry",
+	"dependencies": {
+		"vibe-d": "~>0.8.5"
+	},
+	"description": "A test web server.",
+	"license": "MIT",
+	"name": "web-server"
+}
