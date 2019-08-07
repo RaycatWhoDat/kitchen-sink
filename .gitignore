@@ -26,4 +26,4 @@ ocaml/**/*.o
 ocaml/**/_build
 
 # D
-d/.dub
+d/**/.dub
