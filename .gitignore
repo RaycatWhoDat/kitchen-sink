@@ -24,3 +24,6 @@ ocaml/**/*.cmx
 ocaml/**/*.cmi
 ocaml/**/*.o
 ocaml/**/_build
+
+# D
+d/.dub
