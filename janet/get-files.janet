@@ -1,12 +1,6 @@
 # -*- compile-command: "janet get-files.janet" -*-
 
-(def ignored-paths '(".git"
-                     "dist"
-                     "_dist"
-                     "target"
-                     "node_modules"
-                     "love"
-                     ".dub"))
+(def ignored-paths '(".git" "dist" "_dist" "target" "node_modules" "love" ".dub"))
 
 (defn in/list [needle haystack]
   (var result false)
@@ -26,5 +20,3 @@
 
 (defn main [& args]
   (get-files ".." 0))
-
-
