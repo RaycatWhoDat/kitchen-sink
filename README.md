@@ -20,5 +20,5 @@ This repository contains experiments, oddities, and other such scripts that spaw
 #### Lisp/Scheme
 - **Emacs Lisp:** :star: A necessity since I use Emacs.
 - **Common Lisp:** :+1: I didn't like this at first but I'm starting to like it now.
-- **Racket:** :+1: Love this. It feels right but it's a bit slow. Hopefully, Racket-on-Chez will change the game.
+- **Racket:** It feels right but it's a bit slow. Hopefully, Racket-on-Chez will change the game.
 - **Gambit Scheme:** Love the speed of this but the package management systems leave something to be desired.
