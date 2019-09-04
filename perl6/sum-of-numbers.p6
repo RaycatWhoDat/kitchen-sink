@@ -4,16 +4,20 @@ my $forSum = 0;
 my $whileSum = 0;
 my $recurseSum = 0;
 
-sub addTogether(@numbers) {
-    $recurseSum += @numbers.head();
-    return @numbers.tail(*-1) ~~ () ?? $recurseSum !! addTogether(@numbers.tail(*-1));
+my $addTogether = -> @numbers, $sum = 0 {
+    @numbers.skip(1) ~~ ()
+    ?? $sum + @numbers.head
+    !! $addTogether(@numbers.skip(1), $sum + @numbers.head);
 }
 
 sub MAIN() {
     for @numbers { $forSum += $_ }
     while $whileSum < $forSum { $whileSum = [+] @numbers }
-    ($forSum, $whileSum, addTogether(@numbers)).say;
+    $recurseSum = $addTogether(@numbers);
+    say ($forSum, $whileSum, $recurseSum);
+    
     say (<a b c> Z (1, 2, 3)).flat;
+
     say (1, 1, * + * ... *)[^100];
 }
 
