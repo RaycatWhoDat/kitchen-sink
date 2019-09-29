@@ -1,3 +1,4 @@
+use v6;
 use WWW;
 use URI::Escape;
 
@@ -11,8 +12,10 @@ sub print-card(%card-face, %other-card-face?) {
     print "\n";
 }
 
-sub MAIN(*@query) {
-    my %search-results = jget $scryfall-url ~ uri-escape(@query.join(' '));
+sub MAIN(
+    Str :$query! #= The query you want to search on.
+) {
+    my %search-results = jget $scryfall-url ~ uri-escape($query);
     CATCH {
         default { put "No cards found."; }
     }
@@ -26,5 +29,5 @@ sub MAIN(*@query) {
 }
 
 # Local Variables:
-# compile-command: "perl6 ./scryfall.p6 alpha"
+# compile-command: "perl6 ./scryfall.p6 --query='t:legend t:creature ci=bug'"
 # End:

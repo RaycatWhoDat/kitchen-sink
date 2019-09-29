@@ -1,3 +1,5 @@
+use v6;
+
 my Int $max-indent-level = 2;
 my Str @ignored-paths = <. .. .git node_modules target love test_app zef>;
 

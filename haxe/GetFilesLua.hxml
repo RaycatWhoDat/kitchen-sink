@@ -1,0 +1,5 @@
+-dce full
+-cp src/get-files
+-main GetFiles
+-lua dist/get-files.lua
+-cmd lua dist/get-files.lua ..
