@@ -6,6 +6,11 @@ class Card {
     has Suit $.suit is required('A Card must have a suit.');
     has Int $.value is required('A Card must have a value.');
 
+    method unicode() {
+        my %values = <1 ACE 2 TWO 3 THREE 4 FOUR 5 FIVE 6 SIX 7 SEVEN 8 EIGHT 9 NINE 10 TEN 11 JACK 12 QUEEN 13 KING>;
+        uniparse("PLAYING CARD " ~ %values{$.value + 1} ~ " OF " ~ $.suit.uc);
+    }
+    
     method gist() {
         my %values = <1 A 11 J 12 Q 13 K>;
         my @suits = <♥ ♠ ♦ ♣>;
@@ -25,7 +30,7 @@ class Deck {
 
 sub MAIN() {
     my $deck = Deck.new();
-    for $deck.cards { .say; }
+    for $deck.cards { .unicode.say; }
 }
 
 # Local Variables:
