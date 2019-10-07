@@ -30,7 +30,7 @@ class Deck {
 
 sub MAIN() {
     my $deck = Deck.new();
-    for $deck.cards { .unicode.say; }
+    for $deck.cards { .say; }
 }
 
 # Local Variables:
