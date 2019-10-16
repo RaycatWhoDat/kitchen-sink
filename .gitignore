@@ -5,6 +5,7 @@ javascript/**/node_modules/
 haxe/**/*.n
 haxe/**/*.lua
 haxe/**/love/
+haxe/**/node_modules/
 
 # Rust
 rust/**/target/

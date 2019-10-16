@@ -1,0 +1,4 @@
+-cp src/javascript-ecosystem
+-main Main
+-js dist/javascript-ecosystem/main.js
+-cmd node dist/javascript-ecosystem/main.js

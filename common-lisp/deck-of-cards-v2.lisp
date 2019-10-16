@@ -31,3 +31,4 @@
   "Look at the top NUMBER-OF-CARDS in a DECK."
   (loop for index from 0 to (1- number-of-cards)
     collect (nth index (cards deck-of-cards))))
+
