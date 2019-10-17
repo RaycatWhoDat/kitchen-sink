@@ -19,3 +19,7 @@ class Main {
         trace(get(testObject, "test1.test3", 1338));
     }
 }
+
+// Local Variables:
+// compile-command: "haxe --cwd ../.. JavascriptEcosystem.hxml"
+// End:
