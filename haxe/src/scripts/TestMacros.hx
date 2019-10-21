@@ -12,33 +12,18 @@ class TestMacros {
   }
 
   public static macro function zip(sequences: Array<Expr>) {
-    var zippedResults = [];
-    var firstArray = $a{sequences[0]};
-
-    trace(firstArray.toString());
-    
-    // for (xIndex in firstArray) {
-    //   for (yIndex in 0...$v{sequences.length}) {
-    //     zippedResults.push(macro ${$v{sequences}[yIndex][xIndex]});
-    //   }
-    // }
-
-    // return macro {
-    //   for (xIndex in 0...$sequences[0].length ) {
-    //     trace(xIndex);
-    //   }
-    // };
-
-    
-    // return macro { $zippedResults; };
-    // return macro {
-    //   for (x in firstArray.getValue()) {
-    //     for (y in 0...$v{sequences.length}) {
-    //       macro zippedResults.push(sequences[y][x].getValue());
-    //     }
-    //   };
-    //   $zippedResults;
-    // };
-    return macro null;
+      var allSequences = [for (sequence in sequences) $v{sequence}];
+      var numberOfSequences = allSequences.length;
+      var numberOfElementsInFirstSequence = allSequences[0].getValue().length;
+      
+      return macro {
+          [
+              for (xIndex in 0...$v{numberOfElementsInFirstSequence}) {
+                  for (yIndex in 0...$v{numberOfSequences}) {
+                      $a{allSequences}[yIndex][xIndex];
+                  }
+              }
+          ];
+      };
   }
 }

@@ -1,3 +1,6 @@
+-dce full
+-D analyzer-optimize
 -cp src/scripts
 -main MacroTesting
---interp
+--js dist/scripts/macros.js
+
