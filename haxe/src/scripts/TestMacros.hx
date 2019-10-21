@@ -11,16 +11,34 @@ class TestMacros {
     };
   }
 
-  public static macro function zipIterators(sequences: Array<Expr>) {
+  public static macro function zip(sequences: Array<Expr>) {
     var zippedResults = [];
-    var firstIterator = $v{$a{sequences}[0]};
+    var firstArray = $a{sequences[0]};
 
-    for (_ in firstIterator) {
-      for (index in 0...$v{sequences.length}) {
-        zippedResults.push(macro ${$a{sequences}[index]}.next());
-      }
-    }
+    trace(firstArray.toString());
+    
+    // for (xIndex in firstArray) {
+    //   for (yIndex in 0...$v{sequences.length}) {
+    //     zippedResults.push(macro ${$v{sequences}[yIndex][xIndex]});
+    //   }
+    // }
 
-    return macro $a{zippedResults};
+    // return macro {
+    //   for (xIndex in 0...$sequences[0].length ) {
+    //     trace(xIndex);
+    //   }
+    // };
+
+    
+    // return macro { $zippedResults; };
+    // return macro {
+    //   for (x in firstArray.getValue()) {
+    //     for (y in 0...$v{sequences.length}) {
+    //       macro zippedResults.push(sequences[y][x].getValue());
+    //     }
+    //   };
+    //   $zippedResults;
+    // };
+    return macro null;
   }
 }
