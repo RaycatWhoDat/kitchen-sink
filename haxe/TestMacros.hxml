@@ -3,4 +3,4 @@
 -cp src/scripts
 -main MacroTesting
 --js dist/scripts/macros.js
-
+--cmd node dist/scripts/macros.js
