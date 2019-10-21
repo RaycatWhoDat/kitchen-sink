@@ -1,0 +1,6 @@
+-D server
+-lib hxnodejs
+-lib js-kit
+-main Application
+-js dist/server.js
+-cmd node dist/server.js

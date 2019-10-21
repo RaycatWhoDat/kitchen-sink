@@ -1,0 +1,3 @@
+-cp src/scripts
+-main MacroTesting
+--interp
