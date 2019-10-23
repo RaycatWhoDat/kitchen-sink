@@ -13,6 +13,7 @@ class TestMacros {
     }
     
     public static macro function zip(sequences: Array<Expr>) {
+        #if macro
         var numberOfElementsInFirstSequence = null;
         var allSequences = [
             for (sequence in sequences) {
@@ -22,7 +23,13 @@ class TestMacros {
                     if (numberOfElementsInFirstSequence == null && argValues.length > 1) {
                         numberOfElementsInFirstSequence = 1 + argValues[1] - argValues[0];
                     }
-                    macro RangeTools.range($v{argValues[0]}, $v{argValues[1]});
+
+                    var results = [];
+                    for (number in RangeTools.range($v{argValues[0]}, $v{argValues[1]})) {
+                        results.push(macro $v{number});
+                    }
+                    
+                    macro $a{results};
                 case EArrayDecl(_):
                     if (numberOfElementsInFirstSequence == null) {
                         numberOfElementsInFirstSequence = sequence.getValue().length;
@@ -45,5 +52,8 @@ class TestMacros {
                 }
             ];
         };
+        #else
+        trace("Macros are disabled.");
+        #end
     }
 }
