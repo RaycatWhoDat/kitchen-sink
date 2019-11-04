@@ -7,9 +7,7 @@ using haxe.macro.Tools;
 
 class TestMacros {
     public static macro function printSomething(?message: ExprOf<String>) {
-        return macro {
-            trace($message);
-        };
+      return macro { trace($message); }
     }
     
     public static macro function zip(sequences: Array<Expr>) {
