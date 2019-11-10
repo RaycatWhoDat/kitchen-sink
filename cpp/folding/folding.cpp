@@ -1,7 +1,9 @@
 #include <iostream>
 
 template<typename... Args>
-bool all(Args... args) { return (... && args); }
+bool all(Args... args) {
+  return (... && args);
+}
 
 int main() {
   std::cout << all(true) << std::endl;
