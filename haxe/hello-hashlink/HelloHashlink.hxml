@@ -1,7 +1,6 @@
 -lib heaps
 -lib hlsdl
 -D windowSize=1366x768
--cp src/hello-hashlink
 -main Hello
--hl dist/hello-hashlink/Hello.hl
--cmd hl dist/hello-hashlink/Hello.hl
+-hl dist/Hello.hl
+-cmd hl dist/Hello.hl

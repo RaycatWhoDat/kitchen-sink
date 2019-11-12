@@ -96,5 +96,5 @@ int main() {
 
 
 // Local Variables:
-// compile-command: "clang++ -Wall ./sdl2-test.cpp -o test-game `sdl2-config --cflags --libs` && ./test-game"
+// compile-command: "g++ -Wall ./sdl2-test.cpp -o test-game `sdl2-config --cflags --libs` && ./test-game"
 // End:

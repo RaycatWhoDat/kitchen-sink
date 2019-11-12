@@ -1,0 +1,5 @@
+-cp ../libs
+-main Catalina
+--macro catalina.AssetManagement.copyDirectory("../libs", "dist")
+--dce full
+--interp
