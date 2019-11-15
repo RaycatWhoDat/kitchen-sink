@@ -17,10 +17,10 @@
       (dotimes (index 6)
         (let* ((die (1+ index))
                 (occurrences (gethash die results 0)))
-          (cond 
-            ((= occurrences 2) (setq pairs (nconc pairs (list die))))
-            ((= occurrences 3) (setq trips (nconc trips (list die))))
-            ((= occurrences 4) (setq quads (nconc quads (list die)))))))
+          (pcase occurrences
+            ('2 (setq pairs (nconc pairs (list die))))
+            ('3 (setq trips (nconc trips (list die))))
+            ('4 (setq quads (nconc quads (list die)))))))
       
       (cond
         ((= (length (remove-duplicates dice)) 1)
