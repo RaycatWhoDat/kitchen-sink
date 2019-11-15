@@ -2,6 +2,18 @@
 
 ;; Yahtzee Scoring
 
+;; One Pair: Two dice showing the same number. Score: Sum of those two dice.
+;; Two Pairs: Two different pairs of dice. Score: Sum of dice in those two pairs.
+;; Three of a Kind: Three dice showing the same number. Score: Sum of those three dice.
+;; Four of a Kind: Four dice with the same number. Score: Sum of those four dice.
+;; Full House: Any set of three combined with a different pair. Score: Sum of all the dice.
+;; Yahtzee: All five dice with the same number. Score: 50 points.
+
+;; Small Straight: The combination 1-2-3-4-5. Score: 15 points (sum of all the dice).
+;; Large Straight: The combination 2-3-4-5-6. Score: 20 points (sum of all the dice).
+;; Chance: Any combination of dice. Score: Sum of all the dice.
+
+
 (defun score-matches (dice)
   "Returns (NAME SCORE) based on the matching subset of rules."
   (let ((results (make-hash-table :test 'eql :size 6)))
