@@ -1,4 +1,4 @@
-package hello;
+package deckofcards;
 
 val suitMapping = mapOf(
     0 to "♥",
@@ -37,5 +37,5 @@ fun main() {
 }
 
 // Local Variables:
-// compile-command: "kotlinc hello.kt -include-runtime -d hello.jar && java -jar hello.jar"
+// compile-command: "kotlinc deckofcards.kt -include-runtime -d deckofcards.jar && java -jar deckofcards.jar"
 // End:
