@@ -12,10 +12,10 @@ fun printFiles(traversalLevel: Int, currentDirectory: File) {
         if (IGNORED_PATHS.contains(it.getName())) return@forEach;
 
         println(" ".repeat(traversalLevel * INDENTATION_LEVEL) + it.getName());
-        if (!it.isDirectory()) return@forEach;
-        
-        val currentPath = currentDirectory.getCanonicalPath() + "/" + it.getName() + "/."
-        printFiles(traversalLevel + 1, File(currentPath))
+        if (it.isDirectory()) {
+            val currentPath = currentDirectory.getCanonicalPath() + "/" + it.getName() + "/."
+            printFiles(traversalLevel + 1, File(currentPath))
+        }
     }
 }
 
