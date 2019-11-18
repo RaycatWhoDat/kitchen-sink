@@ -6,6 +6,8 @@ haxe/**/*.n
 haxe/**/*.lua
 haxe/**/love/
 haxe/**/node_modules/
+haxe/**/bin/
+haxe/**/dist/
 
 # Rust
 rust/**/target/
@@ -28,3 +30,6 @@ ocaml/**/_build
 
 # D
 d/**/.dub
+
+# Kotlin
+kotlin/**/*.jar
