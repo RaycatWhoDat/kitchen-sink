@@ -1,5 +1,4 @@
 -dce full
--cp src/get-files
 -main GetFiles
 -python dist/get-files.py
 -cmd python3 dist/get-files.py ..
