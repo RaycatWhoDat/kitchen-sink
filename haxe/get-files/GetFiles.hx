@@ -2,22 +2,22 @@ import sys.FileSystem.readDirectory;
 import sys.FileSystem.isDirectory;
 
 class GetFiles {
-  static function printFiles(directoryPath = '..', traversalLevel = 0) {
+  static function printFiles(directoryPath = "..", traversalLevel = 0) {
       var ignoredPaths = [
-          '.git',
-          'node_modules',
-          'target',
-          'love',
-          'dist',
-          'build',
-          '_build',
-          '.dub'
+          ".git",
+          "node_modules",
+          "target",
+          "love",
+          "dist",
+          "build",
+          "_build",
+          ".dub"
       ];
     
       for (entry in readDirectory(directoryPath)) {
           if (ignoredPaths.indexOf(entry) > -1) continue;
-          Sys.println([for (index in 0...(traversalLevel * 2)) ' '].join('') + entry);
-          if (isDirectory(directoryPath + '/' + entry)) GetFiles.printFiles(directoryPath + '/' + entry, traversalLevel + 1);
+          Sys.println([for (index in 0...(traversalLevel * 2)) " "].join("") + entry);
+          if (isDirectory(directoryPath + "/" + entry)) GetFiles.printFiles(directoryPath + "/" + entry, traversalLevel + 1);
       }
   }
   

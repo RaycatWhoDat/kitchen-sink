@@ -16,12 +16,12 @@ string[] ignoredPaths = [".git", "node_modules", "target", "love", "dist", ".dub
 
 void printFiles(string directoryPath, int traversalLevel = 0) {
   foreach (entry; dirEntries(directoryPath, SpanMode.shallow)) {
-    string currentEntry = entry.name.replace(directoryPath, "");
+    string currentEntry = entry.name.replace(directoryPath, "").replace("/", "");
     if (ignoredPaths.canFind(currentEntry.replace("/", ""))) continue;
     repeat(INDENTATION_CHARACTER, TWO_SPACES * traversalLevel)
         .join("")
         .writeln(currentEntry);
-    if (entry.isDir) printFiles(entry.name ~ "/", traversalLevel + 1);
+    if (entry.isDir) printFiles(entry.name, traversalLevel + 1);
   }
 }
 
