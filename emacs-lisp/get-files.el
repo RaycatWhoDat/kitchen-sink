@@ -16,9 +16,11 @@
 
 (defun prompt-for-path (current-directory)
   "Prompt for CURRENT-DIRECTORY and list files."
-  (interactive "sPath to list out: ")
-  (kill-buffer "*File Listing*")
-  (switch-to-buffer-other-window "*File Listing*")
-  (print-files-recursively current-directory 0)
-  (special-mode)
-  (font-lock-mode))
+  (interactive "DPath to list out: ")
+  (let ((file-listing-buffer-name "*File Listing*"))
+    (when (get-buffer file-listing-buffer-name)
+      (kill-buffer file-listing-buffer-name))
+    (switch-to-buffer-other-window file-listing-buffer-name)
+    (print-files-recursively current-directory 0)
+    (special-mode)
+    (font-lock-mode)))
