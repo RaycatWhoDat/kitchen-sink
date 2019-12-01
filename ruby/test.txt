@@ -1,0 +1,3 @@
+12hrs, SmartPHONE, 18131A, used,Apple,600$,{Bluetooth,Water resistant,finger print reader,16GB},white,2016
+Used, Smartwatch, Samsung,{activity tracker, Bluetooth,water resistant},2017,250$,black,3947t4f,9hrs
+Apple,Laptop,silver,809F435RW,{Face ID, Retina display,Core-i5},new,2019,1800$,18hrs

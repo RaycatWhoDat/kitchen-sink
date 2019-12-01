@@ -23,7 +23,16 @@ class GetFiles {
   
   static function main() {
       if (Sys.args().length < 1) return;
+      #if cpp
+      cpp.vm.Gc.enable(false);
+      #end
+      
       GetFiles.printFiles(Sys.args()[0]);
+      
+      #if cpp
+      cpp.vm.Gc.enable(true);
+      cpp.vm.Gc.run(true);
+      #end
   }
 }
 
