@@ -1,4 +1,4 @@
-phonebook = lambda names, numbers: { name: number for name, number in zip(names, numbers) }
+phonebook = lambda names, numbers: dict(zip(names, numbers))
 print(phonebook(["Tetsuo", "Kaneda"], ["another dimension", "555-THERAPY"]))
 
 # Local Variables:
