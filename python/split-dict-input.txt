@@ -1,0 +1,3 @@
+Brazil,P,2430294802,South America
+Canada,E,2430294802,
+France,F,,Europe
