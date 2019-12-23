@@ -1,0 +1,9 @@
+-dce full
+-D analyzer-optimize
+-lib hxcpp
+
+-cp src
+
+-main JavascriptTranslations
+
+-cpp dist/
