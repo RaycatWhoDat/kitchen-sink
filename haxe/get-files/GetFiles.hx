@@ -37,8 +37,7 @@ class GetFiles {
 }
 
 // Local Variables:
-// compile-command: "haxe ../../GetFilesCpp.hxml"
-// eval: (setq funda-haxe-indent-offset 2)
+// compile-command: "haxe GetFilesCpp.hxml"
 // End:
 
 

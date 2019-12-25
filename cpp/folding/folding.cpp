@@ -5,8 +5,16 @@ bool all(Args... args) {
   return (... && args);
 }
 
+template<typename... Args>
+bool some(Args... args) {
+  return (... || args);
+}
+
 int main() {
-  std::cout << all(true) << std::endl;
+  std::cout
+      << std::boolalpha 
+      << (all(true, false, true) || some(true, false, true))
+      << std::endl;
 }
 
 // Local Variables:
