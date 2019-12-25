@@ -23,3 +23,15 @@ the tip and the new total."
       (/ total-amount 100))))
 
 (calculate-tip)
+
+(defun find-length-of-string ()
+  "Prompts for INPUT-STRING and returns the number of characters
+in the string."
+  (interactive)
+  (let ((input-string (read-string "Enter input string: ")))
+    (message "%s has %s characters." input-string (length input-string))))
+
+(find-length-of-string)
+
+
+
