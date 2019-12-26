@@ -1,0 +1,5 @@
+build-deps.hxml
+
+-python dist/JavascriptTranslations.py
+
+-cmd python3 dist/JavascriptTranslations.py
