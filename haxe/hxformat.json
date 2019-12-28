@@ -1,0 +1,14 @@
+{
+    "whitespace": {
+        "remove": "none"
+    },
+    "lineEnds": {
+        "blockCurly": {
+            "leftCurly": "after",
+            "emptyCurly": "both"
+        }
+    },
+    "indentation": {
+        "character": "  "
+    }
+}
