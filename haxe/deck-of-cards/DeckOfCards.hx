@@ -3,12 +3,12 @@ package;
 using Lambda;
 
 typedef Card = {
-  value:Int,
-  suit:Int
+  value: Int,
+  suit: Int
 };
 
 class DeckOfCards {
-  public static var cards:Array<Card> = [];
+  public static var cards: Array<Card> = [];
 
   public static function generate() {
     cards = [
@@ -20,7 +20,7 @@ class DeckOfCards {
     ];
   }
 
-  public static function prettyPrint(card:Card):String {
+  public static function prettyPrint(card: Card): String {
     var suits = ["♥", "♦", "♠", "♣"];
 
     return switch (card) {
@@ -35,12 +35,10 @@ class DeckOfCards {
 
   public static function main() {
     DeckOfCards.generate();
-    DeckOfCards.cards.iter(function(item) trace(DeckOfCards.prettyPrint(item)));
+    DeckOfCards.cards.iter(item -> trace(DeckOfCards.prettyPrint(item));
   }
 }
 
 // Local Variables:
-// mode: funda-haxe
-// eval: (setq funda-haxe-indent-offset 2)
 // compile-command: "haxe -x DeckOfCards"
 // End:

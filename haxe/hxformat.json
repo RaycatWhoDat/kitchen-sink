@@ -1,6 +1,12 @@
 {
+    "sameLine": {
+        "ifBody": "same",
+        "elseBody": "same"
+    },
     "whitespace": {
-        "remove": "none"
+        "colonPolicy": "after",
+        "typeHintColonPolicy": "after",
+        "addLineCommentSpace": "true"
     },
     "lineEnds": {
         "blockCurly": {
