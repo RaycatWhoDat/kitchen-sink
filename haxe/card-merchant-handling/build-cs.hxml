@@ -1,0 +1,5 @@
+build-deps.hxml
+
+-D dll
+-D net-ver=40
+-cs CardMerchantFinderCS

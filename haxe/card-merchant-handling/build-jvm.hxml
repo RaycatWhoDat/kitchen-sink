@@ -1,0 +1,4 @@
+build-deps.hxml
+
+-D jvm
+-java CardMerchantFinderJava

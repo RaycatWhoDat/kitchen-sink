@@ -1,0 +1,3 @@
+# @install: lix --silent download "haxelib:/sure#0.1.1" into sure/0.1.1/haxelib
+-cp ${HAXE_LIBCACHE}/sure/0.1.1/haxelib/
+-D sure=0.1.1
