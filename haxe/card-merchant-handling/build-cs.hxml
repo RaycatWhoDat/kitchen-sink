@@ -1,5 +1,7 @@
 build-deps.hxml
 
 -D dll
--D net-ver=40
+-D real_position
+-D cs_ver=7
+-D net-ver=45
 -cs CardMerchantFinderCS
