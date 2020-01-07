@@ -10,7 +10,7 @@
   "Prompts for BILL-AMOUNT and TIP-PERCENTAGE. Returns the amount of
 the tip and the new total."
   (interactive)
-  (let* ((bill-amount (* (read-number "Bill amount: " 0) 100))
+  (let* ((bill-amount (* (float (read-number "Bill amount: " 0)) 100))
           (tip-percentage (float (read-number "Tip percentage (0 - 100%): " 0)))
           (tip-amount (* bill-amount (/ tip-percentage 100)))
           (total-amount (+ bill-amount tip-amount)))
@@ -33,5 +33,11 @@ in the string."
 
 (find-length-of-string)
 
+(defun whose-quote ()
+  "Prompts for DIALOGUE and SPEAKER. Returns said QUOTE."
+  (interactive)
+  (let ((dialogue (read-string "Enter quote: "))
+         (speaker (read-string "Enter speaker: ")))
+    (message "%s says, '%s'" speaker dialogue)))
 
-
+(whose-quote)

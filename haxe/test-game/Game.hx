@@ -8,7 +8,6 @@ class Game {
     Love.draw = Base.draw;
   }
 }
-
 // Local Variables:
 // compile-command: "haxe ../../TestGame.hxml"
 // End:
