@@ -4,6 +4,12 @@
         "elseBody": "same"
     },
     "whitespace": {
+        "bracesConfig": {
+            "blockBraces": {
+                "openingPolicy": "around",
+                "closingPolicy": "around"
+            }
+        },
         "colonPolicy": "after",
         "typeHintColonPolicy": "after",
         "addLineCommentSpace": "true"

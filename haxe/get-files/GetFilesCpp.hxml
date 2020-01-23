@@ -1,4 +1,4 @@
--v
 -dce full
+-D analyzer-optimize
 -main GetFiles
 -cpp dist/get-files
