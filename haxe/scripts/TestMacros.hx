@@ -11,6 +11,7 @@ class TestMacros {
   public static macro function zip(sequences: Array<Expr>) {
     #if macro
     var numberOfElementsInFirstSequence = null;
+
     var allSequences = [
       for (sequence in sequences) {
         switch (sequence.expr) {
