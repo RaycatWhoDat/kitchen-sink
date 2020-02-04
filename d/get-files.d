@@ -17,13 +17,10 @@ string[] ignoredPaths = [".git", "node_modules", "target", "love", "dist", ".dub
 string directoryPath;
 bool isRecursive = false;
 
-void printFiles(string directoryPath, int traversalLevel = 0)
-{
-  foreach (entry; directoryPath.dirEntries(SpanMode.shallow))
-  {
+void printFiles(string directoryPath, int traversalLevel = 0) {
+  foreach (entry; directoryPath.dirEntries(SpanMode.shallow)) {
     string currentEntry = entry.name;
-    if (directoryPath != ".")
-    {
+    if (directoryPath != ".") {
       currentEntry = currentEntry.replace(directoryPath, "").replace(dirSeparator, "");
     }
     
@@ -38,8 +35,7 @@ void printFiles(string directoryPath, int traversalLevel = 0)
   }
 }
 
-void main(string[] args)
-{
+void main(string[] args) {
   directoryPath = getcwd();
 
   getopt(args,
