@@ -1,27 +1,22 @@
 module carnival;
 
-import std.stdio;
-import std.algorithm;
-import std.range;
-
-auto next(T)(Chunks!T r) {
-  auto previousResult = r.take(1);
-  r.popFront();
-  return previousResult;
-}
-
 void main() {
+  import std.stdio;
+  import std.algorithm;
+  import std.range;
+  import std.conv;
+
   auto firstFiveLetters = ["a", "b", "c", "d", "e"];
   auto lastFiveLetters = ["v", "w", "x", "y", "z"];
 
   auto numberGenerator = recurrence!("n + 1")(1).chunks(5);
-  auto firstFiveNumbers = numberGenerator.next;
-  auto nextFiveNumbers = numberGenerator.next; // I want this to be 6 7 8 9 10.
+  auto firstFiveNumbers = numberGenerator.front.map!(to!string);
+  numberGenerator.popFront();
+  auto nextFiveNumbers = numberGenerator.front.map!(to!string);
 
-  writefln("%(%s %)", firstFiveLetters);
-  writefln("%(%s %)", lastFiveLetters);
-  writefln("%(%s %)", firstFiveNumbers);
-  writefln("%(%s %)", nextFiveNumbers);
+  firstFiveLetters
+      .chain(lastFiveLetters, firstFiveNumbers, nextFiveNumbers)
+      .each!writeln;
 }
 
 // Local Variables:
