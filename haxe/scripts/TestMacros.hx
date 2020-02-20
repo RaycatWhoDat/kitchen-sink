@@ -1,21 +1,17 @@
 package;
 
-import haxe.macro.Context;
 import haxe.macro.Expr;
-import RangeTools;
 
 using haxe.macro.Tools;
 
+/*
+  This is the class we use for testing functions in the macro context.
+ */
 class TestMacros {
-  public static macro function assert() {}
-
-  public static macro function printSomething(?message:ExprOf<String>) {
-    return macro {trace($message);}
-  }
-
-  public static macro function zip(sequences:Array<Expr>) {
+  public static macro function zip(sequences: Array<Expr>) {
     #if macro
     var numberOfElementsInFirstSequence = null;
+
     var allSequences = [
       for (sequence in sequences) {
         switch (sequence.expr) {
@@ -53,8 +49,6 @@ class TestMacros {
         }
       ];
     };
-    #else
-    trace("Macros are disabled.");
     #end
   }
 }

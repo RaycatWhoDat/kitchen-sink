@@ -14,36 +14,36 @@ const string INDENTATION_CHARACTER = " ";
 const int TWO_SPACES = 2, FOUR_SPACES = 4;
 
 string[] ignoredPaths = [".git", "node_modules", "target", "love", "dist", ".dub", "build", "_build"];
-string directoryPath = "";
+string directoryPath;
 bool isRecursive = false;
 
 void printFiles(string directoryPath, int traversalLevel = 0) {
-	foreach (entry; directoryPath.dirEntries(SpanMode.shallow)) {
-		string currentEntry = entry.name;
-		if (directoryPath != ".") {
-			currentEntry = currentEntry.replace(directoryPath, "").replace(dirSeparator, "");
-		}
-		
-		if (ignoredPaths.canFind(currentEntry)) continue;
-		
-		INDENTATION_CHARACTER
+  foreach (entry; directoryPath.dirEntries(SpanMode.shallow)) {
+    string currentEntry = entry.name;
+    if (directoryPath != ".") {
+      currentEntry = currentEntry.replace(directoryPath, "").replace(dirSeparator, "");
+    }
+    
+    if (ignoredPaths.canFind(currentEntry)) continue;
+
+    INDENTATION_CHARACTER
         .repeat(TWO_SPACES * traversalLevel)
         .join("")
         .writeln(currentEntry);
-        
-        if (isRecursive && entry.isDir) entry.name.printFiles(traversalLevel + 1);
-    }
+
+    if (isRecursive && entry.isDir) entry.name.printFiles(traversalLevel + 1);
+  }
 }
 
 void main(string[] args) {
-	directoryPath = getcwd();
-	
-	getopt(args,
-		std.getopt.config.passThrough,
-		"directory", &directoryPath,
-		"recursive", &isRecursive);
-	
-	directoryPath.printFiles();
+  directoryPath = getcwd();
+
+  getopt(args,
+         std.getopt.config.passThrough,
+         "directory", &directoryPath,
+         "recursive", &isRecursive);
+
+  directoryPath.printFiles();
 }
 
 // Local Variables:

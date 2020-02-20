@@ -10,8 +10,7 @@ class MoveScreenshots {
 
     trace("Moving screenshots...");
     for (filename in readDirectory(Sys.getCwd())) {
-      if (filename.indexOf("Screen Shot") < 0)
-        continue;
+      if (filename.indexOf("Screen Shot") < 0) continue;
       rename(filename, screenshotDestination + filename);
     };
     trace("Done.");
