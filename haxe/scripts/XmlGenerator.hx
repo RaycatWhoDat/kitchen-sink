@@ -1,37 +1,35 @@
 package;
 
-enum XmlTree {
-  Tag(name: String, ?attributes: Map<String, Dynamic>, ?children:Array<XmlTree>);
+using StringTools;
+
+enum XmlDocument {
+  Tag(name: String, ?attributes: Map<String, Dynamic>, ?children: Array<XmlDocument>);
 }
 
 class XmlGenerator {
-  public static function parseTree(tree: Array<XmlTree>, document: String = ""): String {
-    switch (tree[0]) {
-      case Tag(name, attributes, children):
-        var openingTag = '<${name}';
+  public static function parseTree(tree: Array<XmlDocument>): String {
+    var fragments = [
+      for (node in tree) {
+        switch (node) {
+          case Tag(name, attributes, children):
+            var attributes = [
+              for (attributeName => attributeValue in attributes)
+                ' ${attributeName}="${attributeValue}"'
+            ];
+            '<${name}${attributes.join(" ")}>${(children == null || children.length == 0) ? '' : XmlGenerator.parseTree(children)}</${name}>';
+        }
+      }
+    ];
 
-        for (attributeName => attributeValue in attributes) {
-          openingTag += ' ${attributeName}="${attributeValue}"';
-        };
-
-        openingTag += ">";
-        
-        var closingTag = '</${name}>';
-        document = '${openingTag}${document}${closingTag}';
-
-        if (children == null || children.length == 0) return document;
-        return XmlGenerator.parseTree(children, document);
-    }
+    return fragments.join("");
   }
-  
+
   public static function main() {
-    // BUG: It creates the tree backwards.
     var testCase = Tag("html", ["class" => "app"], [
-        Tag("body", ["class" => "app"], [
-            Tag("div", ["class" => "container"])
-                                         ])
-                                                    ]);
-    
+      Tag("head", []),
+      Tag("body", ["class" => "app"], [Tag("div", ["class" => "container"])])
+    ]);
+
     trace(XmlGenerator.parseTree([testCase]));
   }
 }
