@@ -1,2 +1,3 @@
+emacs-lisp/rebol.el linguist-vendored
 emacs-lisp/red-keywords.el linguist-vendored
 d/MOCK_DATA.csv linguist-vendored
