@@ -1,5 +1,3 @@
--*- mode: red; compile-command: "./red get-files.red"; eval: (setq tab-width 2)  -*-
-
 Red []
 
 ignored-paths: [".git/" "node_modules/" "target/" "love/" ".dub/" "dist/"]
@@ -20,3 +18,7 @@ get-files: function [
 ]
 
 get-files ".." 0
+
+; Local Variables:
+; compile-command: "./bin/red get-files.red"
+; End:

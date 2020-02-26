@@ -16,7 +16,7 @@ rust/**/target/
 emacs-lisp/funda-haxe-mode.el
 
 # Red
-red/red
+red/**/red
 
 # Lua
 lua/libs
