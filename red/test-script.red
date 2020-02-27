@@ -1,5 +1,3 @@
--*- mode: red; compile-command: "./red test-script.red"; eval: (setq tab-width 2)  -*-
-
 Red [
   title:    "A minimal Red test script"
   author:   "Ray Perry"
@@ -32,3 +30,9 @@ hello-world: function [
 ]
 
 hello-world/times 13
+
+; Local Variables:
+; mode: rebol
+; compile-command: "./bin/red test-script.red"
+; End:
+

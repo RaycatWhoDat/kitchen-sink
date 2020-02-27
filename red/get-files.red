@@ -20,5 +20,6 @@ get-files: function [
 get-files ".." 0
 
 ; Local Variables:
+; mode: rebol
 ; compile-command: "./bin/red get-files.red"
 ; End:
