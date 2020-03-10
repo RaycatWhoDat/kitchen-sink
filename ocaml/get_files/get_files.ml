@@ -1,3 +1,5 @@
+#!/usr/bin/env ocaml
+
 module IgnoredPaths = Set.Make(String)
 
 let ignored_paths =

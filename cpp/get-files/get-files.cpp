@@ -20,5 +20,5 @@ int main() {
 }
 
 // Local Variables:
-// compile-command: "clang++ -Wall -std=c++17 ./get-files.cpp -lstdc++fs -o get-files && ./get-files"
+// compile-command: "clang++-9 -std=c++17 -stdlib=libc++ -Wall -Wextra -g -fsanitize=address,undefined -o get-files ./get-files.cpp && ./get-files"
 // End:

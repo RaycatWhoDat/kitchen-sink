@@ -1,10 +1,15 @@
 package;
 
-class EightyBinary {
-  public static function run() {
-    var mapping = ["01010101", "11010010", "10101010" ]
-                  .map(rawData -> rawData.split("").map(number -> number == "1" ? "true" : "false"));
+using Lambda;
 
-    trace(mapping);
-  }
+class EightyBinary {
+    public static function run() {
+        var mapping = "010101011101001010101010"
+            .split("")
+            .mapi((index, number) -> {
+                '${number == "1"}';
+            }).join("");
+
+        trace(mapping);
+    }
 }

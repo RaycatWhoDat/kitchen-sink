@@ -1,29 +1,16 @@
+use std::io::Error;
 use std::io::Result;
 use std::fs::read_dir;
 use std::path::Path;
 
-fn print_files(directory: &Path) -> Result<()> {
-    // let ignored_paths = [
-    //     ".git",
-    //     "love",
-    //     "target",
-    //     "dist",
-    //     ".dub",
-    //     "node_modules"
-    // ];
-    
-    for entry in read_dir(directory)? {
-        let entry = &entry?;
-        println!("{:?}", entry.path());
+#[allow(unused_imports)]
+fn main() -> Result<(), Error> {
+    let DIRECTORY_PATH = Path::new("..");
+    let mut entries = read_dir(DIRECTORY_PATH)
+        .map(|res| res.map(|entry| entry.path()))
+        .collect::<Result<_, Error>>();
 
-        if Path::new(&entry.path()).is_dir() {
-            // Path::new(&entry.path()).to_str().unwrap().contains("target") {
-            assert!(print_files(Path::new(&entry.path())).is_ok());
-        }
+    for entry in entries {
+        println!("{}", entry);
     }
-    Ok(())
-}
-
-fn main() {
-    assert!(print_files(Path::new("../..")).is_ok());
-}
+}    
