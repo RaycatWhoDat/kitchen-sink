@@ -27,29 +27,32 @@ class SimpleCalculator {
 
     macro static function generateOpSwitch() {
         var operations = ["+", "-", "*", "/"];
-        var switchCases = [];
+        var switchStart = "switch (stdin.readLine().trim()) {";
+        var switchEnd = "}";
+        var switchFragments = [switchStart];
 
         for (operation in operations) {
             var newSwitchCase = '
-                case $operation:
+                case "$operation":
                 while (numberIterator.hasNext()) {
                     result $operation= numberIterator.next();
                 }
                 isComplete = true;
             ';
             
-            switchCases.push(Context.parse(newSwitchCase, Context.currentPos()));
+            switchFragments.push(newSwitchCase);
         }
+
+        switchFragments.push(switchEnd);
+
+        var switchStatement = Context.parse(switchFragments.join("\n"), Context.currentPos());
         
         return macro {
             while (!isComplete) {
                 trace("Operation? ");
                 var numberIterator = numbers.iterator();
-            
-                // switch (stdin.readLine().trim()) {
-                //     // $b{switchCases};
-                // case _:
-                // }
+
+                ${switchStatement};
             }
         };
     }
