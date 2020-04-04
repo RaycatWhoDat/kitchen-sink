@@ -1,4 +1,6 @@
-use strict; use warnings;
+use v5;
+use strict;
+use warnings;
 use File::Find "find";
 
 my $max_indent_level = 2;

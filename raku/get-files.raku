@@ -15,5 +15,5 @@ sub MAIN(IO() $directory = './') {
 }
 
 # Local Variables:
-# compile-command: "perl6 ./get-files.p6 .."
+# compile-command: "raku ./get-files.raku .."
 # End:

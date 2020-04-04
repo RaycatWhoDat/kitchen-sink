@@ -2,5 +2,12 @@
 -lib hlsdl
 -D windowSize=1366x768
 -main Hello
--hl dist/Hello.hl
--cmd hl dist/Hello.hl
+
+--each
+
+-hl dist/hello.hl
+
+--next
+
+-hl dist/hello.c
+-cmd gcc -O3 -o Hello-bin -std=c11 -I dist dist/hello.c -lhl
