@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-const IGNORED_PATHS = ['.', '..', '.git', 'love', 'target', 'node_modules'];
+const IGNORED_PATHS = ['.', '..', '.git', 'love', 'target', 'node_modules', 'dist'];
 const INDENTATION_LEVEL = 2;
 
 const doFiles = callback => (directory, fileLevel) => {
@@ -9,11 +9,12 @@ const doFiles = callback => (directory, fileLevel) => {
     let _fileLevel = fileLevel || 0;
     files.forEach(file => {
         if (IGNORED_PATHS.includes(file.name)) return;
-        callback(' '.repeat(INDENTATION_LEVEL * _fileLevel) + '/' + file.name);
+        callback(' '.repeat(INDENTATION_LEVEL * _fileLevel) + file.name);
         if (file.isDirectory()) doFiles(callback)(directory + '/' + file.name, _fileLevel + 1);
     });
 };
 
 const printFiles = doFiles(console.log);
+const rootDirectoryPath = process.argv.slice(2).pop() || '..';
 
-printFiles('..');
+printFiles(rootDirectoryPath);

@@ -11,8 +11,8 @@ fn get_files(directory_path: &PathBuf, traversal_level: usize) -> io::Result<()>
     let ignored_paths = ["node_modules", ".git", "target", "dist", "dub", "love"];
 
     let mut entries = read_dir(directory_path)?
-        .map(|result| result.map(|entry| entry.path()))
-        .collect::<Result<Vec<PathBuf>, io::Error>>()?;
+        .map(|entry| entry.unwrap().path())
+        .collect::<Vec<PathBuf>>();
 
     entries.sort();
     
