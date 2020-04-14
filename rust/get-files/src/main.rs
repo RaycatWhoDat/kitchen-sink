@@ -12,7 +12,7 @@ fn get_files(directory_path: &PathBuf, traversal_level: usize) -> io::Result<()>
 
     let mut entries = read_dir(directory_path)?
         .map(|entry| entry.unwrap().path())
-        .collect::<Vec<PathBuf>>();
+        .collect::<Vec<_>>();
 
     entries.sort();
     
