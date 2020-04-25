@@ -1,4 +1,4 @@
-;; #!/usr/bin/env chez --script
+#!/usr/bin/env chez --script
 
 (define (get-files directory-path traversal-level)
   (for-each (lambda (entry)
@@ -9,4 +9,4 @@
                     (get-files printed-directory (+ traversal-level 1))))))
     (directory-list directory-path)))
 
-(get-files ".." 0)
+(get-files (if (> (length (command-line)) 1) (cadr (command-line)) ".") 0)

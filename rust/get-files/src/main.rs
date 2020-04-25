@@ -21,7 +21,7 @@ fn get_files(directory_path: &PathBuf, traversal_level: usize) -> io::Result<()>
     for entry in entries {
         let formatted_path = entry.iter().last().unwrap();
         if ignored_paths.contains(&formatted_path.to_str().unwrap()) { continue; }
-        println!("{}{:?}", indentation, formatted_path);
+        println!("{}{}", indentation, &formatted_path.to_str().unwrap());
         if Path::new(&entry).is_dir() {
             get_files(&entry, traversal_level + 1).unwrap();
         }
