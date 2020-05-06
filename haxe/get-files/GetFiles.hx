@@ -3,29 +3,23 @@ import sys.FileSystem.isDirectory;
 
 class GetFiles {
   static function printFiles(directoryPath = "..", traversalLevel = 0) {
+    var TWO_SPACES = 2;
     var ignoredPaths = [".git", "node_modules", "target", "love", "dist", "build", "_build", ".dub"];
 
     for (entry in readDirectory(directoryPath)) {
-      Sys.println([for (index in 0...(traversalLevel * 2)) " "].join("") + entry);
+      var spaces = new StringBuf();
+      for (index in 0...(traversalLevel * TWO_SPACES)) spaces.add(" ");
+      Sys.println(spaces.toString() + entry);
       if (ignoredPaths.indexOf(entry) > -1) continue;
       if (isDirectory(directoryPath + "/" + entry)) {
-        GetFiles.printFiles(directoryPath + "/" + entry, traversalLevel + 1);
+        printFiles(directoryPath + "/" + entry, traversalLevel + 1);
       }
     }
   }
 
   static function main() {
     if (Sys.args().length < 1) return;
-    #if cpp
-    cpp.vm.Gc.enable(false);
-    #end
-
     GetFiles.printFiles(Sys.args()[0]);
-
-    #if cpp
-    cpp.vm.Gc.enable(true);
-    cpp.vm.Gc.run(true);
-    #end
   }
 }
 // Local Variables:

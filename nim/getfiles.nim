@@ -1,5 +1,4 @@
 import os
-import sequtils
 from strutils import spaces
 
 const
@@ -13,5 +12,5 @@ proc printFiles(directoryPath: string = ".", traversalLevel: int = 0) =
     if dirExists(path) and entry notin ignoredPaths:
       printFiles(path, traversalLevel + 1)
 
-let initialDirectory = if len(commandLineParams()) > 0: paramStr(1) else: ".."
+let initialDirectory = if len(commandLineParams()) > 0: paramStr(1) else: "."
 printFiles(initialDirectory)
