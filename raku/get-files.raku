@@ -1,7 +1,7 @@
 use v6;
 
 my Int $max-indent-level = 2;
-my Str @ignored-paths = <. .. .git node_modules target love test_app zef>;
+my Str @ignored-paths = <. .. .git node_modules target love test_app zef dist>;
 
 sub list-files(IO() $directory, Int $file-level = 0, &callback = { .put }) {
     for $directory.dir(test => none @ignored-paths) -> $current-file {

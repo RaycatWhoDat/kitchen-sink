@@ -34,5 +34,5 @@ sub MAIN() {
 }
 
 # Local Variables:
-# compile-command: "perl6 ./deck-of-cards.p6"
+# compile-command: "raku ./deck-of-cards.raku"
 # End:

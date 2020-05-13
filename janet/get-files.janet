@@ -1,22 +1,27 @@
 # -*- compile-command: "janet get-files.janet" -*-
 
-(def ignored-paths '(".git" "dist" "_dist" "target" "node_modules" "love" ".dub"))
+(def TWO_SPACES 2)
+(def ignored-paths '(".git" "dist" "_dub" "target" "love" "node_modules"))
 
-(defn in/list [needle haystack]
-  (var result false)
-  (each item haystack
-    (when (= item needle)
-      (set result true)))
-    result)
+(defn in-list
+  "Given ARR is an array-like structure, return TRUE if ITEM is found in the array."
+  [arr target]
+  (var found false)
+  (loop [item :in arr :when (= item target)] (set found true))
+  found)
 
 (defn get-files
-  [directory-path traversal-level]
-  "Prints out the files recursively."
-  (each filename (os/dir directory-path)
-    (print (string/repeat " " (* traversal-level 2)) filename)
-    (when (and (= (get (os/stat (string directory-path "/" filename)) :mode) :directory)
-               (not (in/list filename ignored-paths)))
-      (get-files (string directory-path "/" filename) (+ traversal-level 1)))))
+  "Get all the files in DIRECTORY-PATH recursively."
+  [&opt traversal-level directory-path]
+  (default traversal-level 0)
+  (default directory-path ".")
+  (each file (sort (os/dir directory-path))
+    (print (string (string/repeat " " (* TWO_SPACES traversal-level)) file))
+    (when (and
+            (= (os/stat (string/join @[directory-path file] "/") :mode) :directory)
+            (not (in-list ignored-paths file)))
+      (get-files (+ traversal-level 1) (string/join @[directory-path file] "/")))))
 
-(defn main [& args]
-  (get-files ".." 0))
+(get-files 0 "..")
+
+
