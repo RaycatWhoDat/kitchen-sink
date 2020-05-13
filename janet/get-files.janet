@@ -22,6 +22,5 @@
             (not (in-list ignored-paths file)))
       (get-files (+ traversal-level 1) (string/join @[directory-path file] "/")))))
 
-(get-files 0 "..")
-
-
+(defn main [& args]
+  (get-files 0 ".."))
