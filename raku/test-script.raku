@@ -1,11 +1,21 @@
 use v6;
+use MONKEY-SEE-NO-EVAL;
+
+sub test() {
+    BEGIN {
+        if 0.5 < rand {
+            EVAL "sub whatever() { }; 1" or die $!;
+        } else {
+            EVAL "sub whatever { }; 1" or die $!;
+        }
+    }
+    whatever  / 25 ; # / ; die "this dies!";
+}
 
 sub MAIN() {
-    my $listing = run 'ls', '-a', '..', :out;
-    for $listing.out.lines -> $line { say $line; }
-    $listing.out.close();
+    test();
 }
 
 # Local Variables:
-# compile-command: "perl6 test-script.p6"
+# compile-command: "raku test-script.raku"
 # End:
