@@ -31,7 +31,7 @@ class JanetTable is repr("CStruct") {
 }
 
 sub janet_init() returns Str is native("janet") { * };
-sub janet_core_env(JanetTable $replacements) returns JanetTable is native("janet") { * };
+sub janet_core_env(JanetTable(NULL) $replacements) returns JanetTable is native("janet") { * };
 sub janet_dostring(JanetTable $env, Str $string, Str $sourcePath, Janet $out) returns Str is native("janet") { * };
 sub janet_deinit() returns Str is native("janet") { * };
 
@@ -41,7 +41,7 @@ sub MAIN() {
     my $janetScript = slurp "test-script.janet";
 
     janet_init;
-    my JanetTable $env = janet_core_env(JanetTable);
+    my JanetTable $env = janet_core_env(NULL);
     janet_dostring($env, $janetScript, "main", NULL);
     janet_deinit;
 }
