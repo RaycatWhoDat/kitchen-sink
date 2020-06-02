@@ -1,3 +1,6 @@
 emacs-lisp/rebol.el linguist-vendored
 emacs-lisp/red-keywords.el linguist-vendored
 d/MOCK_DATA.csv linguist-vendored
+cpp/janet-embed/janet.c linguist-vendored
+cpp/janet-embed/janet.h linguist-vendored
+cpp/janet-embed/janetconf.h linguist-vendored
