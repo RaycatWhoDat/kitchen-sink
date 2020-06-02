@@ -22,6 +22,4 @@
       (get-files (string/join @[directory-path file] "/") (+ traversal-level 1)))))
 
 (defn main [& args]
-  (if (> (length args) 1)
-    (get-files (last args))
-    (get-files)))
+    (get-files (if (> (length args) 1) (last args) nil)))
