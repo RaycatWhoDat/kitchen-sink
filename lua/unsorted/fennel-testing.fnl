@@ -1,5 +1,3 @@
-;; -*- mode: Fennel; compile-command: "fennel --compile fennel-testing.fnl > main.lua; ./love.app/Contents/MacOS/love ." -*-
-
 ;; Testing Fennel. It's kinda nice.
 
 (let [lg love.graphics
@@ -29,3 +27,7 @@
            (lg.rectangle "fill" player.x player.y player.w player.h)
            (lg.setColor (unpack player.color) 255)
            (lg.rectangle "line" player.x player.y player.w player.h))))
+
+(do
+  (var test (lambda [message] (print message)))
+  (test "This is a test"))

@@ -33,3 +33,8 @@ d/**/.dub
 
 # Kotlin
 kotlin/**/*.jar
+
+# Other
+nim/**/janet*
+raku/**/janet*
+**/*.so
