@@ -24,14 +24,25 @@
         (setq results (cons (char-to-string character) results))))
     `(list ,@(reverse results))))
 
+(defun is-pangram (input-string)
+  (zerop
+    (length
+      (-difference
+        (letter-sequence "a" "z")
+        (delete-dups
+          (remove-if (lambda (fragment) (string= fragment " "))
+            (sort (split-string (downcase input-string) "" t) 'string<)))))))
+
 ;; ================================================================
 
 (%% (car (polymod 2345 10 10 10)) 5)
 
+(is-pangram "The quick brown fox jumps over the lazy dog")
+
 ;; ================================================================
 
 (ert-deftest %%-tests ()
-  "Tests the definition and usage of POLYMOD."
+  "Tests the definition and usage of %%."
   (should (equal (%% 12 10) nil))
   (should (equal (%% 12 3) 't))
   (should (equal (%% 15 3 5) 't))
@@ -50,3 +61,9 @@
   (should (equal (letter-sequence "A" "C") (qw A B C)))
   (should (equal (letter-sequence "s" "z") (qw s t u v w x y z)))
   (should (equal (letter-sequence "S" "Z") (qw S T U V W X Y Z))))
+
+(ert-deftest is-pangram-tests ()
+  "Tests the definition and usage of IS-PANGRAM."
+  (should (equal (is-pangram "stroop") nil))
+  (should (equal (is-pangram "strooafbnsdhfobuofwerbogb") nil))
+  (should (equal (is-pangram "The quick brown fox jumps over the lazy dog") t)))
