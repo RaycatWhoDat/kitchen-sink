@@ -1,13 +1,20 @@
 (defmacro qw (&rest symbols)
+  "Returns a quoted list of strings."
   `(list ,@(mapcar (lambda (symbol) (format "%s" symbol)) symbols)))
 
 (defmacro %% (number &rest divisors)
+  "Returns T or NIL if NUMBER is evenly divisible by all DIVISORS."
   (let ((results '()))
     (dolist (divisor divisors)
       (setq results (cons `(zerop (mod ,number ,divisor)) results)))
     `(and ,@(reverse results))))
 
+(defmacro between (number min max)
+  "Returns T or NIL if NUMBER is between MIN and MAX, inclusive."
+  `(and (>= ,number ,min) (<= ,number ,max)))
+
 (defmacro polymod (number &rest divisors)
+  "Returns a list of modulo results with the remainder as the first element."
   (let ((mutnum number)
          (results '()))
     (dolist (divisor divisors)
@@ -16,22 +23,21 @@
     `(reverse (list ,mutnum ,@results))))
 
 (defmacro letter-sequence (start end)
+  "Returns a list of quoted letters."
   (let ((results '()))
     (dolist (character (number-sequence (string-to-char start) (string-to-char end)))
-      (unless (or (< character 65)
-                (and (> character 90) (< character 97))
-                (> character 122))
+      (when (or (between character 65 90) (between character 97 122))
         (setq results (cons (char-to-string character) results))))
     `(list ,@(reverse results))))
 
 (defun is-pangram (input-string)
-  (zerop
-    (length
-      (-difference
-        (letter-sequence "a" "z")
-        (delete-dups
-          (remove-if (lambda (fragment) (string= fragment " "))
-            (sort (split-string (downcase input-string) "" t) 'string<)))))))
+  "Returns T or NIL based on the existence of the each letter in the string."
+  (let ((characters
+          (sort (delete-dups (split-string (downcase input-string) "" t)) 'string<)))
+    (null
+      (remove-if
+        (lambda (fragment) (member fragment characters))
+        (cons " " (letter-sequence "a" "z"))))))
 
 ;; ================================================================
 
@@ -40,6 +46,15 @@
 (is-pangram "The quick brown fox jumps over the lazy dog")
 
 ;; ================================================================
+
+(ert-deftest qw-tests ()
+  "Tests the definition and usage of qw."
+  (should (equal (qw 12 10) '("12" "10")))
+  (should (equal (qw a b c d) '("a" "b" "c" "d")))
+  (should (equal (qw This is a test) '("This" "is" "a" "test")))
+  (should (equal
+            (qw The quick brown fox jumps over the lazy dog)
+            '("The" "quick" "brown" "fox" "jumps" "over" "the" "lazy" "dog"))))
 
 (ert-deftest %%-tests ()
   "Tests the definition and usage of %%."
