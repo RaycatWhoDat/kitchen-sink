@@ -4,10 +4,7 @@
 
 (defmacro %% (number &rest divisors)
   "Returns T or NIL if NUMBER is evenly divisible by all DIVISORS."
-  (let ((results '()))
-    (dolist (divisor divisors)
-      (setq results (cons `(zerop (mod ,number ,divisor)) results)))
-    `(and ,@(reverse results))))
+  `(and ,@(mapcar (lambda (divisor) `(zerop (mod ,number ,divisor))) divisors)))
 
 (defmacro between (number min max)
   "Returns T or NIL if NUMBER is between MIN and MAX, inclusive."
@@ -24,11 +21,11 @@
 
 (defmacro letter-sequence (start end)
   "Returns a list of quoted letters."
-  (let ((results '()))
-    (dolist (character (number-sequence (string-to-char start) (string-to-char end)))
-      (when (or (between character 65 90) (between character 97 122))
-        (setq results (cons (char-to-string character) results))))
-    `(list ,@(reverse results))))
+  `(mapcar
+     'char-to-string
+     (remove-if-not
+       (lambda (character) (or (between character 65 90) (between character 97 122)))
+       (number-sequence (string-to-char ,start) (string-to-char ,end)))))
 
 (defun is-pangram (input-string)
   "Returns T or NIL based on the existence of the each letter in the string."
@@ -40,10 +37,6 @@
         (cons " " (letter-sequence "a" "z"))))))
 
 ;; ================================================================
-
-(%% (car (polymod 2345 10 10 10)) 5)
-
-(is-pangram "The quick brown fox jumps over the lazy dog")
 
 ;; ================================================================
 
@@ -62,6 +55,13 @@
   (should (equal (%% 12 3) 't))
   (should (equal (%% 15 3 5) 't))
   (should (equal (%% 100 1 2 5 10) 't)))
+
+(ert-deftest between-tests ()
+  "Tests the definition and usage of BETWEEN."
+  (should (equal (between 12 10 14) 't))
+  (should (equal (between 1832 10 14) nil))
+  (should (equal (between 13802 13479 13802) 't))
+  (should (equal (between 1 1 10) 't)))
 
 (ert-deftest polymod-tests ()
   "Tests the definition and usage of POLYMOD."
