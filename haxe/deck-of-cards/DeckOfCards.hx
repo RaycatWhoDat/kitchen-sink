@@ -7,6 +7,7 @@ typedef Card = {
   suit: Int
 };
 
+@:keep
 class DeckOfCards {
   public static var cards: Array<Card> = [];
 
@@ -35,7 +36,7 @@ class DeckOfCards {
 
   public static function main() {
     DeckOfCards.generate();
-    DeckOfCards.cards.iter(item -> trace(DeckOfCards.prettyPrint(item));
+    DeckOfCards.cards.iter(item -> trace(DeckOfCards.prettyPrint(item)));
   }
 }
 
