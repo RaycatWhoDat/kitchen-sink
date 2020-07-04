@@ -13,7 +13,6 @@
 ;; Large Straight: The combination 2-3-4-5-6. Score: 20 points (sum of all the dice).
 ;; Chance: Any combination of dice. Score: Sum of all the dice.
 
-
 (defun score-matches (dice)
   "Returns (NAME SCORE) based on the matching subset of rules."
   (let ((results (make-hash-table :test 'eql :size 6)))

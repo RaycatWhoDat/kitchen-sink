@@ -31,10 +31,9 @@
   "Returns T or NIL based on the existence of the each letter in the string."
   (let ((characters
           (sort (delete-dups (split-string (downcase input-string) "" t)) 'string<)))
-    (null
-      (remove-if
-        (lambda (fragment) (member fragment characters))
-        (cons " " (letter-sequence "a" "z"))))))
+    (null (remove-if
+            (lambda (fragment) (member fragment characters))
+            (cons " " (letter-sequence "a" "z"))))))
 
 ;; ================================================================
 
