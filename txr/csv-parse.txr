@@ -1,0 +1,12 @@
+@nil
+@(collect)
+@first_name,@last_name,@email,@dob
+@(end)
+@(output)
+@(repeat)
+First Name: @first_name
+Last Name: @last_name
+Email: @email
+Date of Birth: @dob@\n
+@(end)
+@(end)

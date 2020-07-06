@@ -1,0 +1,8 @@
+@(repeat)
+@number|@text|@type
+@  (output)
+Number: @number
+Text: @text
+Type: @type@\n
+@  (end)
+@(end)
