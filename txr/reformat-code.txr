@@ -1,0 +1,16 @@
+@(collect)
+@(maybe)
+import @module: @functions;
+@(or)
+import @module;
+@(end)
+@(end)
+@(output)
+@(repeat)
+@(if (> (length functions) 0))
+import @module: @functions;
+@(elif (null (length functions)))
+import @module;
+@(end)
+@(end)
+@(end)
