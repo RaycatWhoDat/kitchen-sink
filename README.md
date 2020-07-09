@@ -14,3 +14,5 @@ This repository contains experiments, oddities, and other such scripts that spaw
 - Nim
 - D
 - C++
+
+[Test Page](./test-page.md)
