@@ -1,16 +1,14 @@
-@(collect)
+@(collect :vars (module (functions nil)))
 @(maybe)
 import @module: @functions;
 @(or)
 import @module;
 @(end)
 @(end)
+@(set module @(reverse module))
+@(set functions @(reverse functions))
 @(output)
 @(repeat)
-@(if (> (length functions) 0))
-import @module: @functions;
-@(elif (null (length functions)))
-import @module;
-@(end)
+import @module@(when functions `: `)@functions;
 @(end)
 @(end)
