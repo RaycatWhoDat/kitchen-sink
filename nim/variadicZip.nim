@@ -1,17 +1,22 @@
-import sequtils
+import macros
 import sugar
 
-proc `Z`(iterables: varargs[openArray[untyped]]) =
-  var
-    result = []
-    maximumLength = min(iterables.map((iterable) => iterable.len))
-  
-  for index in 1 .. maximumLength:
-    var currentTuple = ()
-    for iterable in iterables:
-      currentTuple += (iterable[index - 1])
+macro zipShort(iterables: varargs[untyped]): untyped =
+  result = quote do:
+    var maximumLength = 999_999
+    let zippedArray = collect(newSeq):
+      for iterable in `iterables`:
+        if maximumLength > iterable.len:
+          maximumLength = iterable.len
+          
+      for index in 1 .. maximumLength:
+        var currentTuple = ()
+        for iterable in `iterables`:
+          currentTuple += (iterable[index - 1])
+        currentTuple
 
-    result.push(currentTuple)
-
+    zippedArray
+            
 when isMainModule:
-  echo [1, 2, 3, 4] Z [1, 2, 3, 4]
+  echo zipShort([1, 2], [3, 4], [5, 6])
+            

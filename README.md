@@ -10,9 +10,4 @@ This repository contains experiments, oddities, and other such scripts that spaw
 - Raku
 - Haxe
 - Emacs Lisp
-- Common Lisp
-- Nim
 - D
-- C++
-
-[Test Page](./test-page.md)

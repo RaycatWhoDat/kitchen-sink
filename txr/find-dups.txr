@@ -1,0 +1,11 @@
+@(collect)
+@fork
+@(trailer)
+@(skip)
+@fork
+@(end)
+@(output)
+@(repeat)
+Duplicate here: @fork
+@(end)
+@(end)
