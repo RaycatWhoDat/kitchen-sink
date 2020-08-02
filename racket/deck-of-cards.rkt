@@ -13,11 +13,12 @@
              [suit (symbol->string (last card))])
         (print
           (format "~a~a"
-            (cond [(= value 1) "A"]
-              [(= value 11) "J"]
-              [(= value 12) "Q"]
-              [(= value 13) "K"]
-              [else value])
+            (match value
+              [1 "A"]
+              [11 "J"]
+              [12 "Q"]
+              [13 "K"]
+              [_ value])
             suit))))
     cards-in-hand))
 

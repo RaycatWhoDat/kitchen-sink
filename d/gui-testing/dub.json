@@ -1,0 +1,8 @@
+{
+    "name": "gui-testing",
+    "authors": ["Ray Perry"],
+    "description": "Testing some GUI programming",
+    "dependencies": {
+	"gtk-d": "*"
+    }
+}

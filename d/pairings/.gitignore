@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+/pairings
+pairings.so
+pairings.dylib
+pairings.dll
+pairings.a
+pairings.lib
+pairings-test-*
+*.exe
+*.o
+*.obj
+*.lst

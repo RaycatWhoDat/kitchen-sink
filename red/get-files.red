@@ -21,5 +21,5 @@ get-files ".." 0
 
 ; Local Variables:
 ; mode: rebol
-; compile-command: "./bin/red get-files.red"
+; compile-command: "./red get-files.red"
 ; End:
