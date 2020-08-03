@@ -1,0 +1,12 @@
+{
+	"authors": [
+		"Ray Perry"
+	],
+	"copyright": "Copyright © 2020, Ray Perry",
+	"dependencies": {
+		"mir-algorithm": "~>3.9.6"
+	},
+	"description": "A minimal D application.",
+	"license": "none",
+	"name": "pairings"
+}
