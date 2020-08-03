@@ -8,7 +8,7 @@ sub MAIN() {
     my $fileHandle = open 'final_conversion.csv', :a;
     
     for @numbers Z @text Z @types -> [$number, $text, $type] {
-        $fileHandle.say($number ~ "|" ~ $text ~ "|" ~ $type);
+        $fileHandle.sprintf("%s|%s|%s", $number, $text, $type);
     }
 
     $fileHandle.close;
