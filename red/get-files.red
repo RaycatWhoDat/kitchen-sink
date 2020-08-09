@@ -17,7 +17,7 @@ get-files: function [
   ]
 ]
 
-get-files ".." 0
+get-files either (length? system/options/args) > 0 [last system/options/args][".."] 0
 
 ; Local Variables:
 ; mode: rebol
