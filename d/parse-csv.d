@@ -2,16 +2,26 @@
 
 module parsecsv;
 
-import std.stdio: writefln, File;
-import std.algorithm: each;
-import std.range: split, back;
+import std.stdio;
+import std.algorithm;
+import std.range;
+import std.csv;
 
 int main(string[] args) {
   if (args.length != 2) return 1;
-  File(args.back, "r")
-      .byLine
-      .each!(record => writefln("%(%s, %)", record.split(',')));
 
+  auto csvFile = File(args.back)
+                 .byLine
+                 .joiner("\n")
+                 .csvReader!(string[string])(null);
+
+  auto allKeys = ["First Name", "Last Name", "Email", "Date of Birth"];
+  
+  foreach (record; csvFile) {
+    allKeys.each!(key => writefln("%s: %s", key, record[key]));
+    writeln();
+  }
+  
   return 0;
 }
 
