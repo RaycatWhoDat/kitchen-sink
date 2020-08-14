@@ -1,0 +1,17 @@
+@(data beginningOfFile)
+@(skip)
+export type @entityName = @restOfLine
+@(data restOfFile)
+@(trailer)
+@(bind filePrefix @(butlast (ldiff beginningOfFile restOfFile)))
+@(output)
+@(repeat)
+@filePrefix
+@(end)
+type @entityName = @restOfLine
+@(repeat)
+@restOfFile
+@(end)
+
+export default @entityName;
+@(end)
