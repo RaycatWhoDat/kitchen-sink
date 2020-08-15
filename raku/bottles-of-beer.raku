@@ -10,5 +10,5 @@ sub MAIN(Int $bottlesOfBeer = 99) {
 }
 
 # Local Variables:
-# compile-command: "perl6 ./bottles-of-beer.p6"
+# compile-command: "raku ./bottles-of-beer.raku"
 # End:

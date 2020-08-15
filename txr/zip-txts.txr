@@ -1,8 +1,8 @@
 @(bind number @(file-get-lines "formatted_numbers.txt"))
 @(bind text @(file-get-lines "formatted_text.txt"))
 @(bind type @(file-get-lines "formatted_types.txt"))
-@(output)
-@       (repeat)
+@(output "final_conversion.csv")
+@(repeat)
 @number|@text|@type
-@       (end)
+@(end)
 @(end)
