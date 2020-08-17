@@ -114,17 +114,24 @@
    (list txr-mode-kwargs-re          1 font-lock-constant-face)))
 
 
+(defun mode-setup ()
+  (set (make-local-variable 'font-lock-defaults)
+    '(txr-font-lock-keywords t))
+  (add-to-list 'ac-sources 'ac-source-txr))
+
+(defun turn-off-sly ()
+  (when (boundp 'sly-mode) (sly-mode 0)))
+
 (define-derived-mode txr-mode lisp-mode "TXR"
   "Major mode for editing TXR scripts"
-  (set (make-local-variable 'font-lock-defaults)
-       '(txr-font-lock-keywords t))
-  (add-to-list 'ac-sources 'ac-source-txr))
+  (mode-setup))
 
 (define-derived-mode txr-lisp-mode lisp-mode "TXR Lisp"
   "Major mode for editing TXR scripts"
-  (set (make-local-variable 'font-lock-defaults)
-       '(txr-font-lock-keywords t))
-  (add-to-list 'ac-sources 'ac-source-txr))
+  (mode-setup))
+
+(add-hook 'txr-mode-hook 'turn-off-sly)
+(add-hook 'txr-lisp-mode-hook 'turn-off-sly)
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.txr$" . txr-mode))
