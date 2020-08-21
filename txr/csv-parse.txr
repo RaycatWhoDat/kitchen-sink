@@ -7,6 +7,7 @@
 First Name: @first_name
 Last Name: @last_name
 Email: @email
-Date of Birth: @dob@\n
+Date of Birth: @dob
+
 @(end)
 @(end)

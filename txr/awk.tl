@@ -1,8 +1,6 @@
 (awk
   (:inputs "MOCK_DATA.csv")
   (:set fs ",")
+  (:let (entry-format "First Name: ~a\nLast Name: ~a\nEmail: ~a\nDate of Birth: ~a\n"))
   ((>= nr 2)
-    (prn "First Name: " [f 0])
-    (prn "Last Name: " [f 1])
-    (prn "Email: " [f 2])
-    (prn "Date of Birth: " [f 3] "\n")))
+    (prn (format nil entry-format [f 0] [f 1] [f 2] [f 3]))))

@@ -1,0 +1,6 @@
+(each ((line (file-get-lines "MOCK_DATA.csv")))
+  (let ((fields (split-str line ",")))
+    (file-append-lines "first_names.txt" (list [fields 0]))
+    (file-append-lines "last_names.txt" (list  [fields 1]))
+    (file-append-lines "emails.txt" (list [fields 2]))
+    (file-append-lines "dobs.txt" (list [fields 3]))))

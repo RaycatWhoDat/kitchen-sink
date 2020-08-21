@@ -1,5 +1,7 @@
 import zero_functional
 
+var seq1 = "MOCK_DATA.csv".lines
 var seq2 = 6 .. 10
+var seq3 = seq1.reversed
 
-zip("MOCK_DATA.csv".lines, seq2, "MOCK_DATA.csv".lines.reversed) --> foreach(echo it)
+zip(seq1, seq2, seq3) --> foreach(echo it)
