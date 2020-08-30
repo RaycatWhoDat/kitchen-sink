@@ -83,7 +83,7 @@
 (defconst txr-mode-function-re
   (rx
    (seq
-    (or "\(" )
+    (or "\(" "\(\(")
     (group
      (minimal-match
       (one-or-more (not whitespace))))
