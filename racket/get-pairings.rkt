@@ -12,4 +12,4 @@ How about...
   (for/list ((pair pairs))
     (format "~a and ~a\n" (car pair) (cadr pair))))
 
-;; (compile "racket get-pairings.rkt")
+@;(compile "racket get-pairings.rkt")
