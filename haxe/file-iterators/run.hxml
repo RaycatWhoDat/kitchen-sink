@@ -1,3 +1,9 @@
+--dce full
+-D analyzer_optimize
+
 --lib tink_lang
 --main FileIterators
 --interp
+
+#--cpp cpp
+#-D static_link
