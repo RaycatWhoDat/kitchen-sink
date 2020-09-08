@@ -1,0 +1,6 @@
+--dce full
+--define analyzer-optimize
+
+--main GuiTesting
+--lib haxeui-core
+--lib haxeui-openfl

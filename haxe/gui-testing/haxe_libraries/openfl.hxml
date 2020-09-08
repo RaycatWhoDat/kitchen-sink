@@ -1,0 +1,5 @@
+# @install: lix --silent download "haxelib:/openfl#9.0.2" into openfl/9.0.2/haxelib
+# @run: haxelib run-dir openfl ${HAXE_LIBCACHE}/openfl/9.0.2/haxelib
+-cp ${HAXE_LIBCACHE}/openfl/9.0.2/haxelib/lib
+-D openfl=9.0.2
+--macro openfl._internal.ExtraParams.include()

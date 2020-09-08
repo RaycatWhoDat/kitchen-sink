@@ -423,8 +423,8 @@ of the start of the containing expression."
       (modify-syntax-entry ?  "    ")
 
       ;; Delimiters
-      (modify-syntax-entry ?[ "(]  ")
-      (modify-syntax-entry ?] ")[  ")
+      (modify-syntax-entry ?\[ "(]  ")
+      (modify-syntax-entry ?\] ")[  ")
       (modify-syntax-entry ?\( "()  ")
       (modify-syntax-entry ?\) ")(  ")
 
