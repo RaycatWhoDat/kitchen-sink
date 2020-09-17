@@ -1,0 +1,43 @@
+needs nk/gui
+
+with: nk
+
+: new-win
+  \ Define the window using JSON. See the documentation for all the possible keys and values:
+  {
+    name: "main",                   \ name used to find the window
+    wide: 0.5,                      \ be half as wide as the screen (if >1, that many pixels)
+    high: 0.5,                      \ and half as tall
+    bg: "palegreen:10",                \ ugly background color which won't actually show up
+    fonts: {                        \ the fonts we will use:
+      font1: ` 24 font:system `
+    },
+    font: "font1",                     \ the name (our name) of the font to use by default this window
+    title: "Hello, from 8th!"     \ the window title
+  } win ;
+
+: main-render
+  {
+    title: "simple",
+    bg: "white:50",
+    font: "font1",
+    padding: [8,8],
+    flags: [ @WINDOW_NO_SCROLLBAR ]
+  } 
+  begin
+    \ Create a label, centered in the window:
+    win-high 0.75 n:* 1 layout-row-dynamic
+      "Hello, world!" TEXT_CENTERED "black" label-colored
+
+    \ A simple button with a label a word to execute if pushed:
+    win-high 0.20 n:* 1 layout-row-dynamic
+      "Bye..." ' bye button-label
+  end ;
+
+\ You start your 8th application in 'app:main':
+: app:main
+  new-win
+  \ you must use a render-loop in order to see anything at all:
+  ' main-render 200 nk:render-loop
+  \ Get here if the user closed the window, or some other event caused the loop to stop:
+  "Bye from 8th-NK!" . cr ;

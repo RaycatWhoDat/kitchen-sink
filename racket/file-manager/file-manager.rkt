@@ -4,7 +4,7 @@
 
 ;; Start at the present working directory
 (define *current-directory* "/")
-(define *ignored-paths* '("." ".." ".git" "node_modules" ".dub" "love" "target" "dist"))
+(define *ignored-paths* '(".git" "node_modules" ".dub" "love" "target" "dist"))
 
 ;; Get a list of all the files in the directory
 (define (do-files (directory-path *current-directory*))

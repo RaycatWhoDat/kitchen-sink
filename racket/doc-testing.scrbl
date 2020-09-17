@@ -2,7 +2,7 @@
 
 @(require csv-reading)
 @(require racket/match)
-@(define *csv-lines* (cdr (csv->list (open-input-file "MOCK_DATA.csv"))))
+@(define *csv-lines* (cdr (csv->list (open-input-file "../d/MOCK_DATA.csv"))))
 @(define *entry-format* #<<ENTRY
 First Name: ~a
 Last Name: ~a
