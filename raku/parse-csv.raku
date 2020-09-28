@@ -11,12 +11,11 @@ grammar CSVParser {
     token value { <-[,\n]>+ }
 }
 
-my $parsed = CSVParser.parsefile("MOCK_DATA.csv");
+my $fileLocation = "../d/MOCK_DATA.csv";
+my $parsed = CSVParser.parsefile($fileLocation);
 for $parsed<valueRow> -> $valueRow {
     for $parsed<headerRow><value> Z $valueRow<value> -> ($key, $value) {
         say $key ~ ": " ~ $value;
     }
     say "";
 }
-
-
