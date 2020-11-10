@@ -8,10 +8,6 @@ impl User {
     fn get_full_name(&self) -> String {
         format!("{} {}", &self.first_name, &self.last_name)
     }
-    
-    fn get_email(&self) -> &str {
-        &self.email
-    }
 }
 
 fn main() {
@@ -26,5 +22,5 @@ fn main() {
     };
 
     println!("{}", new_user.get_full_name());
-    println!("{}", new_user.get_email());
+    println!("{}", new_user.email);
 }
