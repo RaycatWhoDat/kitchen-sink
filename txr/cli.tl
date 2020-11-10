@@ -8,15 +8,15 @@
 (defvarl invalid-option nil)
 
 (let ((options (new cli-args)))
-  ;; (qref options (getopts *args*))
   options.(getopts *args*)
 
   (set invalid-option
-    (null (or options.folder options.branch options.repo)))
+    [some (list options.folder options.branch options.repo) null])
 
   (when (or options.help invalid-option)
     (put-line "Usage:\n")
     (put-line `  @{prog-name} [options] arg*`)
-    ;; (qref options (opthelp))
     options.(opthelp)
-    (exit 1)))
+    (exit 1))
+
+  (put-line `Would you like to spin-off @{options.folder} at @{options.branch} into @{options.repo}?`))
