@@ -1,5 +1,6 @@
 use v6;
 
+#| These must be integers.
 unit sub MAIN(*@numbers where { .all ~~ Int });
 
 sub fizzbuzz($number) {
