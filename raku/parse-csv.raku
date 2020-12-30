@@ -2,20 +2,32 @@ use v6;
 
 grammar CSVParser {
     rule TOP {
-        <headerRow>
-        <valueRow>+ %% \n
+        '{'
+        <valueRow>+ %% \,
+        '}'
     }
 
-    token headerRow { <value>+ %% \, }
-    token valueRow { <value>+ %% \, }
-    token value { <-[,\n]>+ }
+    token headerRow {
+        '{' | '}' \s*
+    }
+    token valueRow {
+        '"' <key> '"' ':' \s* '"' <value> '"'
+    }
+    token key {
+        <-["]>*
+    }
+    token value {
+        <-["]>*
+    }
 }
 
-my $fileLocation = "../d/MOCK_DATA.csv";
+my $fileLocation = "tag-glossary.json";
 my $parsed = CSVParser.parsefile($fileLocation);
+my $destination = "tag-glossary-formatted.json";
+
+spurt $destination, '{', :append;
 for $parsed<valueRow> -> $valueRow {
-    for $parsed<headerRow><value> Z $valueRow<value> -> ($key, $value) {
-        say $key ~ ": " ~ $value;
-    }
-    say "";
+    my $line = "  \"" ~ $valueRow<key>.trim ~ "\": \"" ~ $valueRow<value>.trim ~ "\",\n";
+    spurt $destination, $line, :append;
 }
+spurt $destination, '}', :append;

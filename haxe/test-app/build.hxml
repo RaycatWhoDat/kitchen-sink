@@ -1,0 +1,6 @@
+-D analyzer-optimize
+-dce full
+
+--main TestApp
+
+--js dist/puzzlebot.js
