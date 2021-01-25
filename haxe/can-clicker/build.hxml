@@ -1,0 +1,7 @@
+-dce full
+-lib heaps
+-main CanClicker
+-D analyzer-optimize
+-D resourcesPath=assets
+-js dist/can-clicker.js
+-debug

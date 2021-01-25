@@ -13,7 +13,9 @@
         (when (directory-exists? (path->directory-path (build-path directory-path current-path)))
           (get-files (string-append directory-path "/" current-path) (+ traversal-level 1)))))))
 
-(get-files)
+(if (zero? (vector-length (current-command-line-arguments)))
+    (get-files)
+    (get-files (vector-ref (current-command-line-arguments) 0)))
 
 ;; Local Variables:
 ;; compile-command: "racket ./get-files.rkt"
