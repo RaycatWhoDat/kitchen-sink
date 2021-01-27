@@ -11,7 +11,7 @@ class Rover {
     has $!grid-width = 0;
     has $!x = 0;
     has $!y = 0;
-    has $!direction;
+    has Direction $!direction;
 
     method getCurrentPosition {
         my $formatted-direction = $!direction.key;
@@ -39,8 +39,8 @@ class Rover {
             when "M" {
                 say "Moving forward...";
                 my ($x-delta, $y-delta) = $!direction.value;
-                $!x += $x-delta if 0 <= ($!x + $x-delta) <= $!grid-width;
-                $!y += $y-delta if 0 <= ($!y + $y-delta) <= $!grid-height;
+                $!x += $x-delta if 0 <= $!x + $x-delta <= $!grid-width;
+                $!y += $y-delta if 0 <= $!y + $y-delta <= $!grid-height;
             }
             
             when "L" {
