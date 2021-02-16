@@ -5,7 +5,7 @@ use std::env::args;
 use std::fs::read_dir;
 use std::path::{Path, PathBuf};
 
-const TWO_SPACES: i32 = 2;
+const TWO_SPACES: usize = 2;
 
 fn get_files(directory_path: &PathBuf, traversal_level: usize) -> io::Result<()> {
     let ignored_paths = ["node_modules", ".git", "target", "dist", "dub", "love"];

@@ -10,7 +10,7 @@ grammar OptionsParser {
 
     token flag-with-values {
         <flag-name> <.ws> <flag-value> {
-            %*result{~$<flag-name>} = ~$<flag-value>;
+            %*result{$<flag-name>} = ~$<flag-value>;
         }
     }
     
