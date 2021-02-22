@@ -1,10 +1,10 @@
 (require 'rx)
-(require 'auto-complete)
+;; (require 'auto-complete)
 
 (defalias 'ap 'apply-partially)
 
-(defun ac-source-txr-candidates ()
-  txr-mode-keywords)
+;; (defun ac-source-txr-candidates ()
+;;   txr-mode-keywords)
 
 (defun txr-document-symbol (symbol)
   (let ((x (assoc (or (and (stringp symbol) symbol)
@@ -13,9 +13,9 @@
     (when x
       (concat "    " (nth 2 x) "\n\n" (nth 3 x)))))
 
-(defconst ac-source-txr
-  `((candidates . ac-source-txr-candidates)
-    (document . txr-document-symbol)))
+;; (defconst ac-source-txr
+;;   `((candidates . ac-source-txr-candidates)
+;;     (document . txr-document-symbol)))
 
 
 (defconst txr-mode-quoted-string-re
@@ -116,8 +116,8 @@
 
 (defun mode-setup ()
   (set (make-local-variable 'font-lock-defaults)
-    '(txr-font-lock-keywords t))
-  (add-to-list 'ac-sources 'ac-source-txr))
+    '(txr-font-lock-keywords t)))
+  ;; (add-to-list 'ac-sources 'ac-source-txr))
 
 (defun turn-off-sly ()
   (when (boundp 'sly-mode) (sly-mode 0)))
