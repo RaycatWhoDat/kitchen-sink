@@ -1,6 +1,6 @@
 use v6;
 
-my @names = <Syd Sabrina Veronica Sean Karan Ray>;
+my @names = <Lex Sabrina Sean Karan Ray Solo>;
 my @combinations = @names.combinations: 2;
 my @pairs;
 
@@ -10,5 +10,24 @@ loop {
 };
 
 say "How about...";
-say "$_[0] and $_[1]" for @pairs;
+for @pairs -> ($first-pair, $second-pair) {
+    when $first-pair ~~ 'Solo' { say "$second-pair goes to the Gulag" }
+    when $second-pair ~~ 'Solo' { say "$first-pair goes to the Gulag" }
+    default { say "$first-pair and $second-pair" }
+}
 
+# Sabrina and Sean
+# Lex and Ray
+# Karan goes to the Gulag
+
+# Lex and Karan
+# Sabrina goes to the Gulag
+# Sean and Ray
+
+# Lex and Sean
+# Sabrina and Karan
+# Ray goes to the Gulag
+
+# Lex and Sabrina
+# Ray and Karan
+# Sean goes to the Gulag
