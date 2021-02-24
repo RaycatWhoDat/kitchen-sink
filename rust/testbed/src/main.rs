@@ -1,3 +1,5 @@
+use std::iter::successors;
+
 struct User {
     first_name: String,
     last_name: String,
@@ -36,4 +38,9 @@ fn main() {
     };
     
     println!("{}", user.get_full_info());
+
+    let fibonacci = successors(Some((1, 1)), |(prev, curr)| Some((*curr, *prev + *curr)));
+    for (number, _) in fibonacci.take(10) {
+        println!("{:#?}", number);
+    }
 }
