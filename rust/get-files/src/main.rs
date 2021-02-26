@@ -8,11 +8,7 @@ use std::string::String;
 
 const TWO_SPACES: usize = 2;
 
-fn get_files(
-    directory_path: &PathBuf,
-    callback: &dyn Fn(&String, &str) -> (),
-    traversal_level: usize,
-) -> Result<()> {
+fn get_files(directory_path: &PathBuf, callback: fn(&String, &str), traversal_level: usize) -> Result<()> {
     let ignored_paths = ["node_modules", ".git", "target", "dist", "dub", "love"];
 
     let mut entries = read_dir(directory_path)?
@@ -24,8 +20,8 @@ fn get_files(
     let indentation = " ".repeat(traversal_level * TWO_SPACES);
 
     for entry in entries {
-        let last_path_component = entry.iter().last().unwrap();
-        let formatted_path = last_path_component.to_str().unwrap();
+        let last_path_component = entry.iter().last().unwrap_or_default();
+        let formatted_path = last_path_component.to_str().unwrap_or_default();
 
         if ignored_paths.contains(&formatted_path) { continue; }
 
@@ -43,5 +39,5 @@ fn main() -> Result<()> {
     let directory_path = PathBuf::from(args().last().unwrap_or(".".to_string()));
     let print_item = |indentation: &String, item: &str| println!("{}{}", indentation, item);
 
-    get_files(&directory_path, &print_item, 0)
+    get_files(&directory_path, print_item, 0)
 }
