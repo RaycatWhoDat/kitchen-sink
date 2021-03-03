@@ -1,0 +1,17 @@
+@nil
+@(collect)
+@{id /\d+/},@{title /"(.*)"|[^,]*/},@labels@(maybe),@{iteration /\d*/}@(or),,@(end),@rest,"@{created_at /\w+ \d+, \d+/}",@nil
+@(end)
+@(output)
+@(repeat)
+@(if (contains "tech debt" labels))
+ID: @id
+Title: @title
+Labels: @labels
+Date: @created_at
+Story Link: https://www.pivotaltracker.com/n/projects/2208207/stories/@id
+
+@(end)
+@(end)
+@(end)
+@(eof)
