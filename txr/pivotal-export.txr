@@ -3,14 +3,10 @@
 @{id /\d+/},@{title /"(.*)"|[^,]*/},@labels@(maybe),@{iteration /\d*/}@(or),,@(end),@rest,"@{created_at /\w+ \d+, \d+/}",@nil
 @(end)
 @(output)
+ID,Title,Labels,Date,Story
 @(repeat)
 @(if (contains "tech debt" labels))
-ID: @id
-Title: @title
-Labels: @labels
-Date: @created_at
-Story Link: https://www.pivotaltracker.com/n/projects/2208207/stories/@id
-
+@id,@title,@labels,"@created_at",https://www.pivotaltracker.co m/n/projects/2208207/stories/@id
 @(end)
 @(end)
 @(end)

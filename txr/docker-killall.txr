@@ -1,0 +1,15 @@
+@(next (open-command "docker ps"))
+@nil
+@(collect)
+@container_id @nil
+@(end)
+@(output)
+@(repeat)
+Killing container ID @container_id...
+@(command-get (fmt "docker kill ~a" container_id))
+@(empty)
+No containers found.
+@(end)
+@(end)
+@(eof)
+

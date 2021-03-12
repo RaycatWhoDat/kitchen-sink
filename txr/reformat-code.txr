@@ -1,10 +1,5 @@
 @(collect :vars (module (functions nil)))
-@(maybe)
-import @module: @functions;
-@(or)
-import @module;
-@(end)
-@(end)
+import @module@(maybe): @functions;@(or);@(end)
 @(set module @(reverse module))
 @(set functions @(reverse functions))
 @(output)
