@@ -1,0 +1,14 @@
+@(next "kaze.txt")
+@nil
+@(collect)
+@(maybe)
+@nil]@text #PSO2
+@(or)
+@nil]@text
+@(end)
+@(end)
+@(output)
+@(repeat)
+Alert: @text
+@(end)
+@(end)

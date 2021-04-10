@@ -55,6 +55,9 @@ if that value is non-nil."
   (rebol-mode-variables)
   (run-hooks 'rebol-mode-hook))
 
+(add-to-list 'auto-mode-alist '("\\.red$" . rebol-mode))
+(add-to-list 'auto-mode-alist '("\\.reds$" . rebol-mode))
+
 (defun rebol-mode-initialize ()
   (use-local-map rebol-mode-map)
   (setq mode-name "REBOL" major-mode 'rebol-mode)
