@@ -1,22 +1,20 @@
-import macros
 import sugar
+import sequtils
+import fusion/matching
 
-macro zipShort(iterables: varargs[untyped]): untyped =
-  result = quote do:
-    var maximumLength = 999_999
-    let zippedArray = collect(newSeq):
-      for iterable in `iterables`:
-        if maximumLength > iterable.len:
-          maximumLength = iterable.len
-          
-      for index in 1 .. maximumLength:
-        var currentTuple = ()
-        for iterable in `iterables`:
-          currentTuple += (iterable[index - 1])
-        currentTuple
-
-    zippedArray
-            
 when isMainModule:
-  echo zipShort([1, 2], [3, 4], [5, 6])
-            
+  {. experimental: "caseStmtMacros" .}
+  
+  var
+    testData1 = [1, 2, 3]
+    testData2 = [4, 5, 6]
+    testData3 = [7, 8, 9, 10, 11, 12]
+    
+  let result = collect(newSeq):
+    for item in testData1.zip(testData2).zip(testData3):
+      case item:
+        of ((@first, @second), @third):
+          (first, second, third)
+
+  for item in result:
+    echo item
