@@ -1,0 +1,15 @@
+@(next "MOCK_DATA.csv")
+@nil
+@(collect)
+@first_name,@last_name,@email,@dob
+@(end)
+@(output)
+@(repeat)
+First Name: @(if (contains "Hartwell" first_name) "" first_name)
+Last Name: @last_name
+Email: @email
+Date of Birth: @dob
+
+@(end)
+@(end)
+@(eof)
