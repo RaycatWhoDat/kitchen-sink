@@ -4,3 +4,4 @@ d/MOCK_DATA.csv linguist-vendored
 cpp/janet-embed/janet.c linguist-vendored
 cpp/janet-embed/janet.h linguist-vendored
 cpp/janet-embed/janetconf.h linguist-vendored
+txr/docs/manpage.html linguist-vendored
