@@ -1,6 +1,6 @@
 @(next "./stack-trace.json")
-@(skip 25)
- "stack": "@(coll)@stacktraceLine\n@(end)@nil
+@(skip)
+@nil"stack": "@(coll)@stacktraceLine\n@(end)@nil
 @(output)
 @(repeat)
 @stacktraceLine
