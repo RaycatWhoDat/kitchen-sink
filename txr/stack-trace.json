@@ -1,0 +1,111 @@
+{
+  "meta": {
+    "error": {
+      "name": "SequelizeQueryError",
+      "isBoom": true,
+      "isServer": true,
+      "data": null,
+      "output": {
+        "statusCode": 500,
+        "payload": {
+          "statusCode": 500,
+          "error": "Internal Server Error",
+          "message": "An internal server error occurred"
+        },
+        "headers": {
+        }
+      },
+      "isDeveloperError": true
+    },
+    "level": "error",
+    "message": "uncaughtException: Attempted a SELECT query for model 'cases' as \"cases\" without selecting any columns\nSequelizeQueryError: Attempted a SELECT query for model 'cases' as \"cases\" without selecting any columns\n    at PostgresQueryGenerator._throwOnEmptyAttributes (/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js:2086:11)\n    at PostgresQueryGenerator.selectFromTableFragment (/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js:2090:10)\n    at PostgresQueryGenerator.selectQuery (/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js:1317:34)\n    at PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:954:27)\n    at Function.findAll (/app/node_modules/sequelize/lib/model.js:1753:47)\n    at process._tickCallback (internal/process/next_tick.js:68:7)",
+    "stack": "SequelizeQueryError: Attempted a SELECT query for model 'cases' as \"cases\" without selecting any columns\n    at PostgresQueryGenerator._throwOnEmptyAttributes (/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js:2086:11)\n    at PostgresQueryGenerator.selectFromTableFragment (/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js:2090:10)\n    at PostgresQueryGenerator.selectQuery (/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js:1317:34)\n    at PostgresQueryInterface.select (/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js:954:27)\n    at Function.findAll (/app/node_modules/sequelize/lib/model.js:1753:47)\n    at process._tickCallback (internal/process/next_tick.js:68:7)",
+    "exception": true,
+    "date": "Wed Apr 21 2021 19:52:04 GMT+0000 (Coordinated Universal Time)",
+    "process": {
+      "pid": 288,
+      "uid": 0,
+      "gid": 0,
+      "cwd": "/app",
+      "execPath": "/usr/bin/node",
+      "version": "v10.21.0",
+      "argv": [
+        "/usr/bin/node",
+        "/app/node_modules/jest-worker/build/workers/processChild.js"
+      ],
+      "memoryUsage": {
+        "rss": 241127424,
+        "heapTotal": 204001280,
+        "heapUsed": 149180096,
+        "external": 492967
+      }
+    },
+    "os": {
+      "loadavg": [
+        0.64501953125,
+        2.24609375,
+        2.6357421875
+      ],
+      "uptime": 324732
+    },
+    "trace": [
+      {
+        "column": 11,
+        "file": "/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js",
+        "function": "PostgresQueryGenerator._throwOnEmptyAttributes",
+        "line": 2086,
+        "method": "_throwOnEmptyAttributes",
+        "native": false
+      },
+      {
+        "column": 10,
+        "file": "/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js",
+        "function": "PostgresQueryGenerator.selectFromTableFragment",
+        "line": 2090,
+        "method": "selectFromTableFragment",
+        "native": false
+      },
+      {
+        "column": 34,
+        "file": "/app/node_modules/sequelize/lib/dialects/abstract/query-generator.js",
+        "function": "PostgresQueryGenerator.selectQuery",
+        "line": 1317,
+        "method": "selectQuery",
+        "native": false
+      },
+      {
+        "column": 27,
+        "file": "/app/node_modules/sequelize/lib/dialects/abstract/query-interface.js",
+        "function": "PostgresQueryInterface.select",
+        "line": 954,
+        "method": "select",
+        "native": false
+      },
+      {
+        "column": 47,
+        "file": "/app/node_modules/sequelize/lib/model.js",
+        "function": "Function.findAll",
+        "line": 1753,
+        "method": "findAll",
+        "native": false
+      },
+      {
+        "column": 7,
+        "file": "internal/process/next_tick.js",
+        "function": "process._tickCallback",
+        "line": 68,
+        "method": "_tickCallback",
+        "native": false
+      }
+    ],
+    "req": {
+      "url": "/api/public-data?queryType=countComplaintTotals",
+      "method": "GET",
+      "originalUrl": "/api/public-data?queryType=countComplaintTotals"
+    }
+  },
+  "trace": "See stack",
+  "memoryUsage": "",
+  "level": "error",
+  "message": "middlewareError"
+}
