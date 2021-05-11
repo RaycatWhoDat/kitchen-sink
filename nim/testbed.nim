@@ -1,7 +1,12 @@
-import zero_functional
+import strformat
 
-var seq1 = "MOCK_DATA.csv".lines.toSeq
-var seq2 = 6 .. 10
-var seq3 = seq1.reversed
+type Person = ref object of RootObj
+  name: string
+  age: int
 
-seq1 --> zip(seq2, seq3) --> foreach(echo it)
+type Manager = ref object of Person
+  role: string
+  
+var jim = Manager(name: "Jim", age: 53, role: if false: "Dude" else: "Duder")
+
+echo fmt"{jim.name} is a {jim.role}"

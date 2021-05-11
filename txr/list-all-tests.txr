@@ -1,0 +1,20 @@
+@(name fileName)
+@nil
+@(collect :vars ((suiteDescription nil) (testDescription nil)))
+@(maybe)
+@{nil}describe("@suiteDescription"@nil
+@(or)
+ test("@testDescription"@nil
+@(end)
+@(end)
+@(output)
+====| @fileName |====
+@(repeat)
+@(if suiteDescription)
+Suite: @suiteDescription
+@(elif testDescription)
+  Test: @testDescription
+@(end)
+@(end)
+       
+@(end)
