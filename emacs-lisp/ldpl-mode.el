@@ -24,7 +24,9 @@
      "to"
      "do"
      "then"
-     "return"))
+     "return"
+     "break"
+     "continue"))
 
 (setq ldpl-mode-built-in-keywords
   '("call"
@@ -69,7 +71,11 @@
 (setq ldpl-mode-keywords
   (append ldpl-mode-lowercase-keywords ldpl-mode-uppercase-keywords))
 
-(setq ldpl-mode-file-extensions (list (rx ".ldpl" eol)))
+(setq ldpl-mode-file-extensions '("\\.ldpl$")))
+
+(defun ldpl-mode-setup ()
+  (setq-default indent-tabs-mode nil)
+  (set (make-local-variable 'tab-stop-list) '(4 8)))
 
 (define-generic-mode
   ldpl-mode
@@ -77,9 +83,9 @@
   ldpl-mode-keywords
   nil
   ldpl-mode-file-extensions
-  nil
+  (list 'ldpl-mode-setup)
   "Major mode for the LDPL Programming Language.")
-  
+
 
   
   
