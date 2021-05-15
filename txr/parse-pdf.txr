@@ -1,0 +1,9 @@
+@(collect)
+@nil/T(@fieldName@(maybe) List@(or)Check@(or) Text@(or) Combo@(end) Box)@nil/V@(maybe)(@fieldValue)@(or)@fieldValue@(end)@nil>@nil
+@(end)
+@(output)
+@(repeat)
+@fieldName: @fieldValue
+@(end)
+@(end)
+   

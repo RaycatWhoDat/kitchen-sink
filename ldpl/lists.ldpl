@@ -1,0 +1,10 @@
+data:
+    numbers is number list
+    fruits is text list
+    index is number
+    
+procedure:
+    for index from 1 to 5 step 1 do
+        push index to numbers
+    repeat
+    display numbers:3

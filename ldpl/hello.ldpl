@@ -1,15 +1,15 @@
 data:
-        arg is text
-        index is number
-        numberOfArgs is number
-        lastIndexOfArgs is number
+    arg is text
+    index is number
+    numberOfArgs is number
+    lastIndexOfArgs is number
 
 procedure:
-       get length of argv in numberOfArgs
-       in lastIndexOfArgs solve numberOfArgs - 1
-       for index from 0 to numberOfArgs step 1 do
-           display argv:index
-           if index is not equal to lastIndexOfArgs then
-              display ", "
-           end if
-       repeat
+    get length of argv in numberOfArgs
+    in lastIndexOfArgs solve numberOfArgs - 1
+    for index from 0 to numberOfArgs step 1 do
+        display argv:index
+        if index is not equal to lastIndexOfArgs then
+           display ", "
+        end if
+    repeat

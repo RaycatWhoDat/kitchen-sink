@@ -1,0 +1,8 @@
+@(collect)
+( @line )@nil
+@(end)
+@(output)
+@(repeat)
+@line
+@(end)
+@(end)
