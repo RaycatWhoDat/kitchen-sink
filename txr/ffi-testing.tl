@@ -1,4 +1,8 @@
-(with-dyn-lib "./lib/libaddition.so"
-  (deffi add "add" int (int int)))
+(with-dyn-lib "./lib/libquick_math.so"
+  (deffi add "add" float (float float))
+  (deffi subtract "subtract" float (float float))
+  (deffi multiply "multiply" float (float float))
+  (deffi divide "divide" float (float float)))
 
-(prinl (add 1 2))
+(prinl (divide (subtract (multiply (add 1 2) 3) 1) 2))
+
