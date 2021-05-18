@@ -1,9 +1,19 @@
+@(skip)
 @(collect :vars (module (functions nil)))
-import @module@(maybe): @functions;@(or);@(end)
-@(set module @(reverse module))
-@(set functions @(reverse functions))
+import @(maybe)@module: @functions;@(or)@module;@(end)
+@(end)
+@(do (set functions
+       (mapcar
+         (lambda (item) (if (stringp item) (split-str item ", ") ""))
+         functions)))
 @(output)
 @(repeat)
-import @module@(when functions `: `)@functions;
+@(if (listp functions))
+@(repeat)
+import @module.@functions;
+@(end)
+@(else)
+import @module;
+@(end)
 @(end)
 @(end)
