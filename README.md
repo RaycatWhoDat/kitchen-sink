@@ -2,7 +2,9 @@
 
 ![Perilous Forays, the Magic: The Gathering card](https://c1.scryfall.com/file/scryfall-cards/art_crop/front/4/2/4210a148-d16c-42de-b0d6-83c05c553dd4.jpg?1598916443)
 
-"[*This*](https://github.com/RayMPerry/kitchen-sink) is the place? This map has got to be wrong … ." — Svania Trul, wayfinder novice, last words
+> "[*This*](https://github.com/RayMPerry/kitchen-sink) is the place? This map has got to be wrong … ." — Svania Trul, wayfinder novice, last words
+
+> Some people say, "[Programming languages] are just tools. Just learn them as needed." I agree, but I still have a favorite hammer and drill.
 
 ## Introduction
 As a web dev, a lot of my time is spent working and building the same sort of applications. This repository contains experiments, oddities, and other such scripts that spawned from a foray into a language. (Mostly) comprised of JavaScript, I plan on using this repo to post my findings and learnings from other languages. Ideally, I would like to reduce the number of languages I *have* to know to be gainfully employed and enjoy working with. Realistically, I could stop right now and just use JavaScript but someone might try to gatekeep me because, ya know, "JavaScript is a bad language" and all that.
@@ -28,24 +30,17 @@ Julia, OCaml, Awk, Perl, Elixir, Ruby/Crystal, Chez/Gambit/Guile/Chicken Scheme,
 
 With that out of the way, let's get started.
 
-## The List
-### 20. C# (TODO)
-Let me be clear: C# is what we call, A Good Language™. There are a lot of things it does right and there are a lot of resources out there to learn it. However, proper understanding of the ecosystem (and where most of the money is) comes down to learning how Windows does things. And Windows and I aren't really on speaking terms anymore.
+## Top 20 Languages
+### 20. [LDPL](https://www.ldpl-lang.org/)
+Okay, hear me out. You see this funky little dinosaur here? I love 'im. I'd take a bullet for 'im. 
 
-```cs
-using System;
+![Funky Little Dinosaur](https://www.ldpl-lang.org/graphics/other/tutorial-logo.png)
 
-namespace TestingCSharp {
-    public class TestApplication {
-        public static void Main() {
-            Console.WriteLine("This is a test.");
-            Console.WriteLine();
-        }
-    }
-}
-```
+In all seriousness, this is a fun toy language. There are some nice applications that have been written in it but I can't see myself using this as a go-to.
 
-### 19. Dart
+### 19. [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) (TODO)
+
+### 18. [Dart](https://dart.dev/)
 Okay, so, Dart. I like this language. It *feels* like a more solid TypeScript where as TypeScript still feels like JavaScript. (I still like both.) It comes from the Google folks so, at any given time, it could be yeeted into the sun. 
 
 ```dart
@@ -74,7 +69,7 @@ void main(List<String> arguments) {
 }
 ```
 
-### 18. Kotlin
+### 17. [Kotlin](https://kotlinlang.org/)
 Kotlin is sweet. There are a lot of niceties in here that make me adore the language. Honestly, I wouldn't mind specializing in this language because of how straight-forward it was to write. Having access to the rest of the JVM ecosystem helps, too.
 
 ```kotlin
@@ -108,7 +103,7 @@ fun main(args: Array<String>) {
 // End:
 ```
 
-### 17. Janet
+### 16. [Janet](https://janet-lang.org/)
 Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The difference betweent the two is that this implements its own VM instead of leveraging Lua's. I like quite a few of the constructs in here but I found it lacking compared to later dialects. Wouldn't mind writing more of it, though. (Also, GitHub: just let them have syntax highlighting. It's been long enough and you can't blame the author for writing the most code for it.)
 
 ```clojure
@@ -139,14 +134,7 @@ Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The 
     (get-files (if (> (length args) 1) (last args) nil)))
 ```
 
-### 16. LDPL (TODO)
-Okay, hear me out. You see this funky little dinosaur here?
-
-![Funky Little Dinosaur](https://www.ldpl-lang.org/graphics/other/tutorial-logo.png)
-
-I love 'im. I'd take a bullet for 'im.
-
-### 15. TCL
+### 15. [TCL](https://www.tcl-lang.org/)
 TCL (pronounced "tickle") is a neat homoiconic language with a pretty cool concurrency model. The story here is that "everything is a string" so, naturally, I had to try it out. I found it to be only slightly more expressive than Lua which is both good and bad. The real killer came from the deployment/portability aspect. Unless you had a go-to Starkit (pre-packaged TCL distribution), you didn't really have a clean way to move your scripts around.
 
 ```tcl
@@ -189,7 +177,7 @@ proc list_files { directory traversal_level } {
 list_files $argv 0
 ```
 
-### 14. Lua (TODO)
+### 14. [Lua](http://www.lua.org/)
 Oh, hey, speak of the devil. Lua is the other language people love to hate. Something about 1-indexed arrays (even though arrays aren't really a construct here; we accept tables as valid currency)? The language does what it needs to do and it's super-embeddable. There's a metric tonne of games out there that use Lua for scripting. Writing the example here was a bit more explicit than I'd like but I don't recall hating it.
 
 ```lua
@@ -244,7 +232,7 @@ end
 print_files_recursively()
 ```
 
-### 13. Common Lisp
+### 13. [Common Lisp](https://common-lisp.net/) ([SBCL](http://www.sbcl.org/))
 Ah, yes. Common Lisp. I have gone back and forth on this language because it's kinda a jack of all trades. Bitrot is almost non-existent here and there are a lot of battle-tested libraries. Originally, I thought you had to keep the car running here but it seems like you could do something like `sbcl --script get-files.lisp` and get the results you want. I need to revisit this and work with the language with that in mind.  
 
 ```lisp
@@ -264,7 +252,7 @@ Ah, yes. Common Lisp. I have gone back and forth on this language because it's k
       do (print-files listing (1+ traversal-level)))))
 ```
 
-### 12. Python
+### 12. [Python](https://www.python.org/)
 It's Python. Language is good. What else is there to talk about?
 
 ```python
@@ -288,7 +276,7 @@ printFiles('..')
 # End:
 ```
 
-### 11/10. REBOL/Red
+### 11/10. [REBOL](http://www.rebol.com/)/[Red](https://www.red-lang.org/)
 Now, we're getting into the nitty-gritty. REBOL and Red are sharing a line because of how similar they are. They're both homoiconic languages that take the block-and-word-based approach to programming, with Red being the most actively-developed language. The concept of "no reserved keywords" is always interesting to me because they're treating the words like a spoken language. The meaning of a word changes based on the context which has interesting effects when interweaving dialects. Can't wait for the cross-platform kinks to get worked out.
 
 ```red
@@ -319,7 +307,7 @@ get-files either (length? system/options/args) > 0 [last system/options/args][".
 ; End:
 ```
 
-### 9. Racket
+### 9. [Racket](https://www.racket-lang.org/)
 Oh boy, it's Racket. I like Racket. Very friendly and batteries-included, albeit a touch explicit. I'd almost argue that it's the Python of Schemes. (Yes, I know it's an amalgam of Lisp and Scheme; just roll with it.) Honestly, I think I would choose this language if it had a nice way to handle data munging.
 
 ```racket
@@ -347,7 +335,7 @@ Oh boy, it's Racket. I like Racket. Very friendly and batteries-included, albeit
 ;; End:
 ```
 
-### 8. Nim
+### 8. [Nim](https://nim-lang.org/)
 Nim, Nim, Nim. I have a few gripes about how UFCS works here and there's no variadic `zip` but overall, this language is sweet. No two ways about it. They even have these source code filters which I think are super cool. 
 
 ```nim
@@ -369,7 +357,7 @@ let initialDirectory = if len(commandLineParams()) > 0: paramStr(1) else: "."
 printFiles(initialDirectory)
 ```
 
-### 7. D
+### 7. [D](https://dlang.org/)
 Ah, D. One of my first loves. This language does something that I have yet to see in any non-Lisp language: it allows you to write high-level, almost-script-like code and tune performance with lower constructs when needed. In my travels, I haven't seen a language do it quite like D. For that reason, this language is high on this list.
 
 ```d
@@ -426,7 +414,7 @@ void main(string[] args) {
 // End:
 ```
 
-### 6. Haxe
+### 6. [Haxe](https://haxe.org/)
 Hello, old friend. Haxe is a... uh... yeah, how do you describe this language? It's a cross-platform, cross-language toolkit that leverages the libraries and platforms of the target programming language. It sounds weird but that's the best way to describe it. 
 
 ```haxe
@@ -457,7 +445,7 @@ function main() {
 // compile-command: "haxe GetFilesCpp.hxml"
 // End:
 ```
-### 5. Raku
+### 5. [Raku](https://raku.org/)
 Okay, we're approaching the top of the top here. I adore Raku. There are so many nice things it gives you. There's a sweet MOP in here, there's lazy lists, sequences, reactive programming... and it goes on and on. The ONLY problems I have with it is that speed is rough and I need a more expressive way to do data munging. If it had that last one solved, this would be a different list.
 
 ```raku
@@ -475,7 +463,7 @@ sub doFiles(IO(Str) $directoryPath, &callback = { .put }, $depth = 0) {
 doFiles("..", { .put });
 ```
 
-### 4. Rust
+### 4. [Rust](https://www.rust-lang.org/)
 *Sigh.* Let's talk about Rust.
 
 I do not like Rust's syntax and I don't like how verbose it can be.
@@ -532,7 +520,7 @@ fn main() -> Result<()> {
 }
 ```
 
-### 3. TXR
+### 3. [TXR](http://nongnu.org/txr/)
 On the flip side, let's talk about TXR. This language is very weird because it's really two separate ones mashed together. There's TXR the pattern matching dialect, and TXR Lisp the Lisp dialect. Between these two, they handle almost every problem I have with regards to data munging. So much so, it's my second go-to language.
 
 #### TXR Pattern Matching
@@ -573,7 +561,7 @@ Date of Birth: @dob
 (do-files 'print-listing (or (car *args*) ".."))
 ```
 
-### 2. Emacs Lisp
+### 2. [Emacs](https://www.gnu.org/software/emacs/) Lisp
 I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for making text-based applications that live in Emacs.
 
 ```elisp
@@ -623,7 +611,7 @@ I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for
 (find-files-recursively "..")
 ```
 
-### 1. JavaScript
+### 1. JavaScript ([MDN](https://developer.mozilla.org/en-US/docs/Web/javascript))
 I'm a web dev. Did you think there would be another language up here?
 
 ```js
@@ -649,8 +637,3 @@ const rootDirectoryPath = process.argv.slice(2).pop() || '..';
 
 printFiles(rootDirectoryPath);
 ```
-
-## Conclusion
-The languages I use to this day are most likely the top 5. 
-
-Thanks for reading. 
