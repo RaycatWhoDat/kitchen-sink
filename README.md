@@ -7,7 +7,7 @@
 > Some people say, "[Programming languages] are just tools. Just learn them as needed." I agree, but I still have a favorite hammer and drill.
 
 ## Introduction
-As a web dev, a lot of my time is spent working and building the same sort of applications. This repository contains experiments, oddities, and other such scripts that spawned from a foray into a language. (Mostly) comprised of JavaScript, I plan on using this repo to post my findings and learnings from other languages. Ideally, I would like to reduce the number of languages I *have* to know to be gainfully employed and enjoy working with. Realistically, I could stop right now and just use JavaScript but someone might try to gatekeep me because, ya know, "JavaScript is a bad language" and all that.
+As a web dev, a lot of my time is spent working and building the same sort of applications. This repository contains experiments, oddities, and other such scripts that spawned from a foray into a language. (Mostly) comprised of JavaScript, I plan on using this repo to post my findings and learnings from other languages. Ideally, I would like to reduce the number of languages I *have* to know to be gainfully employed and enjoy working with. 
 
 ## Things I Want Out of My Languages
 - Good compilation time (prefer not to "keep it running")
@@ -469,7 +469,7 @@ doFiles("..", { .put });
 
 I do not like Rust's syntax and I don't like how verbose it can be.
 
-However, if there's one thing I can count on, it's the community behind it. You simply don't count out people's passion to make cool things. As a result of that thinking, Rust is my go-to pick for systems-level programming and WebAssembly compilation. So, I have to suck it up and learn it to get past that possible gatekeeping in the future.
+However, if there's one thing I can count on, it's the community behind it. You simply don't count out people's passion to make cool things. As a result of that thinking, Rust is my go-to pick for systems-level programming and WebAssembly compilation.
 
 ```rust
 // (compile "cargo run ..")
