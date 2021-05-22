@@ -38,7 +38,8 @@ Okay, hear me out. You see this funky little dinosaur here? I love 'im. I'd take
 
 In all seriousness, this is a fun toy language. There are some nice applications that have been written in it but I can't see myself using this as a go-to.
 
-### 19. [C#](https://docs.microsoft.com/en-us/dotnet/csharp/) (TODO)
+### 19. [C#](https://docs.microsoft.com/en-us/dotnet/csharp/)
+C# is what we call, A Good Language™. There are a lot of things it does right and there are a lot of resources out there to learn it. However, proper understanding of the ecosystem (and where most of the money is) comes down to learning how Windows does things. And Windows and I aren't really on speaking terms anymore.
 
 ### 18. [Dart](https://dart.dev/)
 Okay, so, Dart. I like this language. It *feels* like a more solid TypeScript where as TypeScript still feels like JavaScript. (I still like both.) It comes from the Google folks so, at any given time, it could be yeeted into the sun. 
