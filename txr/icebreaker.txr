@@ -1,0 +1,7 @@
+@(next "icebreaker.txt")
+@(collect)
+@question
+@(end)
+@(output)
+@{(nth (rand (length question) (make-random-state)) question)}
+@(end)
