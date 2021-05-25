@@ -38,3 +38,4 @@ kotlin/**/*.jar
 nim/**/janet*
 raku/**/janet*
 **/*.so
+**/*.tlo
