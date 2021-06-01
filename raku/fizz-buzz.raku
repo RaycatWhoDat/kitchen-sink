@@ -1,13 +1,6 @@
-use v6;
-
-#| These must be integers.
-unit sub MAIN(*@numbers where { .all ~~ Int });
-
-sub fizzbuzz($number) {
-    return "FizzBuzz" if $number %% 15;
-    return "Buzz" if $number %% 5;
-    return "Fizz" if $number %% 3;
-    return $number;
+for 1..100 {
+    my $output = "";
+    $output ~= "Fizz" if $_ %% 3;
+    $output ~= "Buzz" if $_ %% 5;
+    say $output !~~ "" ?? $output !! $_;
 }
-
-say fizzbuzz($_) for @numbers;

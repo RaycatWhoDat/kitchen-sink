@@ -2,18 +2,14 @@ use std::io;
 use std::cmp::Ordering;
 use rand::Rng;
 
-enum Guess {
-    Higher,
-    Equal,
-    Lower
-}
+enum Guess { Higher, Equal, Lower }
 
 struct SecretNumber {
     value: i32
 }
 
 impl SecretNumber {
-    fn compare_guess(&self, guess: &i32) -> Guess {
+    fn compare_guess(&self, guess: i32) -> Guess {
         let guess_result = match guess.cmp(&self.value) {
             Ordering::Greater => Guess::Higher,
             Ordering::Equal => Guess::Equal,
@@ -49,12 +45,9 @@ fn main() {
 
         let guess = guess.trim().parse::<i32>().unwrap();
         
-        match secret_number.compare_guess(&guess) {
-            Guess::Equal => {
-                println!("You guessed it!");
-                break;
-            },
-            _ => ()
+        if let Guess::Equal = secret_number.compare_guess(guess) {
+            println!("You guessed it!");
+            break;
         }
     }
 }
