@@ -39,3 +39,5 @@ nim/**/janet*
 raku/**/janet*
 **/*.so
 **/*.tlo
+**/bin
+**/obj
