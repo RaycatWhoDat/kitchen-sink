@@ -1,0 +1,10 @@
+@(collect)
+@*songTitle - @youtube
+@(end)
+@(output)
+@(repeat)
+Song Title/Artist: @songTitle
+YouTube Link: @youtube
+
+@(end)
+@(end)
