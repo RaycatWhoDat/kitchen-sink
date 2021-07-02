@@ -1,0 +1,8 @@
+(defvar date-parse
+  (txr-parse "@(define date (year month day))@{year /\\d\\d\\d\\d/}-@{month /\\d\\d/}-@{day /\\d\\d/}@(end)"))
+
+(each ((date '("09-10-20" "2009-10-20"
+                "July-15-2014" "foo")))
+  (txr-if date-parse (y m d) date
+    (put-line `match: year @y, month @m, day @d`)
+    (put-line `no match for @date`)))
