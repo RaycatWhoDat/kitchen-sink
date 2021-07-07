@@ -1,4 +1,4 @@
-(defvar *naught-or-cross* '("o" "x"))
+(defvar *naught-or-cross* '("\x1b[41mO\033[0m" "\x1b[42mX\033[0m"))
 (defvar *board* (rlist 1..9))
 (defvar *winning-positions* ^(,(rlist 0..2) ,(rlist 3..5) ,(rlist 6..8) (0 3 6) (1 4 7) (2 5 8) (0 4 8) (2 4 6)))
 
@@ -22,9 +22,10 @@
     (set [*board* (- answer 1)] [*naught-or-cross* 1])))
 
 (defun cpu-move ()
-  (let ((index (pick (free-indexes))))
-    (set [*board* (- index 1)] [*naught-or-cross* 0])
-    (format t "Moving to ~a.\n" index)))
+  (unless (zerop (length (free-indexes)))
+    (let ((index (pick (free-indexes))))
+      (set [*board* (- index 1)] [*naught-or-cross* 0])
+      (format t "Moving to ~a.\n" index))))
 
 (defun print-board ()
   (pprinl (cat-str
@@ -39,6 +40,6 @@
   (cpu-move))
 
 (match-case (get-winner)
-  ((@player @winningPosition) (format t "~a wins across ~a.\n" [player 0] winningPosition))
-  (nil (format t "How boring, a draw!.\n")))
+  ((@player @winningPosition) (format t "~a wins across ~a!\n" [player 0] winningPosition))
+  (nil (format t "How boring, a draw.\n")))
   
