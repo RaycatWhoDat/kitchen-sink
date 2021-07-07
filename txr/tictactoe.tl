@@ -19,7 +19,7 @@
         (when (member possible-answer (free-indexes))
           (set answer possible-answer))))
     (format t "You move to ~a.\n" answer)
-    (set [*board (- answer 1)] [*naught-or-cross* 1])))
+    (set [*board* (- answer 1)] [*naught-or-cross* 1])))
 
 (defun cpu-move ()
   (let ((index (pick (free-indexes))))
