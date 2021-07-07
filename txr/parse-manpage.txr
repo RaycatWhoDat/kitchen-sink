@@ -1,0 +1,19 @@
+@(deffilter html_encode
+   ("&gt;" ">")
+   ("&lt;" "<"))
+@(next "./docs/manpage.html")
+@(collect)
+@nil@{sectionNumber />(\d+)(\.\d+)?(\.\d+)?/}</a>@nil<tt>@item</tt>@nil
+@(end)
+@(do (set item
+       (remove-if
+         (lambda (item) (or
+                          (starts-with "*" item)
+                          (starts-with ":" item)))
+         (sort (uniq item)))))
+@(output :filter html_encode)
+@(repeat)
+@item
+@(end)
+@(end)
+
