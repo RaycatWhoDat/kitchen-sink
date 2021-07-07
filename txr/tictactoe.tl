@@ -14,23 +14,23 @@
 (defun human-move ()
   (let ((answer nil))
     (until answer
-      (format t "Choose one of ~a: \n" (cat-str (mapcar 'tostring (free-indexes)) ", "))
+      (format t "Choose one from ~a: \n" (cat-str (mapcar 'tostring (free-indexes)) ", "))
       (let ((possible-answer (int-str (get-line))))
         (when (member possible-answer (free-indexes))
           (set answer possible-answer))))
     (format t "You move to ~a.\n" answer)
-    (set (nth (- answer 1) *board*) [*naught-or-cross* 1])))
+    (set [*board (- answer 1)] [*naught-or-cross* 1])))
 
 (defun cpu-move ()
   (let ((index (pick (free-indexes))))
-    (set (nth (- index 1) *board*) [*naught-or-cross* 0])
+    (set [*board* (- index 1)] [*naught-or-cross* 0])
     (format t "Moving to ~a.\n" index)))
 
 (defun print-board ()
   (pprinl (cat-str
             (mapcar
               (op format nil "~a | ~a | ~a\n" . @1)
-              (partition *board* (where (lambda (index) (zerop (mod index 3))) 0..8)))
+              (partition *board* (where (op zerop (mod @1 3)) 0..8)))
             "--+---+--\n")))
   
 (until (or (get-winner) (empty (free-indexes)))
