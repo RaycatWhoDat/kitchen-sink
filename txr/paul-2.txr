@@ -1,0 +1,7 @@
+@(next "paul-2.txt")
+@(collect)
+@(coll)@(maybe)@itemNumber, @(or) @itemNumber,@(or)@itemNumber@(end)@(end)
+@(trailer)
+@(skip)
+@(coll)@(maybe)@itemNumber, @(or) @itemNumber,@(or)@itemNumber@(end)@(end)
+@(end)

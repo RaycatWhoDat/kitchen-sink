@@ -1,0 +1,14 @@
+@(next "./fake-files/state-xmls.xml")
+@(skip)
+@(collect)
+@nil value="@abbreviation">@fullStateName<@nil
+@(end)
+@(output)
+{
+@(repeat)
+  "@abbreviation": "@fullStateName",
+@(last)
+  "@abbreviation": "@fullStateName"
+@(end)
+}
+@(end)

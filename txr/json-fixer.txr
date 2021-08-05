@@ -1,0 +1,13 @@
+@(next "./bad-json.json")
+@(skip)
+@(collect :vars (keys (subkeys nil) (values nil)))
+@nil@(cases)"@keys@(coll)[@subkeys]@(until)"@(end)"@(or)"@keys"@(end): "@values"@nil
+@(end)
+@(output)
+@(repeat)
+Keys: @keys
+Subkeys: @(rep)@subkeys,@(last)@subkeys@(end)
+Value(s): @values
+
+@(end)
+@(end)

@@ -1,0 +1,11 @@
+@(next "./fake-files/bad-input.txt")
+@(skip)
+@(collect)
+@(coll)@(choose :shortest header)@header, @(or)@header|@(or)@header@(end)@(end)@nil
+@(coll)@(choose :shortest value)@value,@(or)@value|@(or)@value@(end)@(end)@nil
+@(end)
+@(output)
+@(repeat)
+@(rep)@header: @value@\n@(end)
+@(end)
+@(end)

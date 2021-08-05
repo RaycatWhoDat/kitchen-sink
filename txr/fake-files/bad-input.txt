@@ -1,0 +1,4 @@
+SystemID|Name|FirstName|IDNum, Weight, Gestational AGe|DataFile
+32133213|Whatever|What|312873,319,2|"./example1.dat"
+SystemID|Name|Sex|IDNum, Weight, Gestational AGe|DataFile
+32133213|Whatever|M|312873,319,2|"./example1.dat"
