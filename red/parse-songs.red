@@ -8,15 +8,9 @@ format: function [record] [
 	]
 ]
 
-delimiter: [space "-" space]
-skip-length: length? delimiter
-
 parse-rules: [
 	collect [
-		keep [to delimiter]
-		skip-length skip
-		keep [to delimiter]
-		skip-length skip
+		some [keep [to " - "] 3 skip]
 		keep [to end]
 	]
 ]
