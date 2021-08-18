@@ -1,0 +1,12 @@
+{
+  "result": "success",
+  "clientid": "1",
+  "domainid": "",
+  "totalresults": "2",
+  "startnumber": "0",
+  "numreturned": "2",
+  "domains[domain][0][id]": "1",
+  "domains[domain][0][userid]": "1",
+  "domains[domain][0][orderid]": "1",
+  "domains[domain][0][regtype]": "Register"
+}

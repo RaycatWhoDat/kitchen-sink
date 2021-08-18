@@ -8,13 +8,9 @@ format: function [record] [
 	]
 ]
 
-parse-rules: [
-	collect [
-		some [keep [to " - "] 3 skip]
-		keep [to end]
-	]
-]
+fields: [some [keep to " - " 3 skip]]
+last-field: [keep to end]
 
 foreach line read/lines %songs.txt [
-	format parse line parse-rules
+	format parse line [collect [fields last-field]]
 ]
