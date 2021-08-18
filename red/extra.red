@@ -28,3 +28,22 @@ Z: make op! function [
 ][
     flatten keys Z values
 ]
+
+..: make op! function [
+    start [number!]
+    end [number!]
+] [
+	if start = end [return []]
+	is-start-smaller: start < end
+	total: either is-start-smaller [end - start + 1] [start - end + 1]
+	collect [
+		repeat index total [
+			keep start + either is-start-smaller [index - 1] [-1 * (index - 1)]
+		]
+	]
+]
+
+R: function [end [number!]] [
+    unless end > 1 [return []]
+    1 .. end
+]
