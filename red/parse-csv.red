@@ -1,6 +1,6 @@
 Red []
 
-#include %extra.red
+do read https://raw.githubusercontent.com/RayMPerry/crimson/master/crimson.red
 
 csv-file: read/lines %../d/MOCK_DATA.csv
 

@@ -1,6 +1,6 @@
 Red [needs 'view]
 
-#include %extra.red
+do read https://raw.githubusercontent.com/RayMPerry/crimson/master/crimson.red
 
 csv-row: [collect [keep [first-name last-name email dob]]]
 first-name: [keep to "," skip]
@@ -10,8 +10,8 @@ dob: [keep to end skip]
 
 load-data: function [] [
     result: []
-    foreach line at read/lines %MOCK_DATA.csv 2 [
-        record: [first-name last-name email dob] ~ (parse line csv-row)
+    foreach line at read/lines %../d/MOCK_DATA.csv 2 [
+        record: [first-name last-name email dob] Z! parse line csv-row
         append result rejoin [
             "First Name: " record/first-name newline
             "Last Name: " record/last-name newline
