@@ -1,0 +1,13 @@
+@(skip)
+@(collect :vars (key (value nil)))
+@nil"@key": @(maybe)"@value"@(or)@(end)@nil
+@(end)
+@(output)
+@(repeat)
+Key: @key
+@(if (> (length value) 0))
+Value: @value
+@(end)
+
+@(end)
+@(end)
