@@ -1,6 +1,7 @@
 Red []
 
 do read https://raw.githubusercontent.com/RayMPerry/crimson/master/crimson.red
+crimson/internal/install
 
 test-case1: "the three truths"
 test-case2: "ababababab"
