@@ -1,6 +1,6 @@
 @(skip)
 @(collect :vars (key (value nil)))
-@nil"@key": @(maybe)"@value"@(or)@(end)@nil
+@{nil /\s+/}"@key": @(maybe)"@value"@(or)@(end)@nil
 @(end)
 @(output)
 @(repeat)
