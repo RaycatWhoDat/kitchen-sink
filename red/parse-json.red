@@ -1,6 +1,6 @@
 Red []
 
-json: read/lines %stack-trace.json
+json: read/lines %data/stack-trace.json
 
 delimiter: rejoin [dbl-quote ":"]
 terminator: [dbl-quote | "]" | "}" | end]

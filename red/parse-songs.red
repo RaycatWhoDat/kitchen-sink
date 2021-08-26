@@ -11,6 +11,6 @@ format: function [record] [
 fields: [some [keep to " - " 3 skip]]
 last-field: [keep to end]
 
-foreach line read/lines %songs.txt [
+foreach line read/lines %data/songs.txt [
 	format parse line [collect [fields last-field]]
 ]
