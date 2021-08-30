@@ -8,7 +8,7 @@ remove-each pin-id pin-ids [empty? pin-id]
 
 if empty? pin-ids [
     print "No pin IDs given."
-    halt
+    quit
 ]
 
 print "Retriving images for pins:"
