@@ -13,7 +13,6 @@ delete-item: does [
     attempt [delete file-name]
     alter files/all-files file-name
     remove at files/filtered-files file-listing/selected
-    show file-listing
     print rejoin [file-name { deleted.}]
 ]
 
@@ -57,7 +56,10 @@ mod-selector: layout [
     below
     results-count: text 334x24 "0 results" hidden
     file-listing: text-list text-color 334x500 react [face/data: files/filtered-files]
-    button "Delete" 334x32 on-click [delete-item]
+    button "Delete" 334x32 on-click [
+        delete-item
+        show file-listing
+    ]
 ]
 
 view mod-selector
