@@ -2,8 +2,7 @@ Red []
 
 make-dir %images
 
-replace/all system/script/args {'} {}
-pin-ids: split system/script/args space
+pin-ids: copy system/options/args
 remove-each pin-id pin-ids [empty? pin-id]
 
 if empty? pin-ids [
@@ -11,7 +10,7 @@ if empty? pin-ids [
     quit
 ]
 
-print "Retriving images for pins:"
+print "Retrieving images for pins:"
 
 foreach pin-id pin-ids [
     html: read to-url rejoin ["https://www.pinterest.com/pin/" pin-id]
