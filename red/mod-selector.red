@@ -50,7 +50,7 @@ mod-selector: layout [
     search-bar: field text-color 300x24 focus on-change [search-files]
     clear-search-button: button 24x24 "X" on-click [
         search-bar/data: none 
-        clear-search
+        reset-files
     ] 
     return
     below
