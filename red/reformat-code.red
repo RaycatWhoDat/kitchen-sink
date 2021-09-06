@@ -9,28 +9,30 @@ no-capitals: [letters | digits]
 alphanumeric: [letters | capitals | digits]
 kebab-case-separator: "-"
 snake-case-separator: "_"
-kebab-case-rule: [some alphanumeric some ["-" some alphanumeric]]
-snake-case-rule: [some alphanumeric some ["_" some alphanumeric]]
-camel-case-rule: [some no-capitals some [capitals some no-capitals]]
 
-kebab-case-to-camel-case: function [item] [
-    parse item [
-        some [
-            to kebab-case-separator
-            point:
-            (if all [point/2 <> space point/2 <> dbl-quote]
-                [remove point uppercase/part point 1])
-        ]
+generate-rule: function [characters separators] [
+    compose/deep [
+        some (characters)
+        some [(separators) some (characters)]
+    ]
+]
+
+kebab-case-rule: generate-rule alphanumeric "-"
+snake-case-rule: generate-rule alphanumeric "_"
+camel-case-rule: generate-rule no-capitals capitals
+
+kebab-case-to-camel-case: [
+    some [
+        to kebab-case-separator
+        point:
+        (if all [point/2 <> space point/2 <> dbl-quote]
+            [remove point uppercase/part point 1])
     ]
 ]
 
 test-case: read %reformat-code.red
 parse test-case [
-    some [
-        to kebab-case-rule
-        item:
-        (kebab-case-to-camel-case item)
-    ]
+    some [to kebab-case-rule kebab-case-to-camel-case]
 ]
 
 print test-case
