@@ -18,9 +18,9 @@ payouts-table: context [
     ATHENA: reduce [5000.00 25000.00 max-multiplier]
 ]
 
-minimum-bet: 1.00
-maximum-bet: 100.00
-current-bet: 100.00
+minimum-bet: $1.00
+maximum-bet: $100.00
+current-bet: $100.00
 
 print ["Initial bet:" current-bet]
 
@@ -72,7 +72,7 @@ get-winning-reels-and-numbers: function [symbol-selection possible-wins] [
                 break
             ]
         ]
-        possible-wins: back possible-wins
+        possible-wins: at possible-wins 1
         no-valid-win
     ]
 
@@ -140,5 +140,3 @@ calculate-payout: function [winning-numbers possible-wins] [
         0.0
     ]
 ]
-
-new-spin
