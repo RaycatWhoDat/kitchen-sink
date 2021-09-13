@@ -1,0 +1,12 @@
+@(next "../raku/data/songs.txt")
+@(collect)
+@songTitle - @artistName - @youtubeUrl
+@(end)
+@(output)
+@(repeat)
+Song Title: @songTitle
+Artist Name: @artistName
+YouTube URL: @youtubeUrl
+
+@(end)
+@(end)
