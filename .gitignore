@@ -41,3 +41,4 @@ raku/**/janet*
 **/*.tlo
 **/bin
 **/obj
+**/.o
