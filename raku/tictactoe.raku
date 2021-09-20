@@ -1,15 +1,39 @@
-enum NaughtOrCross <O X>;
+enum Symbols <_ O X>;
+
+my @winning-positions = (0, 1, 2), (3, 4, 5), (6, 7, 8), (0, 4, 8), (2, 4, 6), (0, 3, 6), (1, 4, 7), (2, 5, 8);
 
 class Square {
-    has NaughtOrCross $.value;
-    method Str { $.value.Str }
+    has Symbols $.value;
+    
+    method Str { ~$.value }
+    method Numeric { +$.value }
 }
 
-my @board[9] = [Square.new(value => $_ %% 2 ?? O !! X) for ^9];
+class Board {
+    has @.squares = [Square.new(value => Symbols.pick) for ^9];
 
-sub board-row(@board where .elems == 3) { "@board[0] | @board[1] | @board[2]" }
-sub board-separator { "\n--+---+--" }
+    method gist { @.squares.map({ ~$_ }); }
+    method get-squares(@positions) { @.squares[|@positions].map({ +$_ }); }
+}
 
-say board-row(@board[0..2]) ~ board-separator;
-say board-row(@board[3..5]) ~ board-separator;
-say board-row(@board[6..8]);
+my $board = Board.new;
+
+sub display-board(@board) {
+    .say for "@board[0] | @board[1] | @board[2]",
+    "--+---+--",
+    "@board[3] | @board[4] | @board[5]",
+    "--+---+--",
+    "@board[6] | @board[7] | @board[8]";
+}
+
+sub find-win($board) {
+    my $winning-lines = [];
+    for @winning-positions -> $position {
+        my $result = $board.get-squares($position).cache;
+        $winning-lines.push: $result.first, $position if $result.Bag.elems == 1 and 0 ∉ $result;
+    }
+    $winning-lines;
+}
+
+display-board($board.gist);
+say find-win($board);

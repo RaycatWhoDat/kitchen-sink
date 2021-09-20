@@ -1,6 +1,6 @@
-#lang racket/gui
+#lang racket/base
 
-(require racket/file)
+(require racket/gui racket/file)
 
 ;; Start at the present working directory
 (define *current-directory* "/")
@@ -22,7 +22,7 @@
         (set! *current-directory* new-directory)
         (set! *current-listing* (do-files))
         (send list-box set *current-listing*))
-      (when (not (directory-exists? new-directory))
+      (unless (directory-exists? new-directory)
         (print new-directory)))))
 
 ;; Define the top-level frame
@@ -33,6 +33,12 @@
        [height 360]))
 
 (define *current-listing* (do-files))
+
+(define back-button
+  (new button%
+       [label "Back"]
+       [parent top-frame]
+       [callback (lambda (face event) (dclick-handler list-box event))]))
 
 (define list-box
   (new list-box%
