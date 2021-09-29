@@ -12,4 +12,6 @@ DOC CHECK {
     anagrams('abba', ['aabb', 'abcd', 'bbaa', 'dada']).&is(['aabb', 'bbaa']);
     anagrams('racer', ['crazer', 'carer', 'racar', 'caers', 'racer']).&is(['carer', 'racer']);
     anagrams('laser', ['lazing', 'lazy', 'lacer']).&is([]);
+
+    done-testing;
 }

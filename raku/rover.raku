@@ -86,4 +86,6 @@ DOC CHECK {
             .getCurrentPosition.&is(<5 1 N>);
         }
     }
+
+    done-testing;
 }
