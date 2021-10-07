@@ -9,9 +9,9 @@ class SlotMachine {
     has $!number-of-reels = 6;
     has $!minimum-of-winning-reels = 4;
     has $!minimum-bet = 100;
-    has $!current-bet = 100000;
-    has $!maximum-bet = 100000;
-    has $!max-multiplier = 5000;
+    has $!current-bet = 100_000;
+    has $!maximum-bet = 100_000;
+    has $!max-multiplier = 5_000;
     has %!payout-table = {
         TEN => (0.15, 0.20, 0.30),
         J => (0.20, 0.30, 0.40),
@@ -21,8 +21,8 @@ class SlotMachine {
         SCROLL => (3, 5, 10),
         URN => (10, 25, 50),
         HELMET => (50, 100, 200),
-        PEGASUS => (250, 500, 1000),
-        ATHENA => (500, 2500, $!max-multiplier)
+        PEGASUS => (250, 500, 1_000),
+        ATHENA => (500, 2_500, $!max-multiplier)
     }
 
     has @!all-reels = %!payout-table.keys xx $!number-of-reels;
@@ -69,11 +69,12 @@ class SlotMachine {
         }
         
         $!last-payout = [+] @multipliers.map: * * $!current-bet;
+        say "Current bet: \${$!current-bet / 100}";
         say "Multipliers: {@multipliers.map: * ~ 'x' }";
         say "Payout: \${$!last-payout / 100}";
+        $user-account.current-balance += $!last-payout;
         say "Current balance: \${$user-account.current-balance / 100}";
         say "==========";
-        $user-account.current-balance += $!last-payout;
     }
 }
 
@@ -81,7 +82,7 @@ my $slot-machine = SlotMachine.new;
 my $user-account = UserAccount.new;
 
 loop {
-    last unless $slot-machine.can-spin($user-account);
+    last unless $slot-machine.can-spin($user-account) and $slot-machine.number-of-spins <= 10;
     $slot-machine.spin($user-account);
 }
 
