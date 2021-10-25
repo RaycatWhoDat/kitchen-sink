@@ -1,15 +1,7 @@
-use std::fmt::{Display, Formatter, Result};
-
+#[derive(Debug)]
 struct Card {
     display_string: String,
     value: [usize; 2]
-}
-
-impl Display for Card {
-    fn fmt(&self, formatter: &mut Formatter) -> Result {
-        write!(formatter, "{} {:?}", self.display_string, self.value)?;
-        Ok(())
-    }
 }
 
 impl Card {
@@ -60,5 +52,5 @@ impl Deck {
 
 fn main() {
     let deck = Deck::new();
-    println!("{}", deck.cards[13]);
+    println!("{:?}", deck.cards[13]);
 }
