@@ -42,3 +42,5 @@ raku/**/janet*
 **/bin
 **/obj
 **/.o
+
+raku/**/.precomp
