@@ -1,5 +1,5 @@
 use lib 'lib';
-use GameState;
+use ZorkLib::GameState;
 
 my $game = GameState.new;
 loop { $game.handle-commands; }
