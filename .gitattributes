@@ -1,5 +1,6 @@
 emacs-lisp/rebol.el linguist-vendored
 emacs-lisp/red-keywords.el linguist-vendored
+emacs-lisp/red-mode.el linguist-vendored
 emacs-lisp/txr-mode.el linguist-vendored
 d/MOCK_DATA.csv linguist-vendored
 cpp/janet-embed/janet.c linguist-vendored
