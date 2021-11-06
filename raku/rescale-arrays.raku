@@ -1,7 +1,7 @@
 subset PositiveNumber of Real where * > 0;
-sub rescale(Array[PositiveNumber]() $numbers) {
-    my ($min, $max) = $numbers.minmax.bounds;
-    @$numbers.map(* - $min).map(* / ($max - $min));
+sub rescale(PositiveNumber() @numbers) {
+    my ($min, $max) = @numbers.minmax.bounds;
+    @numbers.map(* - $min).map(* / ($max - $min));
 }
 
 DOC CHECK {
