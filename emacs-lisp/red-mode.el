@@ -7,7 +7,8 @@
 ;;   Modified-by: Jeff Kreis <jeff@rebol.com> 1999
 ;;   Updated-by: Sterling Newton <sterling@rebol.com> 2001
 ;;   Updated-by: Unchartedworks 2017
-;;   Keywords: languages, Red, lisp
+;;   Updated-by: Ray Perry <rmperry09@gmail.com> 2021
+;;   Keywords: languages, REBOL, Red, lisp
 ;;
 ;;-------------------------------------------------------------------------
 
@@ -422,8 +423,8 @@ of the start of the containing expression."
       (modify-syntax-entry ?  "    ")
 
       ;; Delimiters
-      (modify-syntax-entry ?[ "(]  ")
-      (modify-syntax-entry ?] ")[  ")
+      (modify-syntax-entry ?\[ "(]  ")
+      (modify-syntax-entry ?\] ")[  ")
       (modify-syntax-entry ?\( "()  ")
       (modify-syntax-entry ?\) ")(  ")
 
