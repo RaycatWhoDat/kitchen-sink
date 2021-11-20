@@ -76,6 +76,7 @@ DOC CHECK {
     parse-rebol-string('203x134').&isnt(Nil);
     parse-rebol-string('20.3x13.4').&isnt(Nil);
     parse-rebol-file('../red/filter.red').&isnt(Nil);
+    parse-rebol-file('../red/get-files-v2.red').&isnt(Nil);
 
     done-testing;
 }
