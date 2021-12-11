@@ -10,7 +10,7 @@ haxe/**/bin/
 haxe/**/dist/
 
 # Rust
-rust/**/target/
+**/target/
 
 # Emacs Lisp
 emacs-lisp/funda-haxe-mode.el
