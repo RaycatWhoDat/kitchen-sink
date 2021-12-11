@@ -9,10 +9,10 @@ struct State {
 impl State {
     fn ask_for_input(&mut self) {
         println!("Last result: {}", self.last_result);
-        println!("Please enter arithmatic expressions separated by spaces: ");
+        print!("Please enter arithmatic expressions separated by spaces: ");
         
         let mut buffer = String::new();
-        let mut pending_expressions = Vec::new();
+        let mut pending_expressions = vec![];
         match io::stdin().read_line(&mut buffer) {
             Ok(_) => {
                 buffer
