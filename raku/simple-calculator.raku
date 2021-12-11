@@ -30,7 +30,7 @@ class Calculator::Actions {
 }
 
 class Calculator {
-    method calculate(Str $input) returns Real {
+    method calculate(Str $input --> Real) {
         Calculator::Grammar.parse($input, actions => Calculator::Actions).made;
     }
 }
