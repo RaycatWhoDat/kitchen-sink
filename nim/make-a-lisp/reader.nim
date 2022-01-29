@@ -1,4 +1,4 @@
-import re, sugar
+import re
 
 var malRegex = re"""[\s,]*(~@|[\[\]{}()'`~^@]|"(?:\\.|[^\\"])*"?|;.*|[^\s\[\]{}('\"`,;)]*)"""
 
@@ -28,7 +28,9 @@ proc readForm*(reader: var Reader): string =
   reader.next()
 
 proc tokenize*(input: string): Reader =
-  var tokens = collect(newSeq):
-    for token in input.findAll(malRegex): token
+  var tokens: seq[string] = @[];
+      
+  for token in input.findAll(malRegex):
+    tokens.add(token)
                                                                                 
   Reader(rawInput: input, tokens: tokens, position: 0)  
