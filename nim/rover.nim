@@ -1,4 +1,4 @@
-import std/strutils, std/unittest
+import strutils, unittest
 
 type Grid = object
   width: int
@@ -13,11 +13,12 @@ type Direction = enum
 type Position = array[0..1, int]
 type Heading = array[Direction, seq[int]]
 
-var HEADINGS: Heading
-HEADINGS[North] = @[0, -1]
-HEADINGS[East] = @[1, 0]
-HEADINGS[South] = @[0, 1]
-HEADINGS[West] = @[-1, 0]
+const HEADINGS: Heading = [
+  @[0, -1],
+  @[1, 0],
+  @[0, 1],
+  @[-1, 0]
+]
   
 type Rover = ref object
   xCoordinate: int
@@ -49,15 +50,17 @@ proc parseInstructions(rover: Rover, grid: Grid, instructions: string) =
         var deltas = HEADINGS[rover.direction]
         var newXCoordinate = rover.xCoordinate + deltas[0]
         var newYCoordinate = rover.yCoordinate + deltas[1]
-
         rover.xCoordinate = if newXCoordinate > 0 and newXCoordinate <= grid.width: newXCoordinate else: rover.xCoordinate
         rover.yCoordinate = if newYCoordinate > 0 and newYCoordinate <= grid.height: newYCoordinate else: rover.yCoordinate
+        
       of 'L':
         echo "Turning left..."
         rover.direction = if rover.direction == North: West else: pred(rover.direction)
+        
       of 'R':
         echo "Turning right..."
         rover.direction = if rover.direction == West: North else: succ(rover.direction)
+        
       else:
         discard
 
