@@ -44,7 +44,12 @@ fn main() {
         "piece",
         "tower",
         "those",
-        "moist"
+        "moist",
+        "apple",
+        "onion",
+        "spoon",
+        "knife",
+        "aloft"
     ];
 
     let mut rng = rand::thread_rng();
@@ -77,8 +82,6 @@ fn main() {
 
         let mut valid_letters = state.chosen_word.clone();
 
-        println!("{:?}", valid_letters);
-        
         // Check word here.
         for (index, letter) in guess.word.iter().enumerate() {
             let is_valid_position = state.chosen_word[index] == *letter;
