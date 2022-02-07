@@ -34,10 +34,10 @@ fn read_line() -> Option<String> {
 }
 
 fn main() {
-    let ansi_reset = String::from("\x1B[0m");
-    let ansi_green = String::from("\x1B[30;1m\x1B[42m");
-    let ansi_yellow = String::from("\x1B[30;1m\x1B[43m");
-    let ansi_red = String::from("\x1B[31m\x1B[40m");
+    let ansi_reset = "\x1B[0m";
+    let ansi_green = "\x1B[30;1m\x1B[42m";
+    let ansi_yellow = "\x1B[30;1m\x1B[43m";
+    let ansi_red = "\x1B[31m\x1B[40m";
 
     let mut random_words = vec![
         "shard",
@@ -99,13 +99,15 @@ fn main() {
         println!("===============");
         print!("Guess #{}: ", state.guesses.len());
         for (index, letter) in guess.word.iter().enumerate() {
-            if guess.positions[index] {
-                print!("{}{}{}", ansi_green, letter, ansi_reset);
+            let ansi_color = if guess.positions[index] {
+                ansi_green
             } else if guess.letters[index] {
-                print!("{}{}{}", ansi_yellow, letter, ansi_reset);
+                ansi_yellow
             } else {
-                print!("{}{}{}", ansi_red, letter, ansi_reset);
-            }
+                ansi_red
+            };
+
+            print!("{}{}{}", ansi_color, letter, ansi_reset);
         }
         print!("\n===============\n");
         
@@ -115,6 +117,7 @@ fn main() {
         } else {
             if state.guesses.len() >= 6 {
                 println!("Sorry! You didn't guess the word in six tries.");
+                println!("The word was: {}", state.chosen_word.iter().collect::<String>());
                 break;
             }
         }
