@@ -1,0 +1,10 @@
+{
+  "error": {
+    "statusCode": 400,
+    "message": [
+      "documents should not be null or undefined",
+      "participants should not be null or undefined"
+    ],
+    "error": "Bad Request"
+  }
+}
