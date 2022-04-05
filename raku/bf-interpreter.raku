@@ -1,6 +1,6 @@
 grammar BrainFuck::Grammar {
     rule TOP { ^^ <program> $$ }
-    rule program { [<expression><ws>?]+ }
+    rule program { <expression>+ }
     
     proto rule expression { * }
     rule expression:sym<increment> { "+" }
@@ -21,14 +21,17 @@ class BrainFuck::Actions {
     method expression:sym<decrement>($/) { @cells[$data-pointer] -= 1; }
     method expression:sym<next-cell>($/) { $data-pointer += 1; }
     method expression:sym<previous-cell>($/) { $data-pointer -= 1; }
-    method expression:sym<print-ascii-value>($/) { say @cells[$data-pointer].chr;}
+    method expression:sym<print-ascii-value>($/) { say @cells[$data-pointer].chr; }
     method expression:sym<read-char-to-cell>($/) { @cells[$data-pointer] = $*IN.getc.ord; }
-    # TODO: Fix.
     method expression:sym<loop-body>($/) {
+        say ~$/.substr(1, *-1);
         make ~$/.trim.substr(1, *-1);
     }
 }
 
-BrainFuck::Grammar.parse("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.", actions => BrainFuck::Actions);
+sub interpret-bf(Str $program) {
+    BrainFuck::Grammar.parse($program.comb(/<[+\-><.,\[\]]>/).join, actions => BrainFuck::Actions);
+}
 
-BrainFuck::Grammar.parse("++++++ [ > ++++++++++ < - ] > +++++ .", actions => BrainFuck::Actions);
+interpret-bf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++.");
+interpret-bf("++++++ [ > ++++++++++ < - ] > +++++ .");
