@@ -1,12 +1,9 @@
-my constant $file = "../d/MOCK_DATA.csv";
-my @matches = gather {
-    take $_ ~~ m:g/ (.+) ** 4 % ','/ for $file.IO.lines;
+my constant $file = "../d/MOCK_DATA.csv".IO.lines.cache;
+my @column-names = $file.head.split(',');
+my @matches = gather for $file[1..*] {
+    take m:g/ (.+) ** {@column-names.elems} % ','/;
 };
-for @matches[1..*] {
-    my ($firstName, $lastName, $email, $dob) = .head.list.flat;
-    say "First Name: $firstName";
-    say "Last Name: $lastName";
-    say "Email: $email";
-    say "Date of Birth: $dob";
+for @matches {
+    say "$_[0]: $_[1]" for @column-names Z .head.flat;
     say "";
 }
