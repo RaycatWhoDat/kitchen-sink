@@ -8,9 +8,10 @@
        [width 480]
        [height 360]))
 
-(new message%
+(define msg
+  (new message%
      [parent frame]
-     [label "This is another test"])
+     [label "This is another test"]))
 
 (new button% [parent frame]
              [label "Click Me"]
