@@ -1,0 +1,5 @@
+--dce full
+--define analyzer-optimize
+
+--main Tapster
+--interp
