@@ -1,0 +1,5 @@
+@(freeform)
+@(coll)@/\s/@{setWord /[\w\d\-]+/}:@/\s/@(end)
+@(output)
+@(rep)Word set: @setWord@\n@(end)
+@(end)
