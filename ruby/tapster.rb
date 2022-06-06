@@ -5,7 +5,7 @@ class Card < Struct.new(:number, :cardholder_name, :balance, :ounces_poured)
 end
 
 class ReaderEvent < Struct.new(:type, :payload, :timestamp)
-  def initialize(type, payload, timestamp = Time.now.to_i);
+  def initialize(type, payload, timestamp = Time.now.to_i)
     super
   end
 end
