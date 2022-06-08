@@ -1,7 +1,7 @@
 subset CardNumber of Str where .chars == 16;
 
 class Card {
-    has Str $!number;
+    has CardNumber $!number;
     has Str $.cardholder-name;
     has Real $.balance is rw = 0;
     has Real $.ounces-poured is rw = 0;

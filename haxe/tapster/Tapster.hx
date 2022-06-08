@@ -7,16 +7,16 @@ abstract RoundedFloat(Float) from Float {
     this = value;
   }
 
+  static inline function roundFloat(value: Float) {
+    return Math.round(value * multiplier) / multiplier;
+  }
+
   @:to inline public function toFloat(): Float {
     return roundFloat(this);
   }
 
   @:to inline public function toString(): String {
     return Std.string(toFloat());
-  }
-
-  static inline function roundFloat(value: Float) {
-    return Math.round(value * multiplier) / multiplier;
   }
 }
 
