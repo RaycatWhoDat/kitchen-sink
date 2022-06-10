@@ -27,7 +27,7 @@ impl StoreEvent {
             timestamp: Utc::now().timestamp(),
             payload
         }
-    }
+    } 
 }
 
 struct Store {
