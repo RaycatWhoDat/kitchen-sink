@@ -48,14 +48,14 @@ impl Store {
 
     fn purchase_item(&mut self, item: &InventoryItem) {
         self.events.push(StoreEvent::new(StoreEventType::PURCHASED, item.id.clone()));
-        let current_item_stock = self.stock.get(&item.id).unwrap();
-        self.update_item_quantity(item, *current_item_stock - 1);
+        let current_item_stock = self.stock.get(&item.id).unwrap().to_owned();
+        self.update_item_quantity(item, current_item_stock - 1);
     }
 
     fn refund_item(&mut self, item: &InventoryItem) {
         self.events.push(StoreEvent::new(StoreEventType::REFUNDED, item.id.clone()));
-        let current_item_stock = self.stock.get(&item.id).unwrap();
-        self.update_item_quantity(item, *current_item_stock + 1);
+        let current_item_stock = self.stock.get(&item.id).unwrap().to_owned();
+        self.update_item_quantity(item, current_item_stock + 1);
     }
 }
 
