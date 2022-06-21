@@ -1,8 +1,3 @@
-# Design an API to handle the navigation history of a web browser
-# (previous page, next page, list the 10 previous pages), and that can
-# be reusable in many parts of the application (here I give concrete
-# examples in our app).
-
 class BrowserAPI {
     has @.entries = [];
     has $.index is rw = -1;
@@ -12,18 +7,15 @@ class BrowserAPI {
     }
     
     method previous-page {
-        return if $.index < 1;
-        $.index--;
+        $.index = max($.index - 1, 0);
     }
 
     method next-page {
-        return if $.index >= @.entries.elems;
-        $.index++;
+        $.index = min($.index + 1, @.entries.elems - 1);
     }
 
     method list-ten-previous-pages {
-        my $range = ($.index - 10) .. $.index;
-        return if $range.bounds[0] < 0 or $range.bounds[1] > @.entries.elems;
+        my $range = max(0, $.index - 10) .. min($.index, @.entries.elems - 1);
         say self.get-page($_) for $range.list;
     }
 
