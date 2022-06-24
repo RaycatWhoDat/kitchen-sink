@@ -14,9 +14,9 @@ class BrowserAPI {
         $.index = min($.index + 1, @.entries.elems - 1);
     }
 
-    method list-ten-previous-pages {
-        my $range = max(0, $.index - 10) .. min($.index, @.entries.elems - 1);
-        say self.get-page($_) for $range.list;
+    method get-ten-previous-pages {
+        my @range = max(0, $.index - 10) .. min($.index, @.entries.elems - 1);
+        @.entries[@range];
     }
 
     method navigate(Str $page-name) {
@@ -31,4 +31,4 @@ say $api.entries;
 say $api.get-page;
 $api.previous-page;
 say $api.get-page;
-$api.list-ten-previous-pages;
+.say for $api.get-ten-previous-pages;
