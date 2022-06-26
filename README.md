@@ -415,7 +415,50 @@ void main(string[] args) {
 // End:
 ```
 
-### 6. [Haxe](https://haxe.org/)
+### 6. [TXR](http://nongnu.org/txr/)
+On the flip side, let's talk about TXR. This language is very weird because it's really two separate ones mashed together. There's TXR the pattern matching dialect, and TXR Lisp the Lisp dialect. Between these two, they handle almost every problem I have with regards to data munging.
+
+UPDATE: 2 -> 6. Turns out I like Raku a lot more.
+
+#### TXR Pattern Matching
+```
+@(next "MOCK_DATA.csv")
+@nil
+@(collect)
+@first_name,@last_name,@email,@dob
+@(end)
+@(output)
+@(repeat)
+First Name: @first_name
+Last Name: @last_name
+Email: @email
+Date of Birth: @dob
+
+@(end)
+@(end)
+```
+
+#### TXR Lisp
+```lisp
+(defvar *TWO-SPACES* 2)
+(defvar *ignored-paths*
+  '("." ".." ".git" ".gitattributes" ".gitignore" ".dub" "node_modules" "build" "target" "zef"))
+
+(defun print-listing (entry indentation-level)
+  (pprinl (cat-str (append (repeat '(#\ ) (* *TWO-SPACES* indentation-level)) entry))))
+
+(defun do-files (callback : (directory-path ".") (indentation-level 0))
+  (each ((entry (sort (get-lines (open-directory directory-path)))))
+    (let ((full-path (path-cat directory-path entry)))
+      (unless (member entry *ignored-paths*)
+        (eval ^(,callback ,entry ,indentation-level))
+        (when (path-dir-p full-path)
+          (do-files callback full-path (+ indentation-level 1)))))))
+
+(do-files 'print-listing (or (car *args*) ".."))
+```
+
+### 5. [Haxe](https://haxe.org/)
 Hello, old friend. Haxe is a... uh... yeah, how do you describe this language? It's a cross-platform, cross-language toolkit that leverages the libraries and platforms of the target programming language. It sounds weird but that's the best way to describe it. 
 
 ```haxe
@@ -445,23 +488,6 @@ function main() {
 // Local Variables:
 // compile-command: "haxe GetFilesCpp.hxml"
 // End:
-```
-### 5. [Raku](https://raku.org/)
-Okay, we're approaching the top of the top here. I adore Raku. There are so many nice things it gives you. There's a sweet MOP in here, there's lazy lists, sequences, reactive programming... and it goes on and on. The ONLY problems I have with it is that speed is rough and I need a more expressive way to do data munging. If it had that last one solved, this would be a different list.
-
-```raku
-my constant $TWO_SPACES = 2;
-my @ignoredPaths = <. .. .git .dub node_modules build zef target>;
-
-sub doFiles(IO(Str) $directoryPath, &callback = { .put }, $depth = 0) {
-    for $directoryPath.dir.sort({ not .d, .Str }) -> $currentListing {
-        next if $currentListing.basename (elem) @ignoredPaths;
-        &callback(' ' x ($TWO_SPACES * $depth) ~ $currentListing.basename);
-        doFiles($currentListing, &callback, $depth + 1) if $currentListing.d;
-    }
-}
-
-doFiles("..", { .put });
 ```
 
 ### 4. [Rust](https://www.rust-lang.org/)
@@ -521,48 +547,7 @@ fn main() -> Result<()> {
 }
 ```
 
-### 3. [TXR](http://nongnu.org/txr/)
-On the flip side, let's talk about TXR. This language is very weird because it's really two separate ones mashed together. There's TXR the pattern matching dialect, and TXR Lisp the Lisp dialect. Between these two, they handle almost every problem I have with regards to data munging. So much so, it's my second go-to language.
-
-#### TXR Pattern Matching
-```
-@(next "MOCK_DATA.csv")
-@nil
-@(collect)
-@first_name,@last_name,@email,@dob
-@(end)
-@(output)
-@(repeat)
-First Name: @first_name
-Last Name: @last_name
-Email: @email
-Date of Birth: @dob
-
-@(end)
-@(end)
-```
-
-#### TXR Lisp
-```lisp
-(defvar *TWO-SPACES* 2)
-(defvar *ignored-paths*
-  '("." ".." ".git" ".gitattributes" ".gitignore" ".dub" "node_modules" "build" "target" "zef"))
-
-(defun print-listing (entry indentation-level)
-  (pprinl (cat-str (append (repeat '(#\ ) (* *TWO-SPACES* indentation-level)) entry))))
-
-(defun do-files (callback : (directory-path ".") (indentation-level 0))
-  (each ((entry (sort (get-lines (open-directory directory-path)))))
-    (let ((full-path (path-cat directory-path entry)))
-      (unless (member entry *ignored-paths*)
-        (eval ^(,callback ,entry ,indentation-level))
-        (when (path-dir-p full-path)
-          (do-files callback full-path (+ indentation-level 1)))))))
-
-(do-files 'print-listing (or (car *args*) ".."))
-```
-
-### 2. [Emacs](https://www.gnu.org/software/emacs/) Lisp
+### 3. [Emacs](https://www.gnu.org/software/emacs/) Lisp
 I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for making text-based applications that live in Emacs.
 
 ```elisp
@@ -610,6 +595,24 @@ I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for
     (font-lock-mode)))
 
 (find-files-recursively "..")
+```
+
+### 2. [Raku](https://raku.org/)
+I adore Raku. There are so many nice things it gives you. There's a sweet MOP in here, there's lazy lists, sequences, reactive programming... and it goes on and on. The ONLY problems I have with it is that speed is rough and I need a more expressive way to do data munging.
+
+```raku
+my constant $TWO_SPACES = 2;
+my @ignoredPaths = <. .. .git .dub node_modules build zef target>;
+
+sub doFiles(IO(Str) $directoryPath, &callback = { .put }, $depth = 0) {
+    for $directoryPath.dir.sort({ not .d, .Str }) -> $currentListing {
+        next if $currentListing.basename (elem) @ignoredPaths;
+        &callback(' ' x ($TWO_SPACES * $depth) ~ $currentListing.basename);
+        doFiles($currentListing, &callback, $depth + 1) if $currentListing.d;
+    }
+}
+
+doFiles("..", { .put });
 ```
 
 ### 1. JavaScript ([MDN](https://developer.mozilla.org/en-US/docs/Web/javascript))
