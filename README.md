@@ -495,7 +495,7 @@ function main() {
 
 I do not like Rust's syntax and I don't like how verbose it can be.
 
-However, if there's one thing I can count on, it's the community behind it. You simply don't count out people's passion to make cool things. As a result of that thinking, Rust is my go-to pick for systems-level programming and WebAssembly compilation.
+However, if there's one thing I can count on, it's the community behind it. You simply don't count out peoples' passion to make cool things. As a result of that thinking, Rust is my go-to pick for systems-level programming and WebAssembly compilation.
 
 ```rust
 // (compile "cargo run ..")
