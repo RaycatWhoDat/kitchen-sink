@@ -1,0 +1,7 @@
+@(next "./csv-parse.txr")
+@(skip)
+Date of Birth: @dob
+@(output)
+@dob
+@(end)
+
