@@ -1,28 +1,31 @@
-import datetime
 from enum import Enum
+from datetime import datetime
+from dataclasses import dataclass, field
+from typing import List, Dict
 
+@dataclass
 class InventoryItem:
-    def __init__(self, id, name, price):
-        self.id = id
-        self.name = name
-        self.price = price
+    id: str
+    name: str
+    price: int
 
 class StoreEventType(Enum):
     PURCHASED = 1
     REFUNDED = 2
 
+@dataclass
 class StoreEvent:
-    def __init__(self, event_type, payload):
-        self.event_type = event_type
-        self.timestamp = datetime.datetime.now()
-        self.payload = payload
+    event_type: StoreEventType
+    timestamp: datetime = datetime.now()
+    payload: str = ""
 
+@dataclass
 class Store:
-    stock = {}
-    events = []
-
-    def __init__(self, name):
-        self.name = name
+    name: str
+    opening_time: datetime = datetime.now()
+    closing_time: datetime = datetime.now()
+    stock: Dict[str, int] = field(default_factory = dict)
+    events: List[StoreEvent] = field(default_factory = list)
 
     def update_item_quantity(self, item, amount):
         self.stock[item.id] = amount
