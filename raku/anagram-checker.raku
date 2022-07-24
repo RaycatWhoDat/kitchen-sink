@@ -1,5 +1,5 @@
 sub anagrams(Str $word, *@possible-anagrams) {
-    [|@possible-anagrams.grep({ .comb.Bag (==) $word.comb.Bag; })];
+    @possible-anagrams.grep(*.comb.Bag (==) $word.comb);
 }
 
 DOC CHECK {
