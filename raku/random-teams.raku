@@ -3,4 +3,4 @@ my @names = <RaycatWhoDat Lythero DickDebonair OverlordDyvone EmyFails NosferatC
 my @blue = @names.pick: 4;
 
 say "Blue: $_" for @blue;
-say "Gold: $_" for @names.grep: @blue.none;
+say "Gold: $_" for (@names (-) @blue).keys;
