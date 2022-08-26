@@ -46,7 +46,6 @@ struct Deck {
 
         self.shuffle()
     }
-  
     
     mutating func draw() -> Card? {
         guard self.cards.count > 0 else { return nil }

@@ -24,7 +24,7 @@ my $secondAccount = Account.new(balance => 40);
 say $firstAccount;
 say $secondAccount;
 
-$firstAccount + $secondAccount;
+sink $firstAccount + $secondAccount;
 
 say $firstAccount;
 say $secondAccount;
