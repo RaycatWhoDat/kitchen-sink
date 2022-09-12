@@ -25,7 +25,7 @@ class GameState
     loop do
       print "What is your command? "
       next_command = gets.chomp
-      break if next_command.match?($move_regex) or next_command.match?($explore_regex) or next_command.match?($sys_regex)
+      break if [$move_regex, $explore_regex, $sys_regex].any? { |regex| next_command.match?(regex) }
       puts "That is an invalid command."
     end
 

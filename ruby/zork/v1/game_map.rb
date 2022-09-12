@@ -16,7 +16,7 @@ class GameMap
 
   def generate_unexplored_room previous_room, direction
     name = ("a".."z").to_a.sample(15).join
-    opposite_direction = get_opposite_direction direction
+    opposite_direction = get_opposite_direction(direction)
     new_room = Room.new(name: name, rooms: { opposite_direction => previous_room })
     previous_room.rooms[direction] = new_room
   end
