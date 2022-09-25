@@ -3,7 +3,7 @@ struct Account {
     var balance: Int
     let accountNumber: Int
 
-    init(balance: Int) {
+    init(_ balance: Int) {
         self.balance = balance
         Account.number += 1
         self.accountNumber = Account.number        
@@ -15,8 +15,8 @@ func +(lhs: inout Account, rhs: inout Account) {
     rhs.balance = 0
 }
 
-var account1 = Account(balance: 20)
-var account2 = Account(balance: 40)
+var account1 = Account(20)
+var account2 = Account(40)
 
 print(account1)
 print(account2)
