@@ -1,4 +1,5 @@
-import std/[sequtils, sugar, tables]
+import macros
+import std/[sets, sequtils, sugar, tables]
 
 type Direction = enum NORTH, EAST, SOUTH, WEST
 
@@ -15,12 +16,18 @@ type Room = ref object
   description: string
   rooms: Table[Direction, Room]
 
-proc getExits(room: Room): seq[Direction] =
+method getExits(room: Room): seq[Direction] =
   collect:
     for direction in directions:
       if direction in room.rooms:
         direction
 
+method getExplorables(room: Room): seq[Direction] =
+  collect:
+    for direction in directions:
+      if direction notin room.rooms:
+        direction
+        
 when isMainModule:
   var room1 = Room(
     name: "The Front Room",
@@ -35,4 +42,5 @@ when isMainModule:
   echo room1.getExits
   room1.rooms[NORTH] = room2
   echo room1.getExits
+  echo room1.getExplorables
   
