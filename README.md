@@ -26,7 +26,7 @@ As a web dev, a lot of my time is spent working and building the same sort of ap
 Haskell, Elm, F#, Java
 
 ## Other Languages I've Tried
-Julia, OCaml, Awk, Perl, Elixir, Ruby/Crystal, Chez/Gambit/Guile/Chicken Scheme, C/C++, Chapel, V, 8th
+Julia, OCaml, Awk, Perl, Elixir, Chez/Gambit/Guile/Chicken Scheme, C/C++, Chapel, V, 8th
 
 With that out of the way, let's get started.
 
@@ -104,7 +104,37 @@ fun main(args: Array<String>) {
 // End:
 ```
 
-### 16. [Janet](https://janet-lang.org/)
+### 16. [Racket](https://www.racket-lang.org/)
+#### Previously: #9 -> #16
+Oh boy, it's Racket. I like Racket. Very friendly and batteries-included, albeit a touch explicit. I'd almost argue that it's the Python of Schemes. (Yes, I know it's an amalgam of Lisp and Scheme; just roll with it.) Honestly, I think I would choose this language if it had a nice way to handle data munging.
+
+```racket
+#!/usr/bin/env racket
+
+#lang racket/base
+
+(require racket/path racket/string)
+
+(define (get-files (directory-path "..") (traversal-level 0))
+  (for ((entry (directory-list directory-path)))
+    (let ((current-path (path->string entry)))
+      (printf (string-append (make-string (* 2 traversal-level) #\space) "~a~%") current-path)
+      (unless (for/or ((ignored-path '(".git" "love" "target" "dist" ".dub" "node_modules")))
+                (string-contains? current-path ignored-path))
+        (when (directory-exists? (path->directory-path (build-path directory-path current-path)))
+          (get-files (string-append directory-path "/" current-path) (+ traversal-level 1)))))))
+
+(if (zero? (vector-length (current-command-line-arguments)))
+    (get-files)
+    (get-files (vector-ref (current-command-line-arguments) 0)))
+
+;; Local Variables:
+;; compile-command: "racket ./get-files.rkt"
+;; End:
+```
+
+### 15. [Janet](https://janet-lang.org/)
+#### Previously: #16 -> #15
 Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The difference betweent the two is that this implements its own VM instead of leveraging Lua's. I like quite a few of the constructs in here but I found it lacking compared to later dialects. Wouldn't mind writing more of it, though. (Also, GitHub: just let them have syntax highlighting. It's been long enough and you can't blame the author for writing the most code for it.)
 
 ```clojure
@@ -135,7 +165,8 @@ Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The 
     (get-files (if (> (length args) 1) (last args) nil)))
 ```
 
-### 15. [TCL](https://www.tcl-lang.org/)
+### 14. [TCL](https://www.tcl-lang.org/)
+#### Previously: #15 -> #14
 TCL (pronounced "tickle") is a neat homoiconic language with a pretty cool concurrency model. The story here is that "everything is a string" so, naturally, I had to try it out. I found it to be only slightly more expressive than Lua which is both good and bad. The real killer came from the deployment/portability aspect. Unless you had a go-to Starkit (pre-packaged TCL distribution), you didn't really have a clean way to move your scripts around.
 
 ```tcl
@@ -178,7 +209,8 @@ proc list_files { directory traversal_level } {
 list_files $argv 0
 ```
 
-### 14. [Lua](http://www.lua.org/)
+### 13. [Lua](http://www.lua.org/)
+#### Previously: #14 -> #13
 Oh, hey, speak of the devil. Lua is the other language people love to hate. Something about 1-indexed arrays (even though arrays aren't really a construct here; we accept tables as valid currency)? The language does what it needs to do and it's super-embeddable. There's a metric tonne of games out there that use Lua for scripting. Writing the example here was a bit more explicit than I'd like but I don't recall hating it.
 
 ```lua
@@ -233,7 +265,8 @@ end
 print_files_recursively()
 ```
 
-### 13. [Common Lisp](https://common-lisp.net/) ([SBCL](http://www.sbcl.org/))
+### 12. [Common Lisp](https://common-lisp.net/) ([SBCL](http://www.sbcl.org/))
+#### Previously: #13 -> #12
 Ah, yes. Common Lisp. I have gone back and forth on this language because it's kinda a jack of all trades. Bitrot is almost non-existent here and there are a lot of battle-tested libraries. Originally, I thought you had to keep the car running here but it seems like you could do something like `sbcl --script get-files.lisp` and get the results you want. I need to revisit this and work with the language with that in mind.  
 
 ```lisp
@@ -253,7 +286,51 @@ Ah, yes. Common Lisp. I have gone back and forth on this language because it's k
       do (print-files listing (1+ traversal-level)))))
 ```
 
-### 12. [Python](https://www.python.org/)
+### 12. [TXR](http://nongnu.org/txr/)
+#### Previously: #2 -> #6 -> #12
+
+This language is very weird because it's really two separate ones mashed together. There's TXR the pattern matching dialect, and TXR Lisp the Lisp dialect. Between these two, they handle almost every problem I have with regards to data munging.
+
+#### TXR Pattern Matching
+```
+@(next "MOCK_DATA.csv")
+@nil
+@(collect)
+@first_name,@last_name,@email,@dob
+@(end)
+@(output)
+@(repeat)
+First Name: @first_name
+Last Name: @last_name
+Email: @email
+Date of Birth: @dob
+
+@(end)
+@(end)
+```
+
+#### TXR Lisp
+```lisp
+(defvar *TWO-SPACES* 2)
+(defvar *ignored-paths*
+  '("." ".." ".git" ".gitattributes" ".gitignore" ".dub" "node_modules" "build" "target" "zef"))
+
+(defun print-listing (entry indentation-level)
+  (pprinl (cat-str (append (repeat '(#\ ) (* *TWO-SPACES* indentation-level)) entry))))
+
+(defun do-files (callback : (directory-path ".") (indentation-level 0))
+  (each ((entry (sort (get-lines (open-directory directory-path)))))
+    (let ((full-path (path-cat directory-path entry)))
+      (unless (member entry *ignored-paths*)
+        (eval ^(,callback ,entry ,indentation-level))
+        (when (path-dir-p full-path)
+          (do-files callback full-path (+ indentation-level 1)))))))
+
+(do-files 'print-listing (or (car *args*) ".."))
+```
+
+### 11. [Python](https://www.python.org/)
+#### Previously: #12 -> #11
 It's Python. Language is good. What else is there to talk about?
 
 ```python
@@ -277,7 +354,8 @@ printFiles('..')
 # End:
 ```
 
-### 11/10. [REBOL](http://www.rebol.com/)/[Red](https://www.red-lang.org/)
+### 10/9. [REBOL](http://www.rebol.com/)/[Red](https://www.red-lang.org/)
+#### Previously: #11/#10 -> #10/#9
 Now, we're getting into the nitty-gritty. REBOL and Red are sharing a line because of how similar they are. They're both homoiconic languages that take the block-and-word-based approach to programming, with Red being the most actively-developed language. The concept of "no reserved keywords" is always interesting to me because they're treating the words like a spoken language. The meaning of a word changes based on the context which has interesting effects when interweaving dialects. Can't wait for the cross-platform kinks to get worked out.
 
 ```red
@@ -306,34 +384,6 @@ get-files either (length? system/options/args) > 0 [last system/options/args][".
 ; mode: rebol
 ; compile-command: "./red get-files.red"
 ; End:
-```
-
-### 9. [Racket](https://www.racket-lang.org/)
-Oh boy, it's Racket. I like Racket. Very friendly and batteries-included, albeit a touch explicit. I'd almost argue that it's the Python of Schemes. (Yes, I know it's an amalgam of Lisp and Scheme; just roll with it.) Honestly, I think I would choose this language if it had a nice way to handle data munging.
-
-```racket
-#!/usr/bin/env racket
-
-#lang racket/base
-
-(require racket/path racket/string)
-
-(define (get-files (directory-path "..") (traversal-level 0))
-  (for ((entry (directory-list directory-path)))
-    (let ((current-path (path->string entry)))
-      (printf (string-append (make-string (* 2 traversal-level) #\space) "~a~%") current-path)
-      (unless (for/or ((ignored-path '(".git" "love" "target" "dist" ".dub" "node_modules")))
-                (string-contains? current-path ignored-path))
-        (when (directory-exists? (path->directory-path (build-path directory-path current-path)))
-          (get-files (string-append directory-path "/" current-path) (+ traversal-level 1)))))))
-
-(if (zero? (vector-length (current-command-line-arguments)))
-    (get-files)
-    (get-files (vector-ref (current-command-line-arguments) 0)))
-
-;; Local Variables:
-;; compile-command: "racket ./get-files.rkt"
-;; End:
 ```
 
 ### 8. [Nim](https://nim-lang.org/)
@@ -415,50 +465,8 @@ void main(string[] args) {
 // End:
 ```
 
-### 6. [TXR](http://nongnu.org/txr/)
-On the flip side, let's talk about TXR. This language is very weird because it's really two separate ones mashed together. There's TXR the pattern matching dialect, and TXR Lisp the Lisp dialect. Between these two, they handle almost every problem I have with regards to data munging.
-
-UPDATE: 2 -> 6. Turns out I like Raku a lot more.
-
-#### TXR Pattern Matching
-```
-@(next "MOCK_DATA.csv")
-@nil
-@(collect)
-@first_name,@last_name,@email,@dob
-@(end)
-@(output)
-@(repeat)
-First Name: @first_name
-Last Name: @last_name
-Email: @email
-Date of Birth: @dob
-
-@(end)
-@(end)
-```
-
-#### TXR Lisp
-```lisp
-(defvar *TWO-SPACES* 2)
-(defvar *ignored-paths*
-  '("." ".." ".git" ".gitattributes" ".gitignore" ".dub" "node_modules" "build" "target" "zef"))
-
-(defun print-listing (entry indentation-level)
-  (pprinl (cat-str (append (repeat '(#\ ) (* *TWO-SPACES* indentation-level)) entry))))
-
-(defun do-files (callback : (directory-path ".") (indentation-level 0))
-  (each ((entry (sort (get-lines (open-directory directory-path)))))
-    (let ((full-path (path-cat directory-path entry)))
-      (unless (member entry *ignored-paths*)
-        (eval ^(,callback ,entry ,indentation-level))
-        (when (path-dir-p full-path)
-          (do-files callback full-path (+ indentation-level 1)))))))
-
-(do-files 'print-listing (or (car *args*) ".."))
-```
-
-### 5. [Haxe](https://haxe.org/)
+### 6. [Haxe](https://haxe.org/)
+#### Previously: #5 -> #6
 Hello, old friend. Haxe is a... uh... yeah, how do you describe this language? It's a cross-platform, cross-language toolkit that leverages the libraries and platforms of the target programming language. It sounds weird but that's the best way to describe it. 
 
 ```haxe
@@ -490,7 +498,8 @@ function main() {
 // End:
 ```
 
-### 4. [Rust](https://www.rust-lang.org/)
+### 5. [Rust](https://www.rust-lang.org/)
+#### Previously: #4 -> #5
 *Sigh.* Let's talk about Rust.
 
 I do not like Rust's syntax and I don't like how verbose it can be.
@@ -547,7 +556,8 @@ fn main() -> Result<()> {
 }
 ```
 
-### 3. [Emacs](https://www.gnu.org/software/emacs/) Lisp
+### 4. [Emacs](https://www.gnu.org/software/emacs/) Lisp
+#### Previously: #3 -> #4
 I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for making text-based applications that live in Emacs.
 
 ```elisp
@@ -597,7 +607,8 @@ I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for
 (find-files-recursively "..")
 ```
 
-### 2. [Raku](https://raku.org/)
+### 3. [Raku](https://raku.org/)
+#### Previously: #2 -> #3
 I adore Raku. There are so many nice things it gives you. There's a sweet MOP in here, there's lazy lists, sequences, reactive programming... and it goes on and on. The ONLY problems I have with it is that speed is rough and I need a more expressive way to do data munging.
 
 ```raku
@@ -613,6 +624,15 @@ sub doFiles(IO(Str) $directoryPath, &callback = { .put }, $depth = 0) {
 }
 
 doFiles("..", { .put });
+```
+
+### 2. [Ruby](https://ruby-lang.org/en/)
+Ruby is a fantastic language. I'm upset it took me this long to get on the train. I've been playing around with it for a while now and 90% of the things I can do in Raku, I can do in Ruby with more consistency.
+```ruby
+Dir.glob("../**/**").each do |listing|
+  path_parts = listing.split("/")[1..]
+  printf("  " * (path_parts.length - 1) + "%s\n", path_parts.last) 
+end
 ```
 
 ### 1. JavaScript ([MDN](https://developer.mozilla.org/en-US/docs/Web/javascript))
