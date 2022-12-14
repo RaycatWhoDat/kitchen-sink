@@ -3,7 +3,7 @@ package getfiles;
 import java.io.File;
 import kotlin.io.*;
 
-const val INDENTATION_LEVEL = 2
+val INDENTATION_LEVEL = 2
 
 val IGNORED_PATHS = listOf("..", ".", ".git", "node_modules", "dist", ".dub");
 
@@ -19,10 +19,8 @@ fun printFiles(traversalLevel: Int, currentDirectory: File) {
     }
 }
 
-fun main() {
-   printFiles(0, File(".."))
-}
+printFiles(0, File(".."))
 
 // Local Variables:
-// compile-command: "kotlinc getfiles.kt -include-runtime -d getfiles.jar && java -jar getfiles.jar"
+// compile-command: "kotlinc -script getfiles.kts"
 // End:

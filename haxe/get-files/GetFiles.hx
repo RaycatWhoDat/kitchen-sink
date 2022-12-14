@@ -10,8 +10,8 @@ function printFiles(directoryPath = "..", traversalLevel = 0) {
     for (index in 0...(traversalLevel * TWO_SPACES)) spaces.add(" ");
     Sys.println(spaces.toString() + entry);
     if (ignoredPaths.indexOf(entry) > -1) continue;
-    if (isDirectory(directoryPath + "/" + entry)) {
-      printFiles(directoryPath + "/" + entry, traversalLevel + 1);
+    if (isDirectory('${directoryPath}/${entry}')) {
+      printFiles('${directoryPath}/${entry}', traversalLevel + 1);
     }
   }
 }
