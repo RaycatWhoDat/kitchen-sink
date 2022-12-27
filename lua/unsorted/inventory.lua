@@ -1,32 +1,32 @@
+Class = {}
+function Class.new(newSelf, newObj)
+   newSelf.__index = newSelf
+   return setmetatable(newObj, newSelf)
+end
+
 InventoryItem = {}
 function InventoryItem:new(id, name, price)
-   newObj = { id = id, name = name, price = price }
-   self.__index = self
-   return setmetatable(newObj, self)
+   return Class.new(self, { id = id, name = name, price = price })
 end
 
 StoreEvent = {}
 function StoreEvent:new(event_type, payload)
-   newObj = {
+   return Class.new(self, {
       event_type = event_type,
       timestamp = os.date("%c"),
       payload = payload
-   }
-   self.__index = self
-   return setmetatable(newObj, self)
+   })
 end
 
 Store = {}
 function Store:new(name)
-   newObj = {
+   return Class.new(self, {
       name = name,
       opening_time = 900,
       closing_time = 1700,
       stock = {},
       events = {}
-   }
-   self.__index = self
-   return setmetatable(newObj, self)
+   })
 end
 
 function Store:update_item_quantity(item, amount)
