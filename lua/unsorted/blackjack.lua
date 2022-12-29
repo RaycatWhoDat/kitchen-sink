@@ -1,7 +1,8 @@
 local starting_hand_size = 2
 local number_of_players = 1
 
-math.randomseed(os.time() + math.floor(math.random() * 999999))
+math.randomseed(os.time())
+math.random()
 
 Class = {}
 function Class.new(new_self, new_obj)
@@ -84,7 +85,7 @@ end
 function BlackjackDeck:deal()
    local cards = {}
    for index = 1, starting_hand_size * (number_of_players + 1) do
-      local card = table.remove(self.cards, math.floor(math.random() * #self.cards) + 1)
+      local card = table.remove(self.cards, math.random(#self.cards))
       local current_player = (index % (number_of_players + 1)) + 1
       cards[current_player] = cards[current_player] or {} 
       table.insert(cards[current_player], card)
@@ -94,7 +95,7 @@ function BlackjackDeck:deal()
 end
 
 function BlackjackDeck:hit()
-   return table.remove(self.cards, math.floor(math.random() * #self.cards) + 1)
+   return table.remove(self.cards, math.random(#self.cards))
 end
 
 local deck = BlackjackDeck:new()
