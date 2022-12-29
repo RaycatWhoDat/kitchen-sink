@@ -1,0 +1,74 @@
+require "os"
+require "hashmap"
+require "sequence"
+
+local InventoryItem = @record {
+   id: string,
+   name: string,
+   price: integer
+}
+
+local StoreEventType = @enum {
+   PURCHASED = 0,
+   REFUNDED
+}
+
+local StoreEvent = @record {
+   event_type: StoreEventType,
+   timestamp: string,
+   payload: string
+}
+
+local Store = @record {
+   name: string,
+   opening_time: integer,
+   closing_time: integer,
+   stock: hashmap(string, integer),
+   events: sequence(StoreEvent)
+}
+
+function Store:update_item_quantity(item: InventoryItem, amount: integer)
+   self.stock[item.id] = amount
+end
+
+function Store:purchase_item(item: InventoryItem)
+   if self.stock[item.id] < 1 then
+      return
+   end
+
+   self.events:push((@StoreEvent) {
+         event_type = StoreEventType.PURCHASED,
+         timestamp = os.date("%c"),
+         payload = item.id
+   })
+   self:update_item_quantity(item, self.stock[item.id] - 1)
+end
+
+function Store:refund_item(item: InventoryItem)
+   self.events:push((@StoreEvent) {
+         event_type = StoreEventType.REFUNDED,
+         timestamp = os.date("%c"),
+         payload = item.id
+   })
+   self:update_item_quantity(item, self.stock[item.id] + 1)
+end
+
+local item1: InventoryItem = { id = "1", name = "Item 1 - A", price = 500 }
+local item2: InventoryItem = { id = "2", name = "Item 2 - B", price = 750 }
+local item3: InventoryItem = { id = "3", name = "Item 3 - C", price = 1000 }
+
+local store: Store = {
+   name = "Bob's Shop",
+   opening_time = 900,
+   closing_time = 1700
+}
+
+store:update_item_quantity(item1, 10)
+store:update_item_quantity(item2, 7)
+store:update_item_quantity(item3, 5)
+
+store:purchase_item(item1)
+
+for id, amount in pairs(store.stock) do
+   print(id, amount)
+end

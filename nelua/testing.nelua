@@ -1,0 +1,5 @@
+local function add(num1: integer, num2: integer): integer
+   return num1 + num2
+end
+
+print(add(1, 5))
