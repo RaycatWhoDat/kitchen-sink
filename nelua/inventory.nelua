@@ -37,18 +37,18 @@ function Store:purchase_item(item: InventoryItem)
    end
 
    self.events:push({
-         event_type = StoreEventType.PURCHASED,
-         timestamp = os.date("%c"),
-         payload = item.id
+      event_type = StoreEventType.PURCHASED,
+      timestamp = os.date("%c"),
+      payload = item.id
    })
    self:update_item_quantity(item, self.stock[item.id] - 1)
 end
 
 function Store:refund_item(item: InventoryItem)
    self.events:push({
-         event_type = StoreEventType.REFUNDED,
-         timestamp = os.date("%c"),
-         payload = item.id
+      event_type = StoreEventType.REFUNDED,
+      timestamp = os.date("%c"),
+      payload = item.id
    })
    self:update_item_quantity(item, self.stock[item.id] + 1)
 end
