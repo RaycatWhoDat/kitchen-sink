@@ -1,0 +1,126 @@
+require "sequence"
+require "iterators"
+require "string"
+require "math"
+require "os"
+
+local starting_hand_size <const> = 2
+local number_of_players <const> = 1
+
+math.randomseed(os.time())
+math.random()
+
+local BlackjackValue = @record {
+    display_value: string,
+    first_value: integer,
+    second_value: integer
+};
+
+local BlackjackHand = @record {
+    cards: sequence(BlackjackValue),
+    total: BlackjackValue
+};
+
+local BlackjackDeck = @record {
+    cards: sequence(BlackjackValue)
+}
+
+function BlackjackDeck:hit()
+    return self.cards:remove(math.random(#self.cards))
+end
+
+function BlackjackHand:status()
+    local card_listing = ""
+    for _, card in pairs(self.cards) do
+        card_listing = card_listing .. " " .. card.display_value 
+    end
+ 
+    print(card_listing)
+    print(
+        "Total value: " 
+        .. tostring(self.total.first_value) 
+        .. (self.total.second_value ~= self.total.first_value and (", " .. tostring(self.total.second_value)) or "")
+    )
+end
+
+function BlackjackHand:hit(deck: BlackjackDeck)
+    if deck == nil then return end
+    local next_card = deck:hit()
+    self.cards:push(next_card)
+    self.total.first_value = self.total.first_value + next_card.first_value
+    self.total.second_value = self.total.second_value + next_card.second_value
+end
+
+function BlackjackHand:is_busted()
+   return self.total.first_value > 21 and self.total.second_value > 21
+end
+
+function BlackjackHand.new(cards: sequence(BlackjackValue))
+    local total: BlackjackValue
+    for _, card in ipairs(cards) do
+        total.first_value = total.first_value + card.first_value
+        total.second_value = total.second_value + card.second_value
+    end
+    return (@BlackjackHand) { cards, total }
+end
+
+##[[
+local function generate_deck()
+    local cards = aster.InitList({
+        pattr = {
+            desiredtype = types.ArrayType(BlackjackValue.value, 52)
+        }
+    })
+    local values = {
+        "2", "3", "4", "5", "6", "7", "8",
+        "9", "10", "J", "Q", "K", "A"
+    }
+    local suits = { "♥", "♠", "♦", "♣" }
+
+    for _, suit in ipairs(suits) do
+        for _, value in ipairs(values) do
+            local first_value, second_value
+            if value == "A" then
+                first_value = 1
+                second_value = 11
+            else
+                first_value = tonumber(value) or 10
+                second_value = first_value
+            end
+
+            table.insert(cards, aster.value({ 
+                display_value = value .. suit,
+                first_value = first_value,
+                second_value = second_value
+            }))
+        end
+    end
+    return cards
+end
+]]
+
+function BlackjackDeck:reset()
+    self.cards = #[generate_deck()]#
+end
+
+function BlackjackDeck:deal()
+    local cards: sequence(BlackjackValue)
+    for i = 1, starting_hand_size do
+        cards:push(self:hit())
+        self:hit()
+    end
+    return cards
+end
+
+local deck: BlackjackDeck
+deck:reset()
+
+local player_hand = BlackjackHand.new(deck:deal())
+player_hand:status()
+
+repeat
+   player_hand:hit(deck)
+   player_hand:status()
+until player_hand:is_busted()
+
+print("You've busted!")
