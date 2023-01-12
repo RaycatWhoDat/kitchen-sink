@@ -15,16 +15,12 @@ function GameMap:get_opposing_direction(direction)
    })[direction]
 end
 
-local letters = {}
-for _, letter in ("abcdefghijklmnopqrstuvwxyz"):gmatch(".") do
-   table.insert(letters, letter)
-end
-
 function GameMap:generate_unexplored_room(previous_room, direction)
-   local name = utils.join("", utils.pick(letters, 15))
-   local opposite_direction = self.get_opposing_direction(direction)
-   local new_room = Room.new(name, nil, { [opposite_direction] = previous_room })
+   local name = utils.join("", utils.pick(utils.chars("abcdefghijklmnopqrstuvwxyz"), 15))
+   local opposite_direction = self:get_opposing_direction(direction)
+   local new_room = Room:new(name, nil, { [opposite_direction] = previous_room })
    previous_room.rooms[direction] = new_room
+   return new_room
 end
 
 return GameMap

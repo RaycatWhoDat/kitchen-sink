@@ -35,4 +35,24 @@ function utils.join(separator, ...)
    return new_string
 end
 
+function utils.trim(str)
+   return string.match(str, "%s*(%S.+%S)%s*")
+end
+
+function utils.tee(...)
+   local args = { ... }
+   for index, arg in ipairs(args) do
+      print(index, arg)
+   end
+   return unpack(args)
+end
+
+function utils.chars(str)
+   local chars = {}
+   for letter in string.gmatch(str, ".") do
+      table.insert(chars, letter)
+   end
+   return chars
+end
+
 return utils
