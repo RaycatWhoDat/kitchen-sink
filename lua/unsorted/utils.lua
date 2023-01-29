@@ -1,52 +1,92 @@
-math.randomseed((''..os.time()):reverse())
-math.random()
+local Utils = {}
 
-local function zip(...)
-   local index = 0
-   local items = { ... }
-   return function ()
-      index = index + 1
-      local container = {}
-      for _, item in ipairs(items) do
-         table.insert(container, item[index])
-      end
-      return unpack(container)
-   end
-end
-
-local function base_sample(t, number, is_nondestructive)
+function base_sample(t, number, opts)
    assert(number > 1, "Number cannot be less than 2.")
+   local options = opts or {}
    local picks = {}
    local choice = -1
    for index = 1, (number or 2) do
       choice = math.random(#t)
-      item = is_nondestructive and t[choice] or table.remove(t, choice)
+      item = options.is_nondestructive and t[choice] or table.remove(t, choice)
       table.insert(picks, item)
    end
    return unpack(picks)
 end
 
-local function pick(t, number)
-   return base_sample(t, number, true)
+function Utils.pick(t, number)
+   return base_sample(t, number, { is_nondestructive = true })
 end
 
-local function sample(t, number)
-   return base_sample(t, number, false)
+function Utils.sample(t, number)
+   return base_sample(t, number)
 end
 
-local test_case1 = { 1, 2, 3, 4, 5 }
-local test_case2 = { 6, 7, 8, 9, 10, 11 }
-local test_case3 = { 12, 13, 14, 15, 16, 17, 18 }
-
-for item1, item2, item3, item4, item5 in zip(test_case1, test_case2, test_case3, test_case2, test_case1) do
-   print(item1, item2, item3, item4, item5)
+function Utils.join(separator, ...)
+   local strings = { ... }
+   local new_string = ""
+   for index, str in ipairs(strings) do
+      new_string = new_string .. (type(str) ~= "string" and tostring(str) or str)
+      if index < #strings then
+         new_string = new_string .. (separator or " ")
+      end
+   end
+   return new_string
 end
 
-print(pick(test_case3, 2))
-print(#test_case3)
-print(sample(test_case3, 2))
-print(#test_case3)
+function Utils.trim(str)
+   return string.match(str, "%s*(%S.+%S)%s*")
+end
 
--- {
---    zip = zip
--- }
+function Utils.tee(...)
+   local args = { ... }
+   for index, arg in ipairs(args) do
+      print(index, arg)
+   end
+   return unpack(args)
+end
+
+function Utils.chars(str)
+   local chars = {}
+   for letter in string.gmatch(str, ".") do
+      table.insert(chars, letter)
+   end
+   return chars
+end
+
+function Utils.range(number1, number2)
+   local range_index = 0
+   local current_number = number2 ~= nil and number1 - 1 or -1
+
+   if number2 == nil then
+      number2 = number1
+   end
+   
+   return function ()
+      range_index = range_index + 1
+      current_number = current_number + 1
+      if current_number <= number2 then
+         return current_number
+      end
+   end
+end
+
+function Utils.zip(...)
+   local iters = { ... }
+   local result = {}
+   local is_exhausted
+   
+   repeat
+      local tuple = {}
+      is_exhausted = true
+      for index = 1, #iters do
+         local item = iters[index]()
+         if item ~= nil then is_exhausted = false end
+         table.insert(tuple, item)
+      end
+      table.insert(result, tuple)
+   until is_exhausted
+   
+   return result
+end
+
+return Utils

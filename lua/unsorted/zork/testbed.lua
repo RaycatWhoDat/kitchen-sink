@@ -1,11 +1,12 @@
 local utils = require "utils"
-local Class = require "class"
-local Room = require "room"
-local GameMap = require "game_map"
-local Player = require "player"
 
+print(utils.trim("      This is a test        "))
 
+local range1 = utils.range(10)
+local range2 = utils.range(10, 21)
+local range3 = utils.range(21, 33)
 
-player:status()
-player.current_room:get_exits()
-utils.trim("      This is a test        ")
+for _, items in ipairs(utils.zip(range1, range2, range3)) do
+   print(unpack(items))
+end
+

@@ -44,17 +44,20 @@ function Store:refund_item(item)
    self:update_item_quantity(item, self.stock[item.id] + 1)
 end
 
-item1 = InventoryItem:new("1", "Item 1 - A", 500)
-item2 = InventoryItem:new("2", "Item 2 - B", 750)
-item3 = InventoryItem:new("3", "Item 3 - C", 1000)
+local item1 = InventoryItem:new("1", "Item 1 - A", 500)
+local item2 = InventoryItem:new("2", "Item 2 - B", 750)
+local item3 = InventoryItem:new("3", "Item 3 - C", 1000)
 
-store = Store:new("Bob's Shop")
+local store = Store:new("Bob's Shop")
 
 store:update_item_quantity(item1, 10)
 store:update_item_quantity(item2, 7)
 store:update_item_quantity(item3, 5)
 
 store:purchase_item(item1)
+store:purchase_item(item2)
+store:purchase_item(item3)
+store:refund_item(item1)
 
 for id, stock in pairs(store.stock) do
    print(id, stock)
