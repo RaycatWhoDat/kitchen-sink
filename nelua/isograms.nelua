@@ -1,0 +1,24 @@
+require "string"
+require "hashmap"
+require "iterators"
+
+local test_cases: []string = { "lumberjacks", "background", "downstream", "six-year-old", "isograms" }
+local expected_results: []boolean = { true, true, true, true, false } 
+
+local function is_isogram(str: string)
+   local mapping: hashmap(string, boolean) = {}
+   local result = true
+   for character in string.gmatch(str, "[^ -]") do
+      if mapping:has(character) then
+         result = false
+         break
+      end
+      mapping[character] = true
+   end
+   return result
+end
+
+for index, test_case in ipairs(test_cases) do
+   assert(is_isogram(test_case) == expected_results[index])
+   print(is_isogram(test_case))
+end

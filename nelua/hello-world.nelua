@@ -1,0 +1,2 @@
+require "io"
+io.printf("Hello, %s.\n", "world")
