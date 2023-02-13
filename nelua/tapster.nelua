@@ -40,7 +40,7 @@ function ReaderEvent.new(event_type: ReaderEventType, payload: string)
 end
 
 function ReaderEvent:__tostring()
-   return self.timestamp .. " | " .. reader_event_type_mapping[self.event_type]  .. " | " .. self.payload
+   return self.timestamp .. " - " .. reader_event_type_mapping[self.event_type]  .. ": " .. self.payload
 end
 
 local CardOrNil = @union { card: Card, none: niltype }
