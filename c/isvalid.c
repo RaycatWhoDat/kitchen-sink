@@ -21,8 +21,8 @@ int isvalid(char* input)
         if (!isdigit(current_char)) is_valid = 0;
         break;
     }
-    return is_valid;
   }
+  return is_valid;
 }
 
 int main() {

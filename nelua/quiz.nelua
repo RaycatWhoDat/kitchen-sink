@@ -1,0 +1,26 @@
+require "io"
+require "iterators"
+require "string"
+
+local Question = @record {
+   answer: string,
+   text: string
+}
+
+local questions: []Question = {
+   { text = "This is a test. What is the answer?", answer = "A" },
+   { text = "This is another test. Why is the answer?", answer = "B" },
+   { text = "This is the final test. How is the answer?", answer = "C" },
+}
+local correct_answers: integer
+
+for index, question in ipairs(questions) do
+   io.printf("%s\n", question.text)
+   local _, letters = string.match(io.read(), "%u")
+   if string.upper(letters[1]) == question.answer then
+      correct_answers = correct_answers + 1
+   end
+end
+
+io.printf("%i out of %i correct\n", correct_answers, #questions)
+io.printf("Percentage: %.2f%%\n", 100.0 * correct_answers / #questions)

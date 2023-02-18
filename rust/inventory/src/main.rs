@@ -3,9 +3,9 @@
 use std::collections::HashMap;
 use chrono::Utc;
 
-struct InventoryItem {
-    id: &'static str,
-    name: &'static str,
+struct InventoryItem<'a> {
+    id: &'a str,
+    name: &'a str,
     price: i32
 }
 
@@ -23,7 +23,7 @@ struct StoreEvent<'a> {
 }
 
 impl StoreEvent<'_> {
-    fn new(event_type: StoreEventType, payload: &'static str) -> Self {
+    fn new(event_type: StoreEventType, payload: &'_ str) -> Self {
         Self {
             event_type,
             timestamp: Utc::now().timestamp(),

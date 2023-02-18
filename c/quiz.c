@@ -2,16 +2,18 @@
 #include <string.h>
 #include <ctype.h>
 
-struct Question {
+struct Question
+{
   char questionAnswer;
   char questionText[50];
 };
 
-int main() {
+int main()
+{
   int index;
   int correctAnswers = 0;
-  struct Question questions[2];
-  char guesses[2];
+  struct Question questions[3];
+  char guesses[3];
 
   strcpy(questions[0].questionText, "This is a test. What is the answer?");
   questions[0].questionAnswer = 'A';
@@ -19,7 +21,10 @@ int main() {
   strcpy(questions[1].questionText, "This is another test. Why is the answer?");
   questions[1].questionAnswer = 'B';
   
-  size_t numberOfQuestions = sizeof(questions) / sizeof(struct Question);
+  strcpy(questions[2].questionText, "This is the final test. How is the answer?");
+  questions[2].questionAnswer = 'C';
+  
+  int numberOfQuestions = sizeof(questions) / sizeof(struct Question);
 
   for (index = 0; index < numberOfQuestions; index++) {
     printf("%s\n", questions[index].questionText);
@@ -29,8 +34,8 @@ int main() {
     }
   }
 
-  printf("%i out of %li correct\n", correctAnswers, numberOfQuestions);
-  printf("Percentage: %ld%%\n", (correctAnswers / numberOfQuestions) * 100);
+  printf("%i out of %i correct\n", correctAnswers, numberOfQuestions);
+  printf("Percentage: %.2f%%\n", 100.0 * correctAnswers / numberOfQuestions);
   
   return 0;
 }
