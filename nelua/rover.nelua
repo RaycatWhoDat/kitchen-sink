@@ -1,0 +1,91 @@
+require "hashmap"
+require "io"
+require "iterators"
+require "string"
+
+local Grid = @record {
+   width: integer,
+   height: integer
+}
+
+local Direction = @enum {
+   NORTH = 0,
+   EAST,
+   SOUTH,
+   WEST
+}
+
+local function get_text(direction: Direction): string
+   local text: string
+   if direction == Direction.NORTH then text = "NORTH" end
+   if direction == Direction.EAST then text = "EAST" end
+   if direction == Direction.SOUTH then text = "SOUTH" end
+   if direction == Direction.WEST then text = "WEST" end
+   return text
+end
+
+local Rover = @record {
+   x_coordinate: integer,
+   y_coordinate: integer,
+   direction: Direction
+}
+
+function Rover:get_current_position(): string
+   io.printf("Currently at %s %s facing %s...\n", self.x_coordinate, self.y_coordinate, get_text(self.direction))
+   return string.format("%s %s %s", self.x_coordinate, self.y_coordinate, get_text(self.direction))
+end
+
+function Rover:set_starting_position(grid: Grid, x_position: integer, y_position: integer, direction: Direction)
+   if x_position < 0 or x_position > grid.width or y_position < 0 or y_position > grid.height then
+      self.x_coordinate = 0
+      self.y_coordinate = 0
+   else
+      self.x_coordinate = x_position
+      self.y_coordinate = y_position
+   end
+
+   self.direction = direction
+end
+
+function Rover:parse_instructions(grid: Grid, instructions: string)
+   local headings: hashmap(Direction, [2]integer) = {}
+   headings[Direction.NORTH] = {0, -1}
+   headings[Direction.EAST] = {1, 0}
+   headings[Direction.SOUTH] = {0, 1}
+   headings[Direction.WEST] = {-1, 0}
+   
+   for character in string.gmatch(instructions, "[MLR]") do
+      if character == "M" then
+         local new_x_position = self.x_coordinate + headings[self.direction][0]
+         local new_y_position = self.y_coordinate + headings[self.direction][1]
+
+         if new_x_position >= 0 and new_x_position <= grid.height and new_y_position >= 0 and new_y_position <= grid.width then
+            io.print("Moving forward...")
+            self.x_coordinate = new_x_position
+            self.y_coordinate = new_y_position
+         end
+      end
+      if character == "L" then
+         io.print("Turning left...")
+         if self.direction == Direction.NORTH then self.direction = Direction.WEST end
+         if self.direction == Direction.EAST then self.direction = Direction.NORTH end
+         if self.direction == Direction.SOUTH then self.direction = Direction.EAST end
+         if self.direction == Direction.WEST then self.direction = Direction.SOUTH end
+      end
+      if character == "R" then
+         io.print("Turning right...")
+         if self.direction == Direction.NORTH then self.direction = Direction.EAST end
+         if self.direction == Direction.EAST then self.direction = Direction.SOUTH end
+         if self.direction == Direction.SOUTH then self.direction = Direction.WEST end
+         if self.direction == Direction.WEST then self.direction = Direction.NORTH end
+      end
+   end
+end
+
+local grid: Grid = { width = 5, height = 5 }
+local rover: Rover = { x_coordinate = 0, y_coordinate = 0, direction = Direction.NORTH }
+rover:set_starting_position(grid, 1, 1, Direction.NORTH)
+rover:get_current_position()
+rover:parse_instructions(grid, "LMLMLMLMM")
+rover:get_current_position()
+

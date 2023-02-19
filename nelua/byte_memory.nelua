@@ -1,0 +1,44 @@
+require "io"
+require "iterators"
+
+local Memory = @record {
+   data: [8]uint8
+}
+
+function Memory:get_data(): [8]uint8
+   return self.data
+end
+
+function Memory:get_integer_value(): uint8
+   local result: uint8
+   for index, value in ipairs(self.data) do
+      result = result + (value << (7 - index))
+   end
+   return result
+end
+
+function Memory:set_integer_value(number: uint8)
+   local count = number
+   for index, _ in ipairs(self.data) do
+      local place = 1 << (7 - index)
+      local result = count >= place and 1 or 0
+      self.data[index] = result
+      if result == 1 then
+         count = count - place
+      end
+   end
+end
+
+local memory: Memory = {
+   data = {0, 0, 0, 0, 0, 0, 0, 0}
+}
+
+memory:set_integer_value(128)
+
+for _, value in ipairs(memory:get_data()) do
+   io.write(value)
+end
+io.write("\n")
+
+io.print(memory:get_integer_value())
+
