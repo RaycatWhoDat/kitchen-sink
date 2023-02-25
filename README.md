@@ -555,7 +555,80 @@ end
 ### 4. [Nelua](https://nelua.io)
 Nelua is exactly the kind of language I'd want if TypeScript wanted to take a serious swing at systems programming instead of maintainability. Generates efficient C using similar semantics to Lua *and* is metaprogrammable using Lua. I think that's the coolest thing.
 ```lua
--- example soon
+require "string"
+
+-- NOTE: Import here to avoid repeating yourself for each imported function
+## cinclude '<dirent.h>'
+## cinclude '<sys/stat.h>'
+
+-- NOTE: "Import from C", "No declaration *from Nelua*", "Forward the declaration found in C world"
+-- NOTE: "@<type>" correlates to a Nelua type
+global DIR: type <cimport, nodecl, forwarddecl> = @record {}
+-- NOTE: You can annotate a type directly
+global DT_DIR: cuint <cimport, nodecl, const>
+global DT_REG: cuint <cimport, nodecl, const>
+
+-- NOTE: ..., ..., "Define a Nelua type backed by a C definition"
+global dirent: type <cimport, nodecl, ctypedef> = @record {
+   d_name: cstring
+}
+
+-- NOTE: ctypedef
+global stat_t: type <cimport, nodecl, ctypedef 'stat'> = @record{
+  st_mode: cuint
+}
+
+global S_IFDIR: cuint <cimport, nodecl, const>
+global S_IFREG: cuint <cimport, nodecl, const>
+
+local function closedir(dirp: *DIR): cint <cimport, nodecl> end
+local function opendir(dirname: cstring <const>): *DIR <cimport, nodecl> end
+local function readdir(dirp: *DIR): *dirent <cimport, nodecl> end
+
+local function stat(file: cstring, buf: *stat_t): cint <cimport, nodecl> end
+local function S_ISDIR(mode: cuint): boolean <cimport, nodecl> end
+
+local IGNORED_PATHS: []string <const> = { ".", "..", ".DS_Store", ".gitignore", "node_modules", ".git", ".gitattributes", "debug" } 
+
+local function is_directory(path: string): boolean
+   local path_stat: stat_t;
+   stat(path, path_stat)
+   return S_ISDIR(path_stat.st_mode)
+end
+
+local function _listdir(path: string, is_recursive: boolean, indentation_level: integer): void
+   local opened_dir = opendir(path)
+   -- NOTE: Zero is initialization
+   local is_exhausted
+   repeat
+      local entry = readdir(opened_dir)
+      if not entry then
+         is_exhausted = true
+      else
+         local is_ignored
+         for index = 0, #IGNORED_PATHS - 1 do
+            if entry.d_name == IGNORED_PATHS[index] then
+               is_ignored = true
+               break
+            end
+         end
+         if is_ignored then continue end
+         
+         print(string.format("%s%s", string.rep(" ", indentation_level), entry.d_name))
+         local new_path = string.format("%s/%s", path, entry.d_name)
+         if is_recursive and is_directory(new_path) then
+            _listdir(new_path, is_recursive, indentation_level + 1)
+         end
+      end
+   until not entry
+   closedir(opened_dir)
+end
+
+local function list_dir_recursive(path: string): void
+   _listdir(path, true)
+end
+
+list_dir_recursive("..")
 ```
 
 ### 3. [Lua](http://www.lua.org/)
