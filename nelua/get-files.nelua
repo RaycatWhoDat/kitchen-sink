@@ -31,7 +31,7 @@ local function readdir(dirp: *DIR): *dirent <cimport, nodecl> end
 local function stat(file: cstring, buf: *stat_t): cint <cimport, nodecl> end
 local function S_ISDIR(mode: cuint): boolean <cimport, nodecl> end
 
-local IGNORED_PATHS: []string <const> = { ".", "..", ".DS_Store", ".gitignore", "node_modules", ".git", ".gitattributes", "debug" } 
+local IGNORED_PATHS: []string <const> = { ".", "..", ".DS_Store", ".gitignore", "node_modules", ".git", ".gitattributes", "target" } 
 
 local function is_directory(path: string): boolean
    local path_stat: stat_t;

@@ -9,4 +9,4 @@ sub doFiles(IO(Str) $directoryPath, &callback = { .put }, $depth = 0) {
     }
 }
 
-doFiles("..", { .put });
+doFiles("..");
