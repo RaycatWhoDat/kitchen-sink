@@ -30,7 +30,7 @@ proc loseWheels(car: Car, wheelsToRemove: int) =
     
 var newCar = Car(name: "New Car", numberOfWheels: 4, color: Color.Red)
 
-for wheelsToRemove in 1..5:
+for wheelsToRemove in 1..<5:
   newCar.loseWheels(wheelsToRemove)
 
 var testColor = Color.Black
