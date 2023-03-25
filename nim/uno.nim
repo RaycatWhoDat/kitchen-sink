@@ -1,4 +1,4 @@
-import std/[algorithm, lists, random, sequtils, strformat, strutils, terminal, options]
+import std/[random, sequtils, strformat, strutils, terminal, options]
 import fusion/matching
 
 {.experimental: "caseStmtMacros".}
@@ -33,6 +33,11 @@ type Deck = ref object of Hand
 type DiscardPile = ref object
   topCard: Card
 
+proc checkIfPlayable(card: Card, discardPile: DiscardPile) =
+  card.isPlayable = card.color.isNone or (card.effect.isSome and card.effect ==
+      discardPile.topCard.effect) or (card.number.isSome and card.number ==
+      discardPile.topCard.number) or card.color == discardPile.topCard.color
+  
 proc newDeck(): Deck =
   result = Deck(cards: @[], counter: 0)
   # Generate non-Wild cards
@@ -57,10 +62,15 @@ proc newDeck(): Deck =
       effect: some(WildDrawFour), isPlayable: false)
   result.cards = result.cards & cycle(@[wildCard, wildDrawFourCard], 4)
   shuffle(result.cards)
-
-proc drawCard(deck: Deck): Card =
+  
+proc drawCard(deck: Deck, discardPile: DiscardPile): Card =
   result = deck.cards[deck.counter]
-  deck.counter = if deck.counter >= deck.cards.len(): 0 else: deck.counter + 1
+  result.checkIfPlayable(discardPile)
+  if deck.counter >= deck.cards.len():
+    deck.counter = 0
+    shuffle(deck.cards)
+  else:
+    deck.counter += 1
 
 proc discardToPile(card: Card, discardPile: DiscardPile) =
   if card.color.isNone:
@@ -68,14 +78,14 @@ proc discardToPile(card: Card, discardPile: DiscardPile) =
     card.color = some(Red)
   discardPile.topCard = card
 
-proc newHand(deck: Deck): Hand =
+proc newHand(deck: Deck, discardPile: DiscardPile): Hand =
   result = Hand(cards: @[])
   for index in 0..<7:
-    result.cards.add(deck.drawCard())
+    result.cards.add(deck.drawCard(discardPile))
 
 proc printCard(card: Card) =
-  var fgColor = fgWhite
   var bgColor = bgBlack
+  var fgColor = fgWhite
   var value: string
   case card.color:
     of Some(@color):
@@ -100,11 +110,6 @@ proc printCard(card: Card) =
 
   stdout.styledWrite(styleBright, bgColor, fgColor, " ", value, " ", resetStyle)
 
-proc checkIfPlayable(card: Card, discardPile: DiscardPile) =
-  card.isPlayable = card.color.isNone or (card.effect.isSome and card.effect ==
-      discardPile.topCard.effect) or (card.number.isSome and card.number ==
-      discardPile.topCard.number) or card.color == discardPile.topCard.color
-
 proc status(hand: Hand, discardPile: DiscardPile) =
   stdout.writeLine("=== " & $hand.cards.len() & " cards left ===")
   for card in hand.cards:
@@ -122,9 +127,9 @@ proc status(discardPile: DiscardPile) =
 
 when isMainModule:
   let deck = newDeck()
-  let hand = newHand(deck)
-  let discardPile = DiscardPile(topCard: nil)
-  deck.drawCard().discardToPile(discardPile)
+  let discardPile = DiscardPile(topCard: Card(color: none(Color), number: none(int), effect: none(Effect)))
+  let hand = newHand(deck, discardPile)
+  deck.drawCard(discardPile).discardToPile(discardPile)
   discardPile.status()
   hand.status(discardPile)
 
