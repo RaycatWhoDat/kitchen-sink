@@ -29,17 +29,10 @@ type Hand = object of RootObj
 
 type Deck = ref object of Hand
   counter: int
-
-type DiscardPile = ref object
-  topCard: Card
-
-proc checkIfPlayable(card: Card, discardPile: DiscardPile) =
-  card.isPlayable = card.color.isNone or (card.effect.isSome and card.effect ==
-      discardPile.topCard.effect) or (card.number.isSome and card.number ==
-      discardPile.topCard.number) or card.color == discardPile.topCard.color
+  lastPlayedCard: Card
   
 proc newDeck(): Deck =
-  result = Deck(cards: @[], counter: 0)
+  result = Deck(cards: @[], counter: 0, lastPlayedCard: Card())
   # Generate non-Wild cards
   for color in Color:
     for number in 0..9:
@@ -50,11 +43,8 @@ proc newDeck(): Deck =
     for effect in Effect:
       let newCard = Card(color: some(color), number: none(int), effect: some(
           effect), isPlayable: false)
-      case effect:
-        of Skip, DrawTwo, Reverse:
+      if effect == Skip or effect == DrawTwo or effect == Reverse:
           result.cards = result.cards & repeat(newCard, 2)
-        else:
-          break
   # Add the Wilds
   let wildCard = Card(color: none(Color), number: none(int), effect: some(Wild),
       isPlayable: false)
@@ -62,26 +52,32 @@ proc newDeck(): Deck =
       effect: some(WildDrawFour), isPlayable: false)
   result.cards = result.cards & cycle(@[wildCard, wildDrawFourCard], 4)
   shuffle(result.cards)
+
+proc checkIfPlayable(card: Card, deck: Deck) =
+  card.isPlayable = card.color.isNone or (card.effect.isSome and card.effect == deck.lastPlayedCard.effect) or (card.number.isSome and card.number == deck.lastPlayedCard.number) or card.color == deck.lastPlayedCard.color
   
-proc drawCard(deck: Deck, discardPile: DiscardPile): Card =
+proc drawCard(deck: Deck): Card =
   result = deck.cards[deck.counter]
-  result.checkIfPlayable(discardPile)
+  result.checkIfPlayable(deck)
   if deck.counter >= deck.cards.len():
     deck.counter = 0
     shuffle(deck.cards)
   else:
     deck.counter += 1
 
-proc discardToPile(card: Card, discardPile: DiscardPile) =
+proc newHand(deck: Deck): Hand =
+  result = Hand(cards: @[])
+  for index in 0..<7:
+    result.cards.add(deck.drawCard())
+
+let deck = newDeck()
+let hand = deck.newHand()
+
+proc discardCard(card: Card) =
   if card.color.isNone:
     # Assign color
     card.color = some(Red)
-  discardPile.topCard = card
-
-proc newHand(deck: Deck, discardPile: DiscardPile): Hand =
-  result = Hand(cards: @[])
-  for index in 0..<7:
-    result.cards.add(deck.drawCard(discardPile))
+  deck.lastPlayedCard = card
 
 proc printCard(card: Card) =
   var bgColor = bgBlack
@@ -110,26 +106,18 @@ proc printCard(card: Card) =
 
   stdout.styledWrite(styleBright, bgColor, fgColor, " ", value, " ", resetStyle)
 
-proc status(hand: Hand, discardPile: DiscardPile) =
-  stdout.writeLine("=== " & $hand.cards.len() & " cards left ===")
+proc printGameStatus() =
+  stdout.writeLine("=== Top card is: ===")
+  deck.lastPlayedCard.printCard()
+  echo ""
+  stdout.writeLine("=== Your hand has " & $hand.cards.len() & " cards left ===")
   for card in hand.cards:
-    card.checkIfPlayable(discardPile)
+    card.checkIfPlayable(deck)
     card.printCard()
     if card.isPlayable:
       stdout.write("*")
     stdout.write("|")
   echo ""
 
-proc status(discardPile: DiscardPile) =
-  stdout.writeLine("=== Top card is: ===")
-  discardPile.topCard.printCard()
-  echo ""
-
-when isMainModule:
-  let deck = newDeck()
-  let discardPile = DiscardPile(topCard: Card(color: none(Color), number: none(int), effect: none(Effect)))
-  let hand = newHand(deck, discardPile)
-  deck.drawCard(discardPile).discardToPile(discardPile)
-  discardPile.status()
-  hand.status(discardPile)
-
+deck.drawCard().discardCard()
+printGameStatus()
