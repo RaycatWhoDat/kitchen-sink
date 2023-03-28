@@ -30,7 +30,7 @@ type Hand = object of RootObj
 type Deck = ref object of Hand
   counter: int
   lastPlayedCard: Card
-  
+
 proc newDeck(): Deck =
   result = Deck(cards: @[], counter: 0, lastPlayedCard: Card())
   # Generate non-Wild cards
@@ -44,7 +44,7 @@ proc newDeck(): Deck =
       let newCard = Card(color: some(color), number: none(int), effect: some(
           effect), isPlayable: false)
       if effect == Skip or effect == DrawTwo or effect == Reverse:
-          result.cards = result.cards & repeat(newCard, 2)
+        result.cards = result.cards & repeat(newCard, 2)
   # Add the Wilds
   let wildCard = Card(color: none(Color), number: none(int), effect: some(Wild),
       isPlayable: false)
@@ -54,8 +54,10 @@ proc newDeck(): Deck =
   shuffle(result.cards)
 
 proc checkIfPlayable(card: Card, deck: Deck) =
-  card.isPlayable = card.color.isNone or (card.effect.isSome and card.effect == deck.lastPlayedCard.effect) or (card.number.isSome and card.number == deck.lastPlayedCard.number) or card.color == deck.lastPlayedCard.color
-  
+  card.isPlayable = card.color.isNone or (card.effect.isSome and card.effect ==
+      deck.lastPlayedCard.effect) or (card.number.isSome and card.number ==
+      deck.lastPlayedCard.number) or card.color == deck.lastPlayedCard.color
+
 proc drawCard(deck: Deck): Card =
   result = deck.cards[deck.counter]
   result.checkIfPlayable(deck)
@@ -87,7 +89,7 @@ proc printCard(card: Card) =
     of Some(@color):
       bgColor = parseEnum[BackgroundColor]("bg" & $color)
       fgColor = fgBlack
-    
+
   case card.effect:
     of Some(Skip):
       value = "SK"
