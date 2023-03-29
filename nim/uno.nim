@@ -1,4 +1,4 @@
-import std/[random, sequtils, strformat, strutils, terminal, options]
+import std/[parsecsv, random, sequtils, strutils, terminal, options]
 import fusion/matching
 
 {.experimental: "caseStmtMacros".}
@@ -33,25 +33,23 @@ type Deck = ref object of Hand
 
 proc newDeck(): Deck =
   result = Deck(cards: @[], counter: 0, lastPlayedCard: Card())
-  # Generate non-Wild cards
-  for color in Color:
-    for number in 0..9:
-      let newCard = Card(color: some(color), number: some(number), effect: none(
-          Effect), isPlayable: false)
-      let numberOfCopies = if number > 0: 2 else: 1
-      result.cards = result.cards & repeat(newCard, numberOfCopies)
-    for effect in Effect:
-      let newCard = Card(color: some(color), number: none(int), effect: some(
-          effect), isPlayable: false)
-      if effect == Skip or effect == DrawTwo or effect == Reverse:
-        result.cards = result.cards & repeat(newCard, 2)
-  # Add the Wilds
-  let wildCard = Card(color: none(Color), number: none(int), effect: some(Wild),
-      isPlayable: false)
-  let wildDrawFourCard = Card(color: none(Color), number: none(int),
-      effect: some(WildDrawFour), isPlayable: false)
-  result.cards = result.cards & cycle(@[wildCard, wildDrawFourCard], 4)
-  shuffle(result.cards)
+  var csvParser: CsvParser
+  csvParser.open("cards.csv")
+  csvParser.readHeaderRow()
+  while csvParser.readRow():
+    let newCard = Card()
+    case csvParser.headers:
+      of [@quantityColumn, @colorColumn, @numberColumn, @effectColumn]:
+        let quantityValue = csvParser.rowEntry(quantityColumn).strip()
+        let colorValue = csvParser.rowEntry(colorColumn).strip()
+        let numberValue = csvParser.rowEntry(numberColumn).strip()
+        let effectValue = csvParser.rowEntry(effectColumn).strip()
+        newCard.color = if colorValue != "None": some(parseEnum[Color](colorValue)) else: none(Color)
+        newCard.number = if numberValue != "None": some(parseInt(numberValue)) else: none(int)
+        newCard.effect = if effectValue != "None": some(parseEnum[Effect](effectValue)) else: none(Effect)
+        result.cards = result.cards & cycle(@[newCard], parseInt(quantityValue))
+  csvParser.close()
+  result.cards.shuffle()
 
 proc checkIfPlayable(card: Card, deck: Deck) =
   card.isPlayable = card.color.isNone or (card.effect.isSome and card.effect ==
@@ -77,7 +75,7 @@ let hand = deck.newHand()
 
 proc discardCard(card: Card) =
   if card.color.isNone:
-    # Assign color
+    # Assign temporary color to Wilds
     card.color = some(Red)
   deck.lastPlayedCard = card
 
