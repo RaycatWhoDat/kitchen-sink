@@ -45,7 +45,7 @@ proc reset(deck: var BlackjackDeck) =
 proc hit(deck: var BlackjackDeck): Card =
   deck.cards.pop()
   
-when isMainModule:
+proc main =
   var playerHand = BlackjackHand(cards: @[], total: [0, 0])
   var deck = BlackjackDeck(cards: @[], startingHandSize: 2)
   deck.reset()
@@ -54,3 +54,6 @@ when isMainModule:
     playerHand.status()
 
   echo "You've busted!"
+
+
+main()
