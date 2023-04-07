@@ -5,9 +5,6 @@ type InventoryItem = ref object
   name: string
   price: int
 
-proc newInventoryItem(id: string, name: string, price: int): InventoryItem =
-  InventoryItem(id: id, name: name, price: price)
-  
 type StoreEventType = enum
   PURCHASED,
   REFUNDED
@@ -41,23 +38,19 @@ proc purchaseItem(store: Store, item: InventoryItem) =
   store.events.add(newStoreEvent(PURCHASED, item.id))
   store.updateItemQuantity(item, currentItemStock - 1)
 
-proc refundItem(store: Store, item: InventoryItem) =
-  var currentItemStock = store.stock.getOrDefault(item.id)
-  store.events.add(newStoreEvent(REFUNDED, item.id))
-  store.updateItemQuantity(item, currentItemStock + 1)
-
-when isMainModule:
+proc main =
   var
-    item1 = newInventoryItem("1", "Item 1 - A", 500)
-    item2 = newInventoryItem("2", "Item 2 - B", 750)
-    item3 = newInventoryItem("3", "Item 3 - C", 1000)
+    item1 = InventoryItem(id: "1", name: "Item 1 - A", price: 500)
+    item2 = InventoryItem(id: "2", name: "Item 2 - B", price: 750)
+    item3 = InventoryItem(id: "3", name: "Item 3 - C", price: 1000)
     store = newStore("Bob's Store")
 
   store.updateItemQuantity(item1, 10)
   store.updateItemQuantity(item2, 7)
   store.updateItemQuantity(item3, 5)
   store.purchaseItem(item1)
-  store.refundItem(item1)
 
   echo store.stock
   
+when isMainModule:
+  main()
