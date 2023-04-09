@@ -2,9 +2,7 @@
 #include <string>
 #include <map>
 
-class InventoryItem
-{
-public:
+struct InventoryItem {
   std::string id;
   std::string name;
   unsigned int price;
@@ -17,9 +15,8 @@ enum StoreEventType
   REFUNDED
 };
 
-class StoreEvent
+struct StoreEvent
 {
-public:
   StoreEventType eventType;
   unsigned int timestamp;
   std::string payload;
@@ -30,42 +27,37 @@ public:
 
 class Store
 {
+  std::string name;
   unsigned int openingTime;
   unsigned int closingTime;
   std::map<std::string, unsigned int> stock;
   std::vector<StoreEvent> events;
 
 public:
-  std::string name;
-
   Store(std::string _name) : name(_name) {
     openingTime = 900;
     closingTime = 1700;
   }
   
-  void updateItemQuantity(InventoryItem* item, unsigned int amount) {
-    stock[item->id] = amount;
+  void update_item_quantity(InventoryItem& item, unsigned int amount) {
+    stock[item.id] = amount;
   }
   
-  void purchaseItem(InventoryItem* item) {
-    if (stock[item->id] <= 0) {
+  void purchase_item(InventoryItem& item) {
+    if (stock[item.id] <= 0) {
       return;
     }
 
-    StoreEvent storeEvent = StoreEvent(PURCHASED, item->id);
-    events.push_back(storeEvent);
-
-    updateItemQuantity(item, stock[item->id] - 1);
+    events.push_back(StoreEvent(PURCHASED, item.id));
+    update_item_quantity(item, stock[item.id] - 1);
   }
   
-  void refundItem(InventoryItem* item) {
-    StoreEvent storeEvent = StoreEvent(REFUNDED, item->id);
-    events.push_back(storeEvent);
-
-    updateItemQuantity(item, stock[item->id] + 1);
+  void refund_item(InventoryItem& item) {
+    events.push_back(StoreEvent(REFUNDED, item.id));
+    update_item_quantity(item, stock[item.id] + 1);
   }
   
-  void getStoreStatus() {
+  void get_store_status() {
     for (const auto& entry : stock) {
       std::cout << entry.first << ": " << entry.second << std::endl;
     }
@@ -79,13 +71,13 @@ int main() {
 
   Store store = Store("Bob's Shop");
   
-  store.updateItemQuantity(&item1, 10);
-  store.updateItemQuantity(&item2, 7);
-  store.updateItemQuantity(&item3, 5);
+  store.update_item_quantity(item1, 10);
+  store.update_item_quantity(item2, 7);
+  store.update_item_quantity(item3, 5);
 
-  store.purchaseItem(&item1);
+  store.purchase_item(item1);
 
-  store.getStoreStatus();
+  store.get_store_status();
 }
 
 // Local Variables:

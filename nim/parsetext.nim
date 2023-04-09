@@ -1,11 +1,12 @@
-from std/strutils import Digits
+from std/strutils import Digits, splitLines
 from std/parseutils import parseInt, skipUntil
+from std/compilesettings import querySetting, SingleValueSetting
 import std/enumerate
 
+const lines = staticRead("../README.md")
+
 proc main =
-  var file = open("../README.md", fmRead)
-  defer: close(file)
-  for index, line in enumerate(file.lines):
+  for index, line in enumerate(lines.splitLines()):
     var value: int
     let skippedCharacters = skipUntil(line, Digits)
     if skippedCharacters != 0 and skippedCharacters != line.len:
@@ -13,4 +14,5 @@ proc main =
       echo "L" & $index & ": " & $value
       echo "Context: " & line & "\n"
 
-main()
+when isMainModule:
+  main()

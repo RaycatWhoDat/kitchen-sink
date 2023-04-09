@@ -28,10 +28,10 @@ proc newStore(name: string): Store =
   Store(name: name, openingTime: 900, closingTime: 2100, stock: initTable[string, int](), events: @[])
 
 proc updateItemQuantity(store: Store, item: InventoryItem, amount: int) =
-  store.stock.mgetOrPut(item.id, amount) = amount
+  store.stock[item.id] = amount
   
 proc purchaseItem(store: Store, item: InventoryItem) =
-  var currentItemStock = store.stock.getOrDefault(item.id)
+  var currentItemStock = store.stock[item.id] or 0
   if currentItemStock <= 0:
     return
     
@@ -47,8 +47,9 @@ proc main =
 
   store.updateItemQuantity(item1, 10)
   store.updateItemQuantity(item2, 7)
-  store.updateItemQuantity(item3, 5)
+  store.updateItemQuantity(item3, 0)
   store.purchaseItem(item1)
+  store.purchaseItem(item3)
 
   echo store.stock
   
