@@ -5,10 +5,6 @@ local Memory = @record {
    data: [8]uint8
 }
 
-function Memory:get_data(): [8]uint8
-   return self.data
-end
-
 function Memory:get_integer_value(): uint8
    local result: uint8
    for index, value in ipairs(self.data) do
@@ -35,7 +31,7 @@ local memory: Memory = {
 
 memory:set_integer_value(128)
 
-for _, value in ipairs(memory:get_data()) do
+for _, value in ipairs(memory.data) do
    io.write(value)
 end
 io.write("\n")
