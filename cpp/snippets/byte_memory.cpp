@@ -1,5 +1,4 @@
 #include <iostream>
-#include <cstring>
 
 struct Memory
 {
