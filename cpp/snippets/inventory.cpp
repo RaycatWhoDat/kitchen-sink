@@ -9,14 +9,12 @@ struct InventoryItem {
   InventoryItem(std::string _id, std::string _name, unsigned int _price) : id(_id), name(_name), price(_price) {}
 };
 
-enum StoreEventType
-{
+enum class StoreEventType {
   PURCHASED,
   REFUNDED
 };
 
-struct StoreEvent
-{
+struct StoreEvent {
   StoreEventType eventType;
   unsigned int timestamp;
   std::string payload;
@@ -25,8 +23,7 @@ struct StoreEvent
   }
 };
 
-class Store
-{
+class Store {
   std::string name;
   unsigned int openingTime;
   unsigned int closingTime;
@@ -48,12 +45,12 @@ public:
       return;
     }
 
-    events.push_back(StoreEvent(PURCHASED, item.id));
+    events.push_back(StoreEvent(StoreEventType::PURCHASED, item.id));
     update_item_quantity(item, stock[item.id] - 1);
   }
   
   void refund_item(InventoryItem& item) {
-    events.push_back(StoreEvent(REFUNDED, item.id));
+    events.push_back(StoreEvent(StoreEventType::REFUNDED, item.id));
     update_item_quantity(item, stock[item.id] + 1);
   }
   
@@ -78,6 +75,8 @@ int main() {
   store.purchase_item(item1);
 
   store.get_store_status();
+
+  return 0;
 }
 
 // Local Variables:
