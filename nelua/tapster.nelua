@@ -43,38 +43,39 @@ function ReaderEvent:__tostring()
    return self.timestamp .. " - " .. reader_event_type_mapping[self.event_type]  .. ": " .. self.payload
 end
 
-local CardOrNil = @union { card: Card, none: niltype }
-
 local Reader = @record {
-   current_card: CardOrNil,
+   current_card: *Card,
    events: sequence(ReaderEvent)
 }
 
-function Reader:insert_card(card: Card)
-   self.events:push(ReaderEvent.new(ReaderEventType.INSERTED, card.cardholder_name))
-   self.current_card.card = card
+function Reader:insert_card(card: *Card)
+  self.events:push(ReaderEvent.new(ReaderEventType.INSERTED, card.cardholder_name))
+  self.current_card = card
 end
 
 function Reader:charge_card(ounces_poured: integer, price_per_ounce: integer)
-   if not self.current_card.card then
+   if self.current_card == nilptr then
       return
    end
 
    local charge_amount = ounces_poured * price_per_ounce
    self.events:push(ReaderEvent.new(ReaderEventType.CHARGED, tostring(charge_amount)))
-   self.current_card.card.ounces_poured = self.current_card.card.ounces_poured + ounces_poured
-   self.current_card.card.balance = self.current_card.card.balance + charge_amount
+   self.current_card.ounces_poured = self.current_card.ounces_poured + ounces_poured
+   self.current_card.balance = self.current_card.balance + charge_amount
 end
 
 function Reader:remove_card()
-   self.events:push(ReaderEvent.new(ReaderEventType.REMOVED, self.current_card.card.cardholder_name))
-   self.current_card.none = nil
+   self.events:push(ReaderEvent.new(ReaderEventType.REMOVED, self.current_card.cardholder_name))
+   self.current_card = nilptr
 end
 
 function Reader:display_stats()
-   io.printf("Cardholder: %s\n", self.current_card.card.cardholder_name)
-   io.printf("Total Amount: $%.2d\n", self.current_card.card.balance)
-   io.printf("Ounces Poured: %.2d\n\n", self.current_card.card.ounces_poured)
+   if self.current_card ~= nilptr then
+      io.printf("Cardholder: %s\n", self.current_card.cardholder_name)
+      io.printf("Total Amount: $%.2d\n", self.current_card.balance)
+      io.printf("Ounces Poured: %.2d\n\n", self.current_card.ounces_poured)
+   end
+   
    io.print("Events:")
 
    for _, event in ipairs(self.events) do

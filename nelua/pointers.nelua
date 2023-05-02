@@ -1,0 +1,34 @@
+local Item = @record {
+   name: string
+}
+
+local Box = @record {
+   -- CRITICAL: You MUST tell Nelua what kind of pointer it is, if you use pointer
+   current_item: *Item
+}
+
+function Box:place_item(item: *Item)
+   self.current_item = item
+end
+
+function Box:remove_item()
+   self.current_item = nilptr
+end
+
+function Box:get_current_item_name()
+   if self.current_item == nilptr then
+      print("No current item.")
+   else
+      -- Nelua will automatically deref for you
+      print(self.current_item.name)
+   end
+end
+
+local box: Box
+local item: Item = { "Item 1" }
+
+box:get_current_item_name()
+box:place_item(item)
+box:get_current_item_name()
+box:remove_item()
+box:get_current_item_name()
