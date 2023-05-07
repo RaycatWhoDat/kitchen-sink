@@ -3,7 +3,6 @@ require "string"
 
 ## local function make_optionalT(T, Allocator)
 ## static_assert(traits.is_type(T), "invalid type '%s'", T)
-## static_assert(T ~= niltype, "cannot make optional from nil")
 ## if not Allocator then
 require "allocators.default"
 ## Allocator = DefaultAllocator
@@ -12,8 +11,8 @@ require "allocators.default"
 local Allocator: type = #[Allocator]#
 local T: type = @#[T]#
 local Tags = @enum {
-   NONE = 0,
-   SOME
+   None = 0,
+   Some
 }
 
 local optionalimplT: type <nickname(#[string.format("optionalimpl(%s)",T)]#)> = @union{
@@ -31,6 +30,7 @@ local optionalT: type <nickname(#[string.format("optional(%s)",T)]#)> = @record{
 local optionalT = optionalT.value
 optionalT.is_container = true
 optionalT.subtype = T
+optionalT.is_optional = true
 ]]
 
 function optionalT.make(allocator: Allocator): optionalT
@@ -39,18 +39,30 @@ function optionalT.make(allocator: Allocator): optionalT
    return o
 end
 
-function optionalT:set_impl(new_impl: *optionalimplT): void
-   self.impl = new_impl
-end
-
 function optionalT:set_value(value: facultative(T)): void
    ## if value.type.is_niltype then
-      self.impl.none = nil
-      self.tag = Tags.NONE
+      self.tag = Tags.None
    ## else
       self.impl.some = value
-      self.tag = Tags.SOME
+      self.tag = Tags.Some
    ## end
+end
+
+function optionalT:is_none(): boolean
+   return self.tag == Tags.None
+end
+
+function optionalT:unwrap(): T
+   if self:is_none() then
+      -- Can be changed when any type drops
+      error("ERROR: attempt to unwrap None()")
+   end
+   
+   return self.impl.some
+end
+
+function optionalT:is_some(): boolean
+   return not self:is_none()
 end
 
 function optionalT:destroy(): void
@@ -61,34 +73,26 @@ function optionalT:__close(): void
    self:destroy()
 end
 
-function optionalT:value(): pointer
-   if self.tag == Tags.NONE then
-      return nilptr
-   else
-      return &self.impl.some
-   end
-end
-
 function optionalT.__convert(value: facultative(T)): optionalT <inline>
    local self: optionalT
-   local new_impl: *optionalimplT = self.allocator:new(@optionalimplT)
-   new_impl.some = value
    ## if value.type.is_niltype then
-      self.tag = Tags.NONE
+      self.tag = Tags.None
    ## else
-      self.tag = Tags.SOME
+      self.tag = Tags.Some
+      local new_impl: *optionalimplT = self.allocator:new(@optionalimplT)
+      new_impl.some = value
+      self.impl = new_impl
    ## end
-   self:set_impl(new_impl)
    return self
 end
 
 function optionalT:__tostring(): string
    local typeinfo = traits.typeinfoof(self)
-   if self.tag == Tags.SOME then
-      local value = $(@*T)(self:value())
-      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "SOME", value)
+   if self:is_some() then
+      local value = self:unwrap()
+      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "Some", value)
    else
-      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "NONE", nil)
+      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "None", nil)
    end
 end
 
@@ -96,6 +100,57 @@ end
 ## end
 
 global optional: type = #[generalize(make_optionalT)]#
+
+global function some(value: auto): auto
+   local T = #[value.type]#
+   local new_optional: optional(T) = value
+   return new_optional
+end
+
+global function none(base_type: type): auto
+   local new_value: base_type
+   local new_optional: optional(base_type) = new_value
+   new_optional.tag = Tags.None
+   return new_optional
+end
+
+--
+-- Test Setup
+--
+
+local Card = @record {
+   name: string,
+   number: string
+}
+
+local Reader = @record {
+   current_card: optional(Card)
+}
+
+function Card:__tostring()
+   return string.format("%s, %s", self.name, self.number)
+end
+
+function Reader:__tostring()
+   if self.current_card:is_some() then
+      local current_card = self.current_card:unwrap()
+      return string.format("Current cardholder name: %s", current_card.name)
+   else
+      return "No card inserted."
+   end
+end
+
+function Reader:insert_card(card: Card)
+   self.current_card:set_value(card)
+end
+
+function Reader:remove_card()
+   self.current_card:set_value()
+end
+
+--
+-- Tests
+--
 
 do
    local test: optional(integer) = 231
@@ -112,14 +167,6 @@ do
 end
 
 do
-   local Card = @record {
-      name: string,
-      number: string
-   }
-
-   function Card:__tostring()
-      return string.format("Cardholder name: %s\n Card number: %s", self.name, self.number)
-   end
 
    local card: Card = { "Please W. Ork", "4444444444444444" }
    
@@ -127,4 +174,31 @@ do
    print(test)
    test:set_value()
    print(test)
+end
+
+do
+   local test = some(8741)
+   print(test)
+   test:set_value()
+   print(test)
+end
+
+do
+   local test = none(integer)
+   print(test)
+   -- Will fail
+   -- print(test:unwrap())
+   local test2 = none(niltype)
+   print(test2)
+end
+
+do
+   local card: Card = { "May Beethistime", "4444444444444444" }
+   local reader: Reader = { none(Card) }
+
+   print(reader)
+   reader:insert_card(card)
+   print(reader)
+   reader:remove_card()
+   print(reader)
 end
