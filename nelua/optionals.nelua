@@ -1,0 +1,71 @@
+-- RE: error: subtype 'niltype' is not addressable thus cannot have a pointer
+
+-- As of 5/2/23, the nil type is not addressable and as a
+-- result, this implementation is coded in a fashion that expects
+-- every non-nil value to be Some and nil is None. This will change if
+-- the nil type becomes addressable in a future release.
+
+## local make_optionalT = generalize(function (T)
+  local T = #[T]#
+      
+  ## static_assert(T ~= niltype, string.format('ERROR: Cannot make optional(T) from non-addressable type (%s)', T))
+  ## static_assert(T.is_scalar ~= true, string.format('ERROR: Cannot make optional(T) from scalar type (%s)', T))
+
+  local optionalT: type <nickname(#[string.format('optional(%s)', T)]#)> = @record {
+     value: pointer
+  }
+  
+  ##[[
+  local optionalT = optionalT.value
+  optionalT.is_container = true
+  optionalT.subtype = T
+  ]]
+
+  function optionalT:is_empty(): boolean
+     return self.value == nilptr
+  end
+  
+  function optionalT:as_value()
+     ## if self.value == nilptr then
+        return nil
+     ## else
+        return $(@*T)(self.value)
+     ## end
+  end
+  
+  function optionalT:set(new_value: *T)
+     self.value = new_value
+  end
+
+  function optionalT:unset()
+     self.value = nilptr
+  end
+
+  ## return optionalT
+## end)
+
+global optional: type = #[make_optionalT]#
+
+do
+   local TestStruct = @record {
+      first_name: string,
+      last_name: string
+   }
+
+   function TestStruct:__tostring()
+      return #[string.format("%s %s", self.first_name, self.last_name)]#
+   end
+   
+   local test_optional: optional(TestStruct)
+
+   local test_struct: TestStruct = { "John", "Smith" }
+
+   print(test_optional:is_empty())
+   print(test_optional:as_value())
+   test_optional:set(test_struct)
+   print(test_optional:is_empty())
+   print(test_optional:as_value())
+   test_optional:unset()
+   print(test_optional:is_empty())
+   print(test_optional:as_value())
+end
