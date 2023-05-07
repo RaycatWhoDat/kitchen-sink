@@ -1,98 +1,98 @@
-require 'traits'
-require 'string'
+require "traits"
+require "string"
 
 ## local function make_optionalT(T, Allocator)
-  ## static_assert(traits.is_type(T), "invalid type '%s'", T)
-  ## static_assert(T ~= niltype, "cannot make optional from nil")
-  ## if not Allocator then
-  require 'allocators.default'
-  ## Allocator = DefaultAllocator
-  ## end
+## static_assert(traits.is_type(T), "invalid type '%s'", T)
+## static_assert(T ~= niltype, "cannot make optional from nil")
+## if not Allocator then
+require "allocators.default"
+## Allocator = DefaultAllocator
+## end
 
-  local Allocator: type = #[Allocator]#
-  local T: type = @#[T]#
-  local Tags = @enum {
-     NONE = 0,
-     SOME
-  }
+local Allocator: type = #[Allocator]#
+local T: type = @#[T]#
+local Tags = @enum {
+   NONE = 0,
+   SOME
+}
 
-  local optionalimplT: type <nickname(#[string.format('optionalimpl(%s)',T)]#)> = @union{
-     some: T,
-     none: niltype
-  }
+local optionalimplT: type <nickname(#[string.format("optionalimpl(%s)",T)]#)> = @union{
+   some: T,
+   none: niltype
+}
 
-  local optionalT: type <nickname(#[string.format('optional(%s)',T)]#)> = @record{
-     impl: *optionalimplT,
-     tag: Tags,
-     allocator: Allocator
-  }
+local optionalT: type <nickname(#[string.format("optional(%s)",T)]#)> = @record{
+   impl: *optionalimplT,
+   tag: Tags,
+   allocator: Allocator
+}
 
-  ##[[
-  local optionalT = optionalT.value
-  optionalT.is_container = true
-  optionalT.subtype = T
-  ]]
+##[[
+local optionalT = optionalT.value
+optionalT.is_container = true
+optionalT.subtype = T
+]]
 
-  function optionalT.make(allocator: Allocator): optionalT
-    local o: optionalT
-    o.allocator = allocator
-    return o
-  end
+function optionalT.make(allocator: Allocator): optionalT
+   local o: optionalT
+   o.allocator = allocator
+   return o
+end
 
-  function optionalT:set_impl(new_impl: *optionalimplT): void
-     self.impl = new_impl
-  end
-  
-  function optionalT:set_value(value: facultative(T)): void
-    ## if value.type.is_niltype then
-       self.impl.none = nil
-       self.tag = Tags.NONE
-    ## else
-       self.impl.some = value
-       self.tag = Tags.SOME
-    ## end
-  end
+function optionalT:set_impl(new_impl: *optionalimplT): void
+   self.impl = new_impl
+end
 
-  function optionalT:destroy(): void
-     self.allocator:delete(self.impl)
-  end
+function optionalT:set_value(value: facultative(T)): void
+   ## if value.type.is_niltype then
+      self.impl.none = nil
+      self.tag = Tags.NONE
+   ## else
+      self.impl.some = value
+      self.tag = Tags.SOME
+   ## end
+end
 
-  function optionalT:__close(): void
-     self:destroy()
-  end
-  
-  function optionalT:value(): pointer
-     if self.tag == Tags.NONE then
-        return nilptr
-     else
-        return &self.impl.some
-     end
-  end
-  
-  function optionalT.__convert(value: facultative(T)): optionalT <inline>
-     local self: optionalT
-     local new_impl: *optionalimplT = self.allocator:new(@optionalimplT)
-     new_impl.some = value
-     ## if value.type.is_niltype then
-        self.tag = Tags.NONE
-     ## else
-        self.tag = Tags.SOME
-     ## end
-     self:set_impl(new_impl)
-     return self
-  end
+function optionalT:destroy(): void
+   self.allocator:delete(self.impl)
+end
 
-  function optionalT:__tostring(): string
-     local typeinfo = traits.typeinfoof(self)
-     if self.tag == Tags.SOME then
-        local value = $(@*T)(self:value())
-        return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "SOME", value)
-     else
-        return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "NONE", nil)
-     end
-  end
-  
-  ## return optionalT
+function optionalT:__close(): void
+   self:destroy()
+end
+
+function optionalT:value(): pointer
+   if self.tag == Tags.NONE then
+      return nilptr
+   else
+      return &self.impl.some
+   end
+end
+
+function optionalT.__convert(value: facultative(T)): optionalT <inline>
+   local self: optionalT
+   local new_impl: *optionalimplT = self.allocator:new(@optionalimplT)
+   new_impl.some = value
+   ## if value.type.is_niltype then
+      self.tag = Tags.NONE
+   ## else
+      self.tag = Tags.SOME
+   ## end
+   self:set_impl(new_impl)
+   return self
+end
+
+function optionalT:__tostring(): string
+   local typeinfo = traits.typeinfoof(self)
+   if self.tag == Tags.SOME then
+      local value = $(@*T)(self:value())
+      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "SOME", value)
+   else
+      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "NONE", nil)
+   end
+end
+
+## return optionalT
 ## end
 
 global optional: type = #[generalize(make_optionalT)]#
