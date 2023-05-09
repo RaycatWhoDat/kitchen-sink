@@ -33,6 +33,12 @@ optionalT.subtype = T
 optionalT.is_optional = true
 ]]
 
+-- aster.Block{
+--    aster.Assign{
+--       {aster.Id{"a"}},
+--       {aster.BinaryOp{aster.Id{'a'}, 'add', aster.Id{'b'}}}
+-- }}
+
 function optionalT.make(allocator: Allocator): optionalT
    local o: optionalT
    o.allocator = allocator
@@ -54,12 +60,20 @@ end
 
 function optionalT:unwrap(): T
    if self:is_none() then
-      -- Can be changed when any type drops
+      -- Can be changed when any type is implemented
       error("ERROR: attempt to unwrap None()")
    end
    
    return self.impl.some
 end
+
+-- function optionalT:unwrap(): any
+--    if self:is_none() then
+--       return nil
+--    else
+--       return self.impl.some
+--    end
+-- end
 
 function optionalT:is_some(): boolean
    return not self:is_none()
@@ -87,7 +101,6 @@ function optionalT.__convert(value: facultative(T)): optionalT <inline>
 end
 
 function optionalT:__tostring(): string
-   local typeinfo = traits.typeinfoof(self)
    if self:is_some() then
       local value = self:unwrap()
       return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "Some", value)
