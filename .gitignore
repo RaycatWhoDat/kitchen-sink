@@ -44,3 +44,6 @@ raku/**/janet*
 **/.o
 
 raku/**/.precomp
+
+## Odin
+odin/**/*.bin

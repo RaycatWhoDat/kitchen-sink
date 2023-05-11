@@ -26,43 +26,14 @@ As a web dev, a lot of my time is spent working and building the same sort of ap
 Haskell, Elm, F#
 
 ## Other Languages I've Tried
-Julia, OCaml, Awk, Perl, Elixir, Chez/Gambit/Guile/Chicken Scheme, C/C++, Chapel, V, 8th, Java, LDPL, C#
+Julia, OCaml, Awk, Perl, Elixir, Chez/Gambit/Guile/Chicken Scheme, C++, Chapel, V, 8th, Java, LDPL, C#, Dart, Racket
 
 With that out of the way, let's get started.
 
 ## Top 20 Languages
-### 20. [Dart](https://dart.dev/)
-#### Previously: #18 -> #20
-Okay, so, Dart. I like this language. It *feels* like TypeScript spawned from C# vs. actual TypeScript which spawned from JavaScript. (I still like both.) It comes from the Google folks so, at any given time, it could be yeeted into the sun. 
 
-```dart
-import "dart:io";
-
-final TWO_SPACES = 2;
-final IGNORED_PATHS = [".git", "dist", "love", "node_modules", "target", "dub", "_build"];
-
-void getFiles([String directoryPath = ".", int traversalLevel = 0]) {
-  var currentDirectory = Directory(directoryPath);
-  var indentation = " " * (TWO_SPACES * traversalLevel);
-  var fileListing = currentDirectory.listSync();
-
-  fileListing.sort((file1, file2) => file1.path.compareTo(file2.path));
-
-  fileListing.forEach((file) {
-    var currentEntry = file.path.split("/").last;
-    stdout.writeln("$indentation${currentEntry}");
-    if (file is File || IGNORED_PATHS.contains(currentEntry)) return;
-    getFiles(file.path, traversalLevel + 1);
-  });
-}
-
-void main(List<String> arguments) {
-  getFiles(arguments.first ?? ".");
-}
-```
-
-### 19. [Kotlin](https://kotlinlang.org/)
-#### Previously: #17 -> #19
+### 20. [Kotlin](https://kotlinlang.org/)
+#### Previously: #17 -> #19 -> #20
 Kotlin is sweet. There are a lot of niceties in here that make me adore the language. Honestly, I wouldn't mind specializing in this language because of how straight-forward it was to write. Having access to the rest of the JVM ecosystem helps, too.
 
 ```kotlin
@@ -96,69 +67,8 @@ fun main(args: Array<String>) {
 // End:
 ```
 
-### 18. [Racket](https://www.racket-lang.org/)
-#### Previously: #9 -> #16 -> #18
-Oh boy, it's Racket. I like Racket. Very friendly and batteries-included, albeit a touch explicit. I'd almost argue that it's the Python of Schemes. (Yes, I know it's an amalgam of Lisp and Scheme; just roll with it.) Honestly, I think I would choose this language if it had a nice way to handle data munging.
-
-```racket
-#!/usr/bin/env racket
-
-#lang racket/base
-
-(require racket/path racket/string)
-
-(define (get-files (directory-path "..") (traversal-level 0))
-  (for ((entry (directory-list directory-path)))
-    (let ((current-path (path->string entry)))
-      (printf (string-append (make-string (* 2 traversal-level) #\space) "~a~%") current-path)
-      (unless (for/or ((ignored-path '(".git" "love" "target" "dist" ".dub" "node_modules")))
-                (string-contains? current-path ignored-path))
-        (when (directory-exists? (path->directory-path (build-path directory-path current-path)))
-          (get-files (string-append directory-path "/" current-path) (+ traversal-level 1)))))))
-
-(if (zero? (vector-length (current-command-line-arguments)))
-    (get-files)
-    (get-files (vector-ref (current-command-line-arguments) 0)))
-
-;; Local Variables:
-;; compile-command: "racket ./get-files.rkt"
-;; End:
-```
-
-### 17. [Janet](https://janet-lang.org/)
-#### Previously: #16 -> #15 -> #17
-Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The difference betweent the two is that this implements its own VM instead of leveraging Lua's. I like quite a few of the constructs in here but I found it lacking compared to later dialects. Wouldn't mind writing more of it, though.
-
-```clojure
-# -*- compile-command: "janet get-files.janet" -*-
-
-(def *two-spaces* 2)
-(def *ignored-paths* '(".git" "dist" "_dub" "target" "love" "node_modules"))
-
-(defn member
-  "Given ARR is an array-like structure, return TRUE if TARGET is found in the array."
-  [arr item]
-  (some (partial = item) arr))
-
-(defn get-files
-  "Get all the files in DIRECTORY-PATH recursively."
-  [&opt directory-path traversal-level]
-  (default directory-path ".")
-  (default traversal-level 0)
-
-  (each file (sort (os/dir directory-path))
-    (print (string (string/repeat " " (* *two-spaces* traversal-level)) file))
-    (when (and
-            (= (os/stat (string/join @[directory-path file] "/") :mode) :directory)
-            (not (member *ignored-paths* file)))
-      (get-files (string/join @[directory-path file] "/") (+ traversal-level 1)))))
-
-(defn main [& args]
-    (get-files (if (> (length args) 1) (last args) nil)))
-```
-
-### 16. [TCL](https://www.tcl-lang.org/)
-#### Previously: #15 -> #14 -> #16
+### 19. [TCL](https://www.tcl-lang.org/)
+#### Previously: #15 -> #14 -> #16 -> #19
 TCL (pronounced "tickle") is a neat homoiconic language with a pretty cool concurrency model. The story here is that "everything is a string" so, naturally, I had to try it out. I found it to be only slightly more expressive than Lua which is both good and bad. The real killer came from the deployment/portability aspect. Unless you had a go-to Starkit (pre-packaged TCL distribution), you didn't really have a clean way to move your scripts around.
 
 ```tcl
@@ -201,8 +111,40 @@ proc list_files { directory traversal_level } {
 list_files $argv 0
 ```
 
-### 15. [Common Lisp](https://common-lisp.net/) ([SBCL](http://www.sbcl.org/))
-#### Previously: #13 -> #12 -> #15
+### 18. [Janet](https://janet-lang.org/)
+#### Previously: #16 -> #15 -> #17 -> #18
+Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The difference betweent the two is that this implements its own VM instead of leveraging Lua's. I like quite a few of the constructs in here but I found it lacking compared to later dialects. Wouldn't mind writing more of it, though.
+
+```clojure
+# -*- compile-command: "janet get-files.janet" -*-
+
+(def *two-spaces* 2)
+(def *ignored-paths* '(".git" "dist" "_dub" "target" "love" "node_modules"))
+
+(defn member
+  "Given ARR is an array-like structure, return TRUE if TARGET is found in the array."
+  [arr item]
+  (some (partial = item) arr))
+
+(defn get-files
+  "Get all the files in DIRECTORY-PATH recursively."
+  [&opt directory-path traversal-level]
+  (default directory-path ".")
+  (default traversal-level 0)
+
+  (each file (sort (os/dir directory-path))
+    (print (string (string/repeat " " (* *two-spaces* traversal-level)) file))
+    (when (and
+            (= (os/stat (string/join @[directory-path file] "/") :mode) :directory)
+            (not (member *ignored-paths* file)))
+      (get-files (string/join @[directory-path file] "/") (+ traversal-level 1)))))
+
+(defn main [& args]
+    (get-files (if (> (length args) 1) (last args) nil)))
+```
+
+### 17. [Common Lisp](https://common-lisp.net/) ([SBCL](http://www.sbcl.org/))
+#### Previously: #13 -> #12 -> #15 -> #17
 Ah, yes. Common Lisp. I have gone back and forth on this language because it's kinda a jack of all trades. Bitrot is almost non-existent here and there are a lot of battle-tested libraries. Originally, I thought you had to keep the car running here but it seems like you could do something like `sbcl --script get-files.lisp` and get the results you want. I need to revisit this and work with the language with that in mind.  
 
 ```lisp
@@ -222,8 +164,8 @@ Ah, yes. Common Lisp. I have gone back and forth on this language because it's k
       do (print-files listing (1+ traversal-level)))))
 ```
 
-### 14. [TXR](http://nongnu.org/txr/)
-#### Previously: #2 -> #6 -> #12 -> #14
+### 16. [TXR](http://nongnu.org/txr/)
+#### Previously: #2 -> #6 -> #12 -> #14 -> #16
 This language is very weird because it's really two separate ones mashed together. There's TXR the pattern matching dialect, and TXR Lisp the Lisp dialect. Between these two, they handle almost every problem I have with regards to data munging.
 
 #### TXR Pattern Matching
@@ -264,8 +206,8 @@ Date of Birth: @dob
 (do-files 'print-listing (or (car *args*) ".."))
 ```
 
-### 13. [Python](https://www.python.org/)
-#### Previously: #12 -> #11 -> #13
+### 15. [Python](https://www.python.org/)
+#### Previously: #12 -> #11 -> #13 -> #15
 It's Python. Language is good. What else is there to talk about?
 
 ```python
@@ -289,8 +231,8 @@ printFiles('..')
 # End:
 ```
 
-### 12/11. [REBOL](http://www.rebol.com/)/[Red](https://www.red-lang.org/)
-#### Previously: #11/#10 -> #10/#9 -> #12/#11
+### 14/13. [REBOL](http://www.rebol.com/)/[Red](https://www.red-lang.org/)
+#### Previously: #11/#10 -> #10/#9 -> #12/#11 -> #14/13
 Now, we're getting into the nitty-gritty. REBOL and Red are sharing a line because of how similar they are. They're both homoiconic languages that take the block-and-word-based approach to programming, with Red being the most actively-developed language. The concept of "no reserved keywords" is always interesting to me because they're treating the words like a spoken language. The meaning of a word changes based on the context which has interesting effects when interweaving dialects. Can't wait for the cross-platform kinks to get worked out.
 
 ```red
@@ -321,32 +263,9 @@ get-files either (length? system/options/args) > 0 [last system/options/args][".
 ; End:
 ```
 
-### 10. [Nim](https://nim-lang.org/)
-#### Previously: #8 -> #10
-Nim, Nim, Nim. I have a few gripes about how UFCS works here and there's no variadic `zip` but overall, this language is sweet. No two ways about it. They even have these source code filters which I think are super cool. 
-
-```nim
-import os
-from strutils import spaces
-
-const
-  TWO_SPACES = 2
-  ignoredPaths = [".git", "love", "dist", "target", "_dub", "node_modules"]
-
-proc printFiles(directoryPath: string = ".", traversalLevel: int = 0) =
-  for kind, path in walkDir(directoryPath):
-    var entry = lastPathPart(path)
-    echo(spaces(TWO_SPACES * traversalLevel), entry)
-    if dirExists(path) and entry notin ignoredPaths:
-      printFiles(path, traversalLevel + 1)
-
-let initialDirectory = if len(commandLineParams()) > 0: paramStr(1) else: "."
-printFiles(initialDirectory)
-```
-
-### 9. [D](https://dlang.org/)
-#### Previously: #7 -> #9
-Ah, D. One of my first loves. This language does something that I have yet to see in any non-Lisp language: it allows you to write high-level, almost-script-like code and tune performance with lower constructs when needed. In my travels, I haven't seen a language do it quite like D. For that reason, this language is high on this list.
+### 12. [D](https://dlang.org/)
+#### Previously: #7 -> #9 -> #12
+This language does something that I have yet to see in any non-Lisp language: it allows you to write high-level, almost-script-like code and tune performance with lower constructs when needed. In my travels, I haven't seen a language do it quite like D.
 
 ```d
 #!/usr/bin/env rdmd 
@@ -402,8 +321,31 @@ void main(string[] args) {
 // End:
 ```
 
-### 8. [Haxe](https://haxe.org/)
-#### Previously: #5 -> #6 -> #8
+### 11. [Nim](https://nim-lang.org/)
+#### Previously: #8 -> #10 -> #11
+Nim, Nim, Nim. I have a few gripes about how UFCS works here and there's no variadic `zip` but overall, this language is sweet. No two ways about it. They even have these source code filters which I think are super cool. 
+
+```nim
+import os
+from strutils import spaces
+
+const
+  TWO_SPACES = 2
+  ignoredPaths = [".git", "love", "dist", "target", "_dub", "node_modules"]
+
+proc printFiles(directoryPath: string = ".", traversalLevel: int = 0) =
+  for kind, path in walkDir(directoryPath):
+    var entry = lastPathPart(path)
+    echo(spaces(TWO_SPACES * traversalLevel), entry)
+    if dirExists(path) and entry notin ignoredPaths:
+      printFiles(path, traversalLevel + 1)
+
+let initialDirectory = if len(commandLineParams()) > 0: paramStr(1) else: "."
+printFiles(initialDirectory)
+```
+
+### 10. [Haxe](https://haxe.org/)
+#### Previously: #5 -> #6 -> #8 -> #10
 Hello, old friend. Haxe is a... uh... yeah, how do you describe this language? It's a cross-platform, cross-language toolkit that leverages the libraries and platforms of the target programming language. It sounds weird but that's the best way to describe it. 
 
 ```haxe
@@ -435,8 +377,8 @@ function main() {
 // End:
 ```
 
-### 7. [Rust](https://www.rust-lang.org/)
-#### Previously: #4 -> #5 -> #7
+### 9. [Rust](https://www.rust-lang.org/)
+#### Previously: #4 -> #5 -> #7 -> #9
 *Sigh.* Let's talk about Rust.
 
 I do not like Rust's syntax and I don't like how verbose it can get. However, if there's one thing I can count on, it's the community behind it. You simply don't count out peoples' passion to make cool things.
@@ -491,8 +433,8 @@ fn main() -> Result<()> {
 }
 ```
 
-### 6. [Emacs](https://www.gnu.org/software/emacs/) Lisp
-#### Previously: #3 -> #4 -> #6
+### 8. [Emacs](https://www.gnu.org/software/emacs/) Lisp
+#### Previously: #3 -> #4 -> #6 -> #8
 I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for making text-based applications that live in Emacs.
 
 ```elisp
@@ -542,8 +484,8 @@ I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for
 (find-files-recursively "..")
 ```
 
-### 5. [Ruby](https://ruby-lang.org/en/)
-#### Previously: #2 -> #5
+### 7. [Ruby](https://ruby-lang.org/en/)
+#### Previously: #2 -> #5 -> #7
 Ruby is a fantastic language. I'm upset it took me this long to get on the train. I've been playing around with it for a while now and 90% of the things I can do in Raku, I can do in Ruby with more consistency. However, I don't love it as much as Raku.
 ```ruby
 Dir.glob("../**/**").each do |listing|
@@ -552,7 +494,33 @@ Dir.glob("../**/**").each do |listing|
 end
 ```
 
+### 6. [C](https://en.cppreference.com/w/c)
+It's C. It does the thing.
+```c
+// You are out of your mind if you think I'm making a get_files implementation in C.
+```
+
+### 5. [Raku](https://raku.org/)
+#### Previously: #2 -> #3 -> #1 -> #5
+I adore Raku. There are so many nice things it gives you. There's a sweet MOP in here, there's lazy lists, sequences, reactive programming... and it goes on and on. The ONLY problems I have with it is that speed is rough and I need a more expressive way to do data munging.
+
+```raku
+my constant $TWO_SPACES = 2;
+my @ignoredPaths = <. .. .git .dub node_modules build zef target>;
+
+sub doFiles(IO(Str) $directoryPath, &callback = { .put }, $depth = 0) {
+    for $directoryPath.dir.sort({ not .d, .Str }) -> $currentListing {
+        next if $currentListing.basename (elem) @ignoredPaths;
+        &callback(' ' x ($TWO_SPACES * $depth) ~ $currentListing.basename);
+        doFiles($currentListing, &callback, $depth + 1) if $currentListing.d;
+    }
+}
+
+doFiles("..", { .put });
+```
+
 ### 4. [Nelua](https://nelua.io)
+#### Previously: #4
 Nelua is exactly the kind of language I'd want if TypeScript wanted to take a serious swing at systems programming instead of maintainability. Generates efficient C using similar semantics to Lua *and* is metaprogrammable using Lua. I think that's the coolest thing.
 ```lua
 require "string"
@@ -631,8 +599,63 @@ end
 list_dir_recursive("..")
 ```
 
-### 3. [Lua](http://www.lua.org/)
-#### Previously: #14 -> #13 -> #3
+### 3. [Odin](https://www.odin-lang.org/)
+A newcomer to this list, Odin is a very nice language that is doing almost exactly what I want in a "C replacement" language: string as basic type, dynamic arrays in core, consistent syntax, manual memory management, and more. Fun times!
+```odin
+package main
+
+import "core:fmt"
+import "core:os"
+import "core:strings"
+
+get_files :: proc (directory: string, file_level: int = 0) {
+  using os
+
+  files: []File_Info
+
+  if dir_handle, errno := open(directory); errno == 0 {
+    files, _ = read_dir(dir_handle, 0)
+  }
+
+  ignored_files := [?]string {
+    ".git",
+    ".gitattributes",
+    ".gitignore",
+    "love",
+    "target",
+    "node_modules",
+    "dist"
+  }
+  
+  for file in files {
+    is_valid := true
+    
+    for ignored_file in ignored_files {
+      if file.name == ignored_file {
+	is_valid = false
+	break
+      }
+    }
+
+    if !is_valid {
+      return
+    }
+    
+    fmt.printf("%s%s\n", strings.repeat(" ", file_level * 2), file.name)
+    
+    if is_dir(file.fullpath) {
+      get_files(file.fullpath, file_level + 1)
+    }
+  }
+}
+
+main :: proc () {
+  get_files("..")
+}
+```
+
+### 2. [Lua](http://www.lua.org/)
+#### Previously: #14 -> #13 -> #3 -> #2
 Lua is another language people love to complain about. For all the good bites, people only remember the 1-indexed arrays (even though arrays aren't really a construct here; we accept tables as valid currency)? The language does what it needs to do and it's super-embeddable. There's a metric tonne of games out there that use Lua. Writing the example here was a bit more explicit than I'd like but the language is neat.
 
 ```lua
@@ -687,8 +710,8 @@ end
 print_files_recursively()
 ```
 
-### 2. JavaScript ([MDN](https://developer.mozilla.org/en-US/docs/Web/javascript))
-#### Previously: #1 -> #2
+### 1. JavaScript ([MDN](https://developer.mozilla.org/en-US/docs/Web/javascript))
+#### Previously: #1 -> #2 -> #1
 I'm a web dev. Did you think there would be another language up here?
 
 ```js
@@ -713,23 +736,4 @@ const printFiles = doFiles(console.log);
 const rootDirectoryPath = process.argv.slice(2).pop() || '..';
 
 printFiles(rootDirectoryPath);
-```
-
-### 1. [Raku](https://raku.org/)
-#### Previously: #2 -> #3 -> #1
-I adore Raku. There are so many nice things it gives you. There's a sweet MOP in here, there's lazy lists, sequences, reactive programming... and it goes on and on. The ONLY problems I have with it is that speed is rough and I need a more expressive way to do data munging.
-
-```raku
-my constant $TWO_SPACES = 2;
-my @ignoredPaths = <. .. .git .dub node_modules build zef target>;
-
-sub doFiles(IO(Str) $directoryPath, &callback = { .put }, $depth = 0) {
-    for $directoryPath.dir.sort({ not .d, .Str }) -> $currentListing {
-        next if $currentListing.basename (elem) @ignoredPaths;
-        &callback(' ' x ($TWO_SPACES * $depth) ~ $currentListing.basename);
-        doFiles($currentListing, &callback, $depth + 1) if $currentListing.d;
-    }
-}
-
-doFiles("..", { .put });
 ```
