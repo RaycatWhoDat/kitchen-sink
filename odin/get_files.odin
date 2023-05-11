@@ -3,6 +3,7 @@ package main
 import "core:fmt"
 import "core:os"
 import "core:strings"
+import "core:sort"
 
 get_files :: proc (directory: string, file_level: int = 0) {
   using os
@@ -22,19 +23,23 @@ get_files :: proc (directory: string, file_level: int = 0) {
     "node_modules",
     "dist"
   }
+
+  sort.quick_sort_proc(files, proc (file1, file2: File_Info) -> int {
+    return strings.compare(file1.name, file2.name)
+  })
   
   for file in files {
-    is_valid := true
+    is_ignored := false
     
     for ignored_file in ignored_files {
       if file.name == ignored_file {
-	is_valid = false
+	is_ignored = true
 	break
       }
     }
 
-    if !is_valid {
-      return
+    if is_ignored {
+      continue
     }
     
     fmt.printf("%s%s\n", strings.repeat(" ", file_level * 2), file.name)

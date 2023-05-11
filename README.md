@@ -23,10 +23,7 @@ As a web dev, a lot of my time is spent working and building the same sort of ap
 (If a language doesn't fulfill at least two items on this list, it probably does something neat.)
 
 ## Languages I'm Aware Of But Never Tried
-Haskell, Elm, F#
-
-## Other Languages I've Tried
-Julia, OCaml, Awk, Perl, Elixir, Chez/Gambit/Guile/Chicken Scheme, C++, Chapel, V, 8th, Java, LDPL, C#, Dart, Racket
+Haskell, F#
 
 With that out of the way, let's get started.
 
@@ -520,7 +517,6 @@ doFiles("..", { .put });
 ```
 
 ### 4. [Nelua](https://nelua.io)
-#### Previously: #4
 Nelua is exactly the kind of language I'd want if TypeScript wanted to take a serious swing at systems programming instead of maintainability. Generates efficient C using similar semantics to Lua *and* is metaprogrammable using Lua. I think that's the coolest thing.
 ```lua
 require "string"
@@ -599,63 +595,8 @@ end
 list_dir_recursive("..")
 ```
 
-### 3. [Odin](https://www.odin-lang.org/)
-A newcomer to this list, Odin is a very nice language that is doing almost exactly what I want in a "C replacement" language: string as basic type, dynamic arrays in core, consistent syntax, manual memory management, and more. Fun times!
-```odin
-package main
-
-import "core:fmt"
-import "core:os"
-import "core:strings"
-
-get_files :: proc (directory: string, file_level: int = 0) {
-  using os
-
-  files: []File_Info
-
-  if dir_handle, errno := open(directory); errno == 0 {
-    files, _ = read_dir(dir_handle, 0)
-  }
-
-  ignored_files := [?]string {
-    ".git",
-    ".gitattributes",
-    ".gitignore",
-    "love",
-    "target",
-    "node_modules",
-    "dist"
-  }
-  
-  for file in files {
-    is_valid := true
-    
-    for ignored_file in ignored_files {
-      if file.name == ignored_file {
-	is_valid = false
-	break
-      }
-    }
-
-    if !is_valid {
-      return
-    }
-    
-    fmt.printf("%s%s\n", strings.repeat(" ", file_level * 2), file.name)
-    
-    if is_dir(file.fullpath) {
-      get_files(file.fullpath, file_level + 1)
-    }
-  }
-}
-
-main :: proc () {
-  get_files("..")
-}
-```
-
-### 2. [Lua](http://www.lua.org/)
-#### Previously: #14 -> #13 -> #3 -> #2
+### 3. [Lua](http://www.lua.org/)
+#### Previously: #14 -> #13
 Lua is another language people love to complain about. For all the good bites, people only remember the 1-indexed arrays (even though arrays aren't really a construct here; we accept tables as valid currency)? The language does what it needs to do and it's super-embeddable. There's a metric tonne of games out there that use Lua. Writing the example here was a bit more explicit than I'd like but the language is neat.
 
 ```lua
@@ -708,6 +649,67 @@ function print_files_recursively(directory_name)
 end
 
 print_files_recursively()
+```
+
+
+### 2. [Odin](https://www.odin-lang.org/)
+A newcomer to this list, Odin is a very nice language that is doing almost exactly what I want in a "C replacement" language: string as basic type, dynamic arrays in core, consistent syntax, manual memory management, and more. Fun times!
+```odin
+package main
+
+import "core:fmt"
+import "core:os"
+import "core:strings"
+import "core:sort"
+
+get_files :: proc (directory: string, file_level: int = 0) {
+  using os
+
+  files: []File_Info
+
+  if dir_handle, errno := open(directory); errno == 0 {
+    files, _ = read_dir(dir_handle, 0)
+  }
+
+  ignored_files := [?]string {
+    ".git",
+    ".gitattributes",
+    ".gitignore",
+    "love",
+    "target",
+    "node_modules",
+    "dist"
+  }
+
+  sort.quick_sort_proc(files, proc (file1, file2: File_Info) -> int {
+    return strings.compare(file1.name, file2.name)
+  })
+  
+  for file in files {
+    is_ignored := false
+    
+    for ignored_file in ignored_files {
+      if file.name == ignored_file {
+	is_ignored = true
+	break
+      }
+    }
+
+    if is_ignored {
+      continue
+    }
+    
+    fmt.printf("%s%s\n", strings.repeat(" ", file_level * 2), file.name)
+    
+    if is_dir(file.fullpath) {
+      get_files(file.fullpath, file_level + 1)
+    }
+  }
+}
+
+main :: proc () {
+  get_files("..")
+}
 ```
 
 ### 1. JavaScript ([MDN](https://developer.mozilla.org/en-US/docs/Web/javascript))
