@@ -24,14 +24,14 @@ new_reader_event :: proc (event_type: ReaderEventType, payload: string) -> Reade
 }
 
 Reader :: struct {
-  current_card: Card,
+  current_card: ^Card,
   events: [dynamic]ReaderEvent
 }
 
 insert_card :: proc (reader: ^Reader, card: ^Card) {
   using reader
   append(&events, new_reader_event(ReaderEventType.INSERTED, card.cardholder_name))
-  current_card = card^
+  current_card = card
 }
 
 remove_card :: proc (reader: ^Reader) {
@@ -56,7 +56,7 @@ display_stats :: proc (reader: ^Reader) {
   using reader
   if current_card != {} {
     fmt.printf("Cardholder: %s\n", current_card.cardholder_name)
-    fmt.printf("Total Amount: %$%.2f\n", current_card.balance)
+    fmt.printf("Total Amount: $%.2f\n", current_card.balance)
     fmt.printf("Ounces Poured: %.2f\n", current_card.ounces_poured)
   }
 
@@ -77,5 +77,6 @@ main :: proc () {
   insert_card(&reader, &card)
   charge_card(&reader, 10, 0.50)
   remove_card(&reader)
+  insert_card(&reader, &card)
   display_stats(&reader)
 }
