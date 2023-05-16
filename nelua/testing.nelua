@@ -1,5 +1,6 @@
-local function add(num1: integer, num2: integer): integer
-   return num1 + num2
-end
-
-print(add(1, 5))
+local test: number = 1
+test += 12
+test *= 4
+test -= 10
+test /= 2
+print(test)

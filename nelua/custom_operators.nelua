@@ -1,15 +1,2 @@
--- ## local function add_and_assign(val1, val2)
---    #|val1.name|# = #|val1.name|# + #[val2]#
--- ## end
-
--- local test1 = 1
--- local test2 = 41
--- ##[[
--- print(aster.parse("add_and_assign"))
--- ]]
--- print(test1)
-
 ## require './custom_operators.lua'
-require './testing.neluam'
-
-
+require './testing.nelua'

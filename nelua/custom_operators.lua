@@ -1,35 +1,37 @@
 local syntaxdefs = require 'nelua.syntaxdefs'
 local aster = require 'nelua.aster'
+local analyzer = require 'nelua.analyzer'
+local lpegrex = require 'nelua.thirdparty.lpegrex'
+local errorer = require 'nelua.utils.errorer'
+local except = require 'nelua.utils.except'
 local grammar = syntaxdefs.grammar
 local shaper = aster.shaper
 
--- grammar = grammar:gsub(
---    "chunk           <-- SHEBANG? SKIP Block (!.)%^UnexpectedSyntax",
---    "chunk           <-- SHEBANG? SKIP Block"
--- )
-
 grammar = grammar:gsub(
    "Assign / call /",
-   "Assign / AddAssign / call /"
+   "Assign / AddAssign / SubAssign / MulAssign / DivAssign / call /"
 )
 
 grammar = grammar:gsub(
    "Assign%s*<== vars `=` @exprs",
-   "Assign <== vars `=` @exprs\nAddAssign <== vars `+=` @exprs"
+   "Assign <== vars `=` @exprs\nAddAssign <== var `+=` @expr\nSubAssign <== var `-=` @expr\nMulAssign <== var `*=` @expr\nDivAssign <== var `/=` @expr"
 )
 
 aster.register_syntax({
-  extension = 'neluam',
+  extension = 'nelua',
   grammar = grammar,
   errors = syntaxdefs.errors,
   defs = syntaxdefs.defs,
 })
 
--- aster.register('AddAssign', { shaper.Node, shaper.Node }, { is_operator = true })
+local optypes = { 'Add', 'Sub', 'Mul', 'Div' }
 
+for _, optype in ipairs(optypes) do
+   aster.register(optype .. "Assign", { shaper.Node, shaper.Node })
 
--- aster.Block{
---    aster.Assign{
---       {aster.Id{"a"}},
---       {aster.BinaryOp{aster.Id{'a'}, 'add', aster.Id{'b'}}}
--- }}
+   analyzer.visitors[optype .. "Assign"] = function (context, node)
+    context:transform_and_traverse_node(node,
+      aster.Assign{{node[1]:clone()}, {aster.BinaryOp{node[1], optype:lower(), node[2]}}}
+    )
+  end
+end
