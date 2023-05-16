@@ -1,71 +1,245 @@
--- RE: error: subtype 'niltype' is not addressable thus cannot have a pointer
+require "traits"
+require "string"
 
--- As of 5/2/23, the nil type is not addressable and as a
--- result, this implementation is coded in a fashion that expects
--- every non-nil value to be Some and nil is None. This will change if
--- the nil type becomes addressable in a future release.
+## local function make_optionalT(T, Allocator)
+## static_assert(traits.is_type(T), "invalid type '%s'", T)
+## static_assert(not T.is_niltype, "cannot make optional from niltype")
+## if not Allocator then
+require "allocators.default"
+## Allocator = DefaultAllocator
+## end
 
-## local make_optionalT = generalize(function (T)
-  local T = #[T]#
-      
-  ## static_assert(T ~= niltype, string.format('ERROR: Cannot make optional(T) from non-addressable type (%s)', T))
-  ## static_assert(T.is_scalar ~= true, string.format('ERROR: Cannot make optional(T) from scalar type (%s)', T))
+local Allocator: type = #[Allocator]#
+local T: type = @#[T]#
+local Tags = @enum {
+   None = 0,
+   Some
+}
 
-  local optionalT: type <nickname(#[string.format('optional(%s)', T)]#)> = @record {
-     value: pointer
-  }
-  
-  ##[[
-  local optionalT = optionalT.value
-  optionalT.is_container = true
-  optionalT.subtype = T
-  ]]
+local optionalimplT: type <nickname(#[string.format("optionalimpl(%s)",T)]#)> = @union{
+   some: T,
+   none: niltype
+}
 
-  function optionalT:is_empty(): boolean
-     return self.value == nilptr
-  end
-  
-  function optionalT:as_value()
-     ## if self.value == nilptr then
-        return nil
-     ## else
-        return $(@*T)(self.value)
-     ## end
-  end
-  
-  function optionalT:set(new_value: *T)
-     self.value = new_value
-  end
+local optionalT: type <nickname(#[string.format("optional(%s)",T)]#)> = @record{
+   impl: *optionalimplT,
+   tag: Tags,
+   allocator: Allocator
+}
 
-  function optionalT:unset()
-     self.value = nilptr
-  end
+##[[
+local optionalT = optionalT.value
+optionalT.is_container = true
+optionalT.subtype = T
+optionalT.is_optional = true
+]]
 
-  ## return optionalT
-## end)
+function optionalT.make(allocator: Allocator): optionalT
+   local o: optionalT
+   o.allocator = allocator
+   return o
+end
 
-global optional: type = #[make_optionalT]#
+function optionalT:set_value(value: facultative(T)): void
+   ## if value.type.is_niltype then
+      self.tag = Tags.None
+   ## else
+      self.impl.some = value
+      self.tag = Tags.Some
+   ## end
+end
 
-do
-   local TestStruct = @record {
-      first_name: string,
-      last_name: string
-   }
+function optionalT:is_none(): boolean
+   return self.tag == Tags.None
+end
 
-   function TestStruct:__tostring()
-      return #[string.format("%s %s", self.first_name, self.last_name)]#
+function optionalT:unwrap(): *T
+   if self:is_none() then
+      -- Can be changed when any type is implemented
+      error("ERROR: attempt to unwrap None()")
    end
    
-   local test_optional: optional(TestStruct)
-
-   local test_struct: TestStruct = { "John", "Smith" }
-
-   print(test_optional:is_empty())
-   print(test_optional:as_value())
-   test_optional:set(test_struct)
-   print(test_optional:is_empty())
-   print(test_optional:as_value())
-   test_optional:unset()
-   print(test_optional:is_empty())
-   print(test_optional:as_value())
+   return &self.impl.some
 end
+
+-- function optionalT:unwrap(): any
+--    if self:is_none() then
+--       return nil
+--    else
+--       return self.impl.some
+--    end
+-- end
+
+function optionalT:is_some(): boolean
+   return not self:is_none()
+end
+
+function optionalT:destroy(): void
+   self.allocator:delete(self.impl)
+end
+
+function optionalT:__close(): void
+   self:destroy()
+end
+
+function optionalT.__convert(value: overload(T, *T, niltype)): optionalT <inline>
+   local self: optionalT
+   ## if value.type.is_niltype then
+      self.tag = Tags.None
+   ## else
+      self.tag = Tags.Some
+      local new_impl: *optionalimplT = self.allocator:new(@optionalimplT)
+      ## if value.type.is_pointer then
+      new_impl.some = $value
+      ## else
+      new_impl.some = value
+      ## end
+      self.impl = new_impl
+   ## end
+   return self
+end
+
+function optionalT:__tostring(): string
+   if self:is_some() then
+      local value = self:unwrap()
+      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "Some", value)
+   else
+      return string.format("%s %s(%s)", "optional(" .. #[T]# .. ")", "None", nil)
+   end
+end
+
+## return optionalT
+## end
+
+global optional: type = #[generalize(make_optionalT)]#
+
+global function some(value: auto): auto
+   local T = #[value.type]#
+   local new_optional: optional(T) = value
+   return new_optional
+end
+
+global function none(base_type: type): auto
+   local new_value: base_type
+   local new_optional: optional(base_type) = new_value
+   new_optional.tag = Tags.None
+   return new_optional
+end
+
+
+## if TEST then
+--
+-- Test Setup
+--
+
+## function test(description, func)
+   print(#[func() and "✅" or "❌"]# .. " " .. #[description]#)
+## end
+      
+local Card = @record {
+   name: string,
+   number: string,
+   balance: number,
+   ounces_poured: number
+}
+
+local Reader = @record {
+   current_card: optional(Card)
+}
+
+function Card:__tostring()
+   return string.format("%s, %s, %s, %s", self.name, self.number, self.balance, self.ounces_poured)
+end
+
+function Reader:__tostring()
+   if self.current_card:is_some() then
+      local current_card = self.current_card:unwrap()
+      return string.format("Current cardholder name: %s", current_card.name)
+   else
+      return "No card inserted."
+   end
+end
+
+function Reader:insert_card(card: Card)
+   self.current_card:set_value(card)
+end
+
+function Reader:remove_card()
+   self.current_card:set_value()
+end
+
+--
+-- Tests
+--
+
+## test("should init as integer, set, and unset", function ()
+   local test: optional(integer) = 231
+   assert(test:is_some(), "didn't set value")
+   test:set_value()
+   assert(test:is_none(), "didn't unset value")
+   ## return true
+## end)
+
+## test("should init as string, set, and unset", function ()
+   local test: optional(string) = "This is a test"
+   assert(test:is_some(), "didn't set value")
+   test:set_value()
+   assert(test:is_none(), "didn't unset value")
+   ## return true
+## end)
+
+## test("should init as struct type, set, and unset", function ()
+   local card: Card = { "Please W. Ork", "4444444444444444" }
+   
+   local test: optional(Card) = card
+   assert(test:is_some(), "didn't set value")
+   test:set_value()
+   assert(test:is_none(), "didn't unset value")
+   ## return true
+## end)
+
+## test("should init as integer using shorthand, set, and unset", function ()
+   local test = some(8741)
+   assert(test:is_some(), "didn't set value")
+   test:set_value()
+   assert(test:is_none(), "didn't unset value")
+   ## return true
+## end)
+
+## test("should init as integer using shorthand as none", function ()
+   local test = none(integer)
+   assert(test:is_none(), "didn't initialize correctly")
+   -- Will fail
+   -- print(test:unwrap())
+   -- local test2 = none(niltype)
+   -- print(test2)
+   ## return true
+## end)
+
+## test("should init as struct type, set, and unset indirectly", function ()
+   local card: Card = { "May Beethistime", "4444444444444444" }
+   local reader: Reader = { none(Card) }
+
+   assert(reader.current_card:is_none(), "didn't initialize correctly")
+   reader:insert_card(card)
+   assert(reader.current_card:is_some(), "didn't set value")
+   reader:remove_card()
+   assert(reader.current_card:is_none(), "didn't unset value")
+   ## return true
+## end)
+
+## test("should init as struct type, set, unwrap, assign value, and unset indirectly", function ()
+   local card: Card = { "Johnny Cage", "4444444444444444" }
+   local reader: Reader = { none(Card) }
+
+   assert(reader.current_card:is_none(), "didn't initialize correctly")
+   reader:insert_card(card)
+   assert(reader.current_card:is_some(), "didn't set value")
+   local current_card = reader.current_card:unwrap()
+   current_card.balance = current_card.balance + 10
+   assert(reader.current_card:unwrap().balance == current_card.balance, "didn't set value indirectly")
+   reader:remove_card()
+   assert(reader.current_card:is_none(), "didn't unset value")
+   ## return true
+## end)
+## end

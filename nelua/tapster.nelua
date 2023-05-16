@@ -9,11 +9,11 @@ require "optionals"
 local Card = @record {
    card_number: string,
    cardholder_name: string,
-   balance: integer,
-   ounces_poured: integer
+   balance: number,
+   ounces_poured: number
 }
 
-function Card.new(card_number: string, cardholder_name: string, balance: integer, ounces_poured: integer)
+function Card.new(card_number: string, cardholder_name: string, balance: number, ounces_poured: number)
    local first, last = string.find(card_number, "%d+")
    assert(first == 1 and last == 16, "Card number needs to be 16 digits long.")
    return (@Card){
@@ -24,8 +24,11 @@ function Card.new(card_number: string, cardholder_name: string, balance: integer
    }
 end
 
+function Card:__tostring()
+   return string.format("%s, %s, %s, %s", self.cardholder_name, self.card_number, self.balance, self.ounces_poured)
+end
+
 local ReaderEventType = @enum { INSERTED = 0, CHARGED, REMOVED }
-local reader_event_type_mapping: []string = { "INSERTED", "CHARGED", "REMOVED" }
 
 local ReaderEvent = @record {
    event_type: ReaderEventType,
@@ -42,6 +45,7 @@ function ReaderEvent.new(event_type: ReaderEventType, payload: string)
 end
 
 function ReaderEvent:__tostring()
+   local reader_event_type_mapping: []string = { "INSERTED", "CHARGED", "REMOVED" }
    return self.timestamp .. " - " .. reader_event_type_mapping[self.event_type]  .. ": " .. self.payload
 end
 
@@ -52,30 +56,35 @@ local Reader = @record {
 
 function Reader:insert_card(card: *Card)
   self.events:push(ReaderEvent.new(ReaderEventType.INSERTED, card.cardholder_name))
-  self.current_card:set(card)
+  self.current_card = card
 end
 
-function Reader:charge_card(ounces_poured: integer, price_per_ounce: integer)
-   if self.current_card:is_empty() then
+function Reader:charge_card(ounces_poured: number, price_per_ounce: number)
+   if self.current_card:is_none() then
       return
    end
 
    local charge_amount = ounces_poured * price_per_ounce
+   local current_card = self.current_card:unwrap()
    self.events:push(ReaderEvent.new(ReaderEventType.CHARGED, tostring(charge_amount)))
-   self.current_card:value().ounces_poured = self.current_card:value().ounces_poured + ounces_poured
-   self.current_card:value().balance = self.current_card:value().balance + charge_amount
+   current_card.ounces_poured = current_card.ounces_poured + ounces_poured
+   current_card.balance = current_card.balance + charge_amount
 end
 
 function Reader:remove_card()
-   self.events:push(ReaderEvent.new(ReaderEventType.REMOVED, self.current_card:value().cardholder_name))
-   self.current_card:unset()
+   if self.current_card:is_none() then
+      return
+   end
+   
+   self.events:push(ReaderEvent.new(ReaderEventType.REMOVED, self.current_card:unwrap().cardholder_name))
+   self.current_card = nil
 end
 
 function Reader:display_stats()
-   if not self.current_card:is_empty() then
-      io.printf("Cardholder: %s\n", self.current_card:value().cardholder_name)
-      io.printf("Total Amount: $%.2d\n", self.current_card:value().balance)
-      io.printf("Ounces Poured: %.2d\n\n", self.current_card:value().ounces_poured)
+   if self.current_card:is_some() then
+      io.printf("Cardholder: %s\n", self.current_card:unwrap().cardholder_name)
+      io.printf("Total Amount: $%.2d\n", self.current_card:unwrap().balance)
+      io.printf("Ounces Poured: %.2d\n\n", self.current_card:unwrap().ounces_poured)
    end
    
    io.print("Events:")
@@ -85,12 +94,10 @@ function Reader:display_stats()
    end
 end
 
-local card = Card.new("5555555555555555", "John Smith", 100, 0)
+local card = Card.new("5555555555555555", "John Smith")
 local reader: Reader
 
 reader:insert_card(card)
-reader:charge_card(10, 50)
+reader:charge_card(10, 0.50)
 reader:remove_card()
 reader:display_stats()
-
-

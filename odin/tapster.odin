@@ -30,13 +30,13 @@ Reader :: struct {
 
 insert_card :: proc (reader: ^Reader, card: ^Card) {
   using reader
-  append(&events, new_reader_event(ReaderEventType.INSERTED, card.cardholder_name))
+  append(&events, new_reader_event(.INSERTED, card.cardholder_name))
   current_card = card
 }
 
 remove_card :: proc (reader: ^Reader) {
   using reader
-  append(&events, new_reader_event(ReaderEventType.REMOVED, current_card.cardholder_name))
+  append(&events, new_reader_event(.REMOVED, current_card.cardholder_name))
   current_card = {}
 }
 
@@ -47,7 +47,7 @@ charge_card :: proc (reader: ^Reader, ounces_poured: f32, price_per_ounce: f32) 
   }
 
   charge := ounces_poured * price_per_ounce
-  append(&events, new_reader_event(ReaderEventType.CHARGED, fmt.aprint(charge)))
+  append(&events, new_reader_event(.CHARGED, fmt.aprint(charge)))
   current_card.ounces_poured += ounces_poured
   current_card.balance += charge
 }
