@@ -53,6 +53,10 @@ function optionalT:is_none(): boolean
    return self.tag == Tags.None
 end
 
+function optionalT:is_some(): boolean
+   return not self:is_none()
+end
+
 function optionalT:unwrap(): *T
    if self:is_none() then
       -- Can be changed when any type is implemented
@@ -62,17 +66,6 @@ function optionalT:unwrap(): *T
    return &self.impl.some
 end
 
--- function optionalT:unwrap(): any
---    if self:is_none() then
---       return nil
---    else
---       return self.impl.some
---    end
--- end
-
-function optionalT:is_some(): boolean
-   return not self:is_none()
-end
 
 function optionalT:destroy(): void
    self.allocator:delete(self.impl)
@@ -133,7 +126,7 @@ end
 --
 
 ## function test(description, func)
-   print(#[func() and "✅" or "❌"]# .. " " .. #[description]#)
+   print(#[pcall(func) and "✅" or "❌"]# .. " " .. #[description]#)
 ## end
       
 local Card = @record {
@@ -177,7 +170,6 @@ end
    assert(test:is_some(), "didn't set value")
    test:set_value()
    assert(test:is_none(), "didn't unset value")
-   ## return true
 ## end)
 
 ## test("should init as string, set, and unset", function ()
@@ -185,7 +177,6 @@ end
    assert(test:is_some(), "didn't set value")
    test:set_value()
    assert(test:is_none(), "didn't unset value")
-   ## return true
 ## end)
 
 ## test("should init as struct type, set, and unset", function ()
@@ -195,7 +186,6 @@ end
    assert(test:is_some(), "didn't set value")
    test:set_value()
    assert(test:is_none(), "didn't unset value")
-   ## return true
 ## end)
 
 ## test("should init as integer using shorthand, set, and unset", function ()
@@ -203,7 +193,6 @@ end
    assert(test:is_some(), "didn't set value")
    test:set_value()
    assert(test:is_none(), "didn't unset value")
-   ## return true
 ## end)
 
 ## test("should init as integer using shorthand as none", function ()
@@ -213,7 +202,6 @@ end
    -- print(test:unwrap())
    -- local test2 = none(niltype)
    -- print(test2)
-   ## return true
 ## end)
 
 ## test("should init as struct type, set, and unset indirectly", function ()
@@ -225,7 +213,6 @@ end
    assert(reader.current_card:is_some(), "didn't set value")
    reader:remove_card()
    assert(reader.current_card:is_none(), "didn't unset value")
-   ## return true
 ## end)
 
 ## test("should init as struct type, set, unwrap, assign value, and unset indirectly", function ()
@@ -240,6 +227,5 @@ end
    assert(reader.current_card:unwrap().balance == current_card.balance, "didn't set value indirectly")
    reader:remove_card()
    assert(reader.current_card:is_none(), "didn't unset value")
-   ## return true
 ## end)
 ## end
