@@ -38,7 +38,7 @@ search-files: does [
 ]
 
 files: reactor [
-    all-files: read %.
+    all-files: sort read %.
     filtered-files: copy all-files
 ]
 
