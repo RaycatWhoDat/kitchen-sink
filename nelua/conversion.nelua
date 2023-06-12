@@ -1,5 +1,0 @@
-local function boolean_to_integer(value: boolean): integer
-   return value and 1 or 0
-end
-
-print(boolean_to_integer(true))

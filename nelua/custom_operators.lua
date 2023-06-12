@@ -1,9 +1,6 @@
 local syntaxdefs = require 'nelua.syntaxdefs'
 local aster = require 'nelua.aster'
 local analyzer = require 'nelua.analyzer'
-local lpegrex = require 'nelua.thirdparty.lpegrex'
-local errorer = require 'nelua.utils.errorer'
-local except = require 'nelua.utils.except'
 local grammar = syntaxdefs.grammar
 local shaper = aster.shaper
 

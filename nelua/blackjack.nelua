@@ -11,44 +11,44 @@ math.randomseed(os.time())
 math.random()
 
 local BlackjackValue = @record {
-    display_value: string,
-    first_value: integer,
-    second_value: integer
-};
+   display_value: string,
+   first_value: integer,
+   second_value: integer
+}
 
 local BlackjackHand = @record {
-    cards: sequence(BlackjackValue),
-    total: BlackjackValue
-};
+   cards: sequence(BlackjackValue),
+   total: BlackjackValue
+}
 
 local BlackjackDeck = @record {
-    cards: sequence(BlackjackValue)
+   cards: sequence(BlackjackValue)
 }
 
 function BlackjackDeck:hit()
-    return self.cards:remove(math.random(#self.cards))
+   return self.cards:remove(math.random(#self.cards))
 end
 
 function BlackjackHand:status()
-    local card_listing = ""
-    for _, card in pairs(self.cards) do
-        card_listing = card_listing .. " " .. card.display_value 
-    end
- 
-    print(card_listing)
-    print(
-        "Total value: " 
-        .. tostring(self.total.first_value) 
-        .. (self.total.second_value ~= self.total.first_value and (", " .. tostring(self.total.second_value)) or "")
-    )
+   local card_listing = ""
+   for _, card in pairs(self.cards) do
+      card_listing = card_listing .. " " .. card.display_value 
+   end
+   
+   print(card_listing)
+   print(
+      "Total value: " 
+      .. tostring(self.total.first_value) 
+      .. (self.total.second_value ~= self.total.first_value and (", " .. tostring(self.total.second_value)) or "")
+   )
 end
 
 function BlackjackHand:hit(deck: BlackjackDeck)
-    if deck == nil then return end
-    local next_card = deck:hit()
-    self.cards:push(next_card)
-    self.total.first_value = self.total.first_value + next_card.first_value
-    self.total.second_value = self.total.second_value + next_card.second_value
+   if deck == nil then return end
+   local next_card = deck:hit()
+   self.cards:push(next_card)
+   self.total.first_value = self.total.first_value + next_card.first_value
+   self.total.second_value = self.total.second_value + next_card.second_value
 end
 
 function BlackjackHand:is_busted()
@@ -56,12 +56,12 @@ function BlackjackHand:is_busted()
 end
 
 function BlackjackHand.new(cards: sequence(BlackjackValue))
-    local total: BlackjackValue
-    for _, card in ipairs(cards) do
-        total.first_value = total.first_value + card.first_value
-        total.second_value = total.second_value + card.second_value
-    end
-    return (@BlackjackHand) { cards, total }
+   local total: BlackjackValue
+   for _, card in ipairs(cards) do
+      total.first_value = total.first_value + card.first_value
+      total.second_value = total.second_value + card.second_value
+   end
+   return (@BlackjackHand) { cards, total }
 end
 
 ##[[
@@ -100,16 +100,16 @@ end
 ]]
 
 function BlackjackDeck:reset()
-    self.cards = #[generate_deck()]#
+   self.cards = #[generate_deck()]#
 end
 
 function BlackjackDeck:deal()
-    local cards: sequence(BlackjackValue)
-    for i = 1, starting_hand_size do
-        cards:push(self:hit())
-        self:hit()
-    end
-    return cards
+   local cards: sequence(BlackjackValue)
+   for i = 1, starting_hand_size do
+      cards:push(self:hit())
+      self:hit()
+   end
+   return cards
 end
 
 local deck: BlackjackDeck
