@@ -3,8 +3,6 @@ require "iterators"
 require "sequence"
 require "string"
 require "os"
--- ./optionals.nelua
-require "optionals"
 
 local Card = @record {
    card_number: string,
@@ -21,7 +19,7 @@ function Card.new(card_number: string, cardholder_name: string, balance: number,
       =cardholder_name,
       =balance,
       =ounces_poured
-   }
+  }
 end
 
 function Card:__tostring()
@@ -50,43 +48,42 @@ function ReaderEvent:__tostring()
 end
 
 local Reader = @record {
-   current_card: optional(Card),
+   current_card: *Card,
    events: sequence(ReaderEvent)
 }
 
 function Reader:insert_card(card: *Card)
-  self.events:push(ReaderEvent.new(ReaderEventType.INSERTED, card.cardholder_name))
-  self.current_card = card
+   self.events:push(ReaderEvent.new(ReaderEventType.INSERTED, card.cardholder_name))
+   self.current_card = card
 end
 
 function Reader:charge_card(ounces_poured: number, price_per_ounce: number)
-   if self.current_card:is_none() then
+   if self.current_card == nilptr then
       return
    end
 
    local charge_amount = ounces_poured * price_per_ounce
-   local current_card = self.current_card:unwrap()
    self.events:push(ReaderEvent.new(ReaderEventType.CHARGED, tostring(charge_amount)))
-   current_card.ounces_poured = current_card.ounces_poured + ounces_poured
-   current_card.balance = current_card.balance + charge_amount
+   self.current_card.ounces_poured = self.current_card.ounces_poured + ounces_poured
+   self.current_card.balance = self.current_card.balance + charge_amount
 end
 
 function Reader:remove_card()
-   if self.current_card:is_none() then
+   if self.current_card == nilptr then
       return
    end
-   
-   self.events:push(ReaderEvent.new(ReaderEventType.REMOVED, self.current_card:unwrap().cardholder_name))
-   self.current_card = nil
+
+   self.events:push(ReaderEvent.new(ReaderEventType.REMOVED, self.current_card.cardholder_name))
+   self.current_card = nilptr
 end
 
 function Reader:display_stats()
-   if self.current_card:is_some() then
-      io.printf("Cardholder: %s\n", self.current_card:unwrap().cardholder_name)
-      io.printf("Total Amount: $%.2d\n", self.current_card:unwrap().balance)
-      io.printf("Ounces Poured: %.2d\n\n", self.current_card:unwrap().ounces_poured)
+   if self.current_card ~= nilptr then
+      io.printf("Cardholder: %s\n", self.current_card.cardholder_name)
+      io.printf("Total Amount: $%.2d\n", self.current_card.balance)
+      io.printf("Ounces Poured: %.2d\n\n", self.current_card.ounces_poured)
    end
-   
+
    io.print("Events:")
 
    for _, event in ipairs(self.events) do

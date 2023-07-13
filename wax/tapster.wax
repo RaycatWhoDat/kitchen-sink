@@ -1,0 +1,83 @@
+(extern get_time (result str))
+(@if TARGET_LUA 1
+  (asm "function get_time() return os.date('%c') end "))
+
+(@if TARGET_TS 1
+  (asm "function get_time() { return `${new Date()}`; } "))
+
+(struct card
+  (let number str)
+  (let cardholder_name str)
+  (let balance float)
+  (let ounces_poured float))
+
+(struct reader_event
+  (let event_type str)
+  (let timestamp str)
+  (let payload str))
+
+(func make_reader_event (param event_type str) (param new_payload str) (result (struct reader_event))
+  (let new_event (struct reader_event) (alloc (struct reader_event)))
+  (set new_event event_type event_type)
+  (set new_event timestamp (call get_time))
+  (set new_event payload new_payload)
+  (return new_event))
+
+(struct reader
+  (let current_card (struct card))
+  (let events (arr (struct reader_event))))
+
+(func insert_card (param self (struct reader)) (param new_card (struct card))
+  (insert (get self events) (# (get self events)) (call make_reader_event "INSERTED" (get new_card cardholder_name)))
+  (set (get self current_card) new_card))
+
+(func remove_card (param self (struct reader))
+  (insert (get self events) (# (get self events)) (call make_reader_event "REMOVED" (get self current_card cardholder_name)))
+  (free (get self current_card)))
+
+(func charge_card (param self (struct reader)) (param ounces_poured float) (param price_per_ounce float)
+  (if (! (?? (get self current_card))) (then (return)))
+  (let charge float (* ounces_poured price_per_ounce))
+  (insert (get self events) (# (get self events)) (call make_reader_event "CHARGED" (get self current_card number)))
+  (set (get self current_card ounces_poured) (+ (get self current_card ounces_poured) ounces_poured))
+  (set (get self current_card balance) (+ (get self current_card balance) charge)))
+
+(func display_stats (param self (struct reader))
+  (if (?? (get self current_card))
+    (then
+      (local stats str (alloc str))
+      (<< stats "Cardholder: ")
+      (<< stats (get self current_card cardholder_name))
+      (<< stats "\n")
+      (<< stats "Total Amount: ")
+      (<< stats (get self current_card balance))
+      (<< stats "\n")
+      (<< stats "Ounces Poured: ")
+      (<< stats (get self current_card ounces_poured))
+      (<< stats "\n")
+      (print stats)))
+  (print "Events: ")
+  (for i 0 (< i (# (get self events))) 1
+    (do
+      (local logline str (alloc str))
+      (<< logline (get self events i timestamp))
+      (<< logline " - ")
+      (<< logline (get self events i event_type))
+      (<< logline " - ")
+      (<< logline (get self events i payload))
+      (print logline))))
+
+(func main (result int)
+  (local card (struct card) (alloc (struct card)))
+  (set card number "5555555555555555")
+  (set card cardholder_name "Ray Perry")
+  
+  (local reader (struct reader) (alloc (struct reader)))
+  (set reader events (alloc (arr (struct reader_event))))
+  
+  (call insert_card reader card)
+  (call charge_card reader 10.0 0.5)
+  (call remove_card reader)
+  (call insert_card reader card)
+  (call display_stats reader)
+  (return 0))

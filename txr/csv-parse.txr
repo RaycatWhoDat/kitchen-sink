@@ -1,4 +1,4 @@
-@(next "MOCK_DATA.csv")
+@(next "../d/MOCK_DATA.csv")
 @nil
 @(collect)
 @first_name,@last_name,@email,@dob
