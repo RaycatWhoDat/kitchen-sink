@@ -56,6 +56,7 @@ if that value is non-nil."
   (run-hooks 'rebol-mode-hook))
 
 (add-to-list 'auto-mode-alist '("\\.r$" . rebol-mode))
+(add-to-list 'auto-mode-alist '("\\.reb$" . rebol-mode))
 (add-to-list 'auto-mode-alist '("\\.red$" . rebol-mode))
 (add-to-list 'auto-mode-alist '("\\.reds$" . rebol-mode))
 
