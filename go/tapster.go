@@ -8,8 +8,8 @@ import (
 type card struct {
 	number string
 	cardholderName string
-	balance float32
-	ouncesPoured float32
+	balance float64
+	ouncesPoured float64
 }
 
 type readerEventType string
@@ -41,10 +41,10 @@ func (r *reader) RemoveCard() {
 	r.currentCard = nil
 }
 
-func (r *reader) ChargeCard(ouncesPoured float32, pricePerOunce float32) {
+func (r *reader) ChargeCard(ouncesPoured float64, pricePerOunce float64) {
 	if r.currentCard == nil { return }
 	charge := ouncesPoured * pricePerOunce
-	r.events = append(r.events, readerEvent{ CHARGED, r.currentCard.cardholderName, time.Now().UnixMilli() })
+	r.events = append(r.events, readerEvent{ CHARGED, fmt.Sprint(charge), time.Now().UnixMilli() })
 	r.currentCard.ouncesPoured += ouncesPoured
 	r.currentCard.balance += charge
 }
@@ -56,13 +56,14 @@ func (r *reader) DisplayStats() {
 		fmt.Printf("Ounces Poured: %.2f\n", r.currentCard.ouncesPoured)
 	}
 
+	fmt.Println("Events: ")
 	for _, event := range r.events {
 		fmt.Printf("%d - %s - %s\n", event.timestamp, event.eventType, event.payload)
 	}
 }
 
 func main() {
-	card1 := card{ "Ray Perry", "5555555555555555", 0.0, 0.0 }
+	card1 := card{ "5555555555555555", "Ray Perry", 0.0, 0.0 }
 	reader1 := reader{}
 
 	reader1.InsertCard(&card1)
