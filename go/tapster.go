@@ -6,50 +6,52 @@ import (
 )
 
 type card struct {
-	number string
+	number         string
 	cardholderName string
-	balance float64
-	ouncesPoured float64
+	balance        float64
+	ouncesPoured   float64
 }
 
 type readerEventType string
 
 const (
 	INSERTED readerEventType = "INSERTED"
-	CHARGED = "CHARGED"
-	REMOVED = "REMOVED"
+	CHARGED                  = "CHARGED"
+	REMOVED                  = "REMOVED"
 )
 
 type readerEvent struct {
 	eventType readerEventType
-	payload string
+	payload   string
 	timestamp int64
 }
 
 type reader struct {
 	currentCard *card
-	events []readerEvent
+	events      []readerEvent
 }
 
-func (r *reader) InsertCard(c *card) {
-	r.events = append(r.events, readerEvent{ INSERTED, c.cardholderName, time.Now().UnixMilli() })
+func (r *reader) insertCard(c *card) {
+	r.events = append(r.events, readerEvent{INSERTED, c.cardholderName, time.Now().UnixMilli()})
 	r.currentCard = c
 }
 
-func (r *reader) RemoveCard() {
-	r.events = append(r.events, readerEvent{ REMOVED, r.currentCard.cardholderName, time.Now().UnixMilli() })
+func (r *reader) removeCard() {
+	r.events = append(r.events, readerEvent{REMOVED, r.currentCard.cardholderName, time.Now().UnixMilli()})
 	r.currentCard = nil
 }
 
-func (r *reader) ChargeCard(ouncesPoured float64, pricePerOunce float64) {
-	if r.currentCard == nil { return }
+func (r *reader) chargeCard(ouncesPoured float64, pricePerOunce float64) {
+	if r.currentCard == nil {
+		return
+	}
 	charge := ouncesPoured * pricePerOunce
-	r.events = append(r.events, readerEvent{ CHARGED, fmt.Sprint(charge), time.Now().UnixMilli() })
+	r.events = append(r.events, readerEvent{CHARGED, fmt.Sprint(charge), time.Now().UnixMilli()})
 	r.currentCard.ouncesPoured += ouncesPoured
 	r.currentCard.balance += charge
 }
 
-func (r *reader) DisplayStats() {
+func (r *reader) displayStats() {
 	if r.currentCard != nil {
 		fmt.Printf("Cardholder: %s\n", r.currentCard.cardholderName)
 		fmt.Printf("Total Amount: $%.2f\n", r.currentCard.balance)
@@ -63,11 +65,11 @@ func (r *reader) DisplayStats() {
 }
 
 func main() {
-	card1 := card{ "5555555555555555", "Ray Perry", 0.0, 0.0 }
+	card1 := card{"5555555555555555", "Ray Perry", 0.0, 0.0}
 	reader1 := reader{}
 
-	reader1.InsertCard(&card1)
-	reader1.ChargeCard(10, 0.50)
-	reader1.RemoveCard()
-	reader1.DisplayStats()
+	reader1.insertCard(&card1)
+	reader1.chargeCard(10, 0.50)
+	reader1.removeCard()
+	reader1.displayStats()
 }
