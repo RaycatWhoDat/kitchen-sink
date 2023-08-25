@@ -18,7 +18,7 @@ class Deck is Hand {
 
 sub new-deck(--> Deck) {
     my $deck = Deck.new;
-    $deck.cards = gather for Color.kv -> $color, $value {
+    $deck.cards = gather for Color.keys -> $color {
         take Card.new(color => Color::{$color}, number => 0, effect => Nil);
         take slip Card.new(color => Color::{$color}, number => $_, effect => Nil) xx 2 for (1..9);
         take slip Card.new(color => Color::{$color}, number => Nil, effect => $_) xx 2 for Skip, DrawTwo, Reverse;
@@ -29,4 +29,5 @@ sub new-deck(--> Deck) {
     $deck;
 }
 
-new-deck();
+my $deck1 = new-deck();
+.say for $deck1;
