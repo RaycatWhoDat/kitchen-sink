@@ -13,4 +13,3 @@ view [
     b "=" [attempt [f/data: math load f/text]]
     b " + " 60x60 return
 ]
-    

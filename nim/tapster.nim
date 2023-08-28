@@ -4,32 +4,23 @@ import options
 type Card = ref object
   number: string
   cardholderName: string
-  balance: float
-  ouncesPoured: float
-
-proc newCard(number: string, cardholderName: string): Card =
-  Card(number: number, cardholderName: cardholderName, balance: 0.00, ouncesPoured: 0.00)
+  balance: float = 0.00
+  ouncesPoured: float = 0.00
   
 type ReaderEventType = enum
   INSERTED, CHARGED, REMOVED
 
 type ReaderEvent = ref object
   eventType: ReaderEventType
-  timestamp: int64
+  timestamp: int64 = getTime().toUnix()
   payload: string
 
-proc newEvent(eventType: ReaderEventType, payload: string): ReaderEvent = 
-  ReaderEvent(eventType: eventType, timestamp: getTime().toUnix(), payload: payload)
-  
 type Reader = ref object
-  currentCard: Option[Card]
-  events: seq[ReaderEvent]
-
-proc newReader(): Reader =
-  Reader(currentCard: none(Card), events: @[])
+  currentCard: Option[Card] = none(Card)
+  events: seq[ReaderEvent] = @[]
 
 proc insertCard(reader: Reader, card: Card) =
-  reader.events.add(newEvent(INSERTED, card.cardholderName))
+  reader.events.add(ReaderEvent(eventType: INSERTED, payload: card.cardholderName))
   reader.currentCard = some(card)
 
 proc chargeCard(reader: Reader, ouncesPoured: float, pricePerOunce: float) =
@@ -37,7 +28,7 @@ proc chargeCard(reader: Reader, ouncesPoured: float, pricePerOunce: float) =
     newCharge = ouncesPoured * pricePerOunce
     currentCard = reader.currentCard.get()
 
-  reader.events.add(newEvent(CHARGED, $newCharge))
+  reader.events.add(ReaderEvent(eventType: CHARGED, payload: $newCharge))
   currentCard.ouncesPoured += ouncesPoured
   currentCard.balance += newCharge
   
@@ -45,7 +36,7 @@ proc removeCard(reader: Reader, card: Card) =
   if reader.currentCard.isNone:
     return
     
-  reader.events.add(newEvent(REMOVED, reader.currentCard.get().cardholderName))
+  reader.events.add(ReaderEvent(eventType: REMOVED, payload: reader.currentCard.get().cardholderName))
   reader.currentCard = none(Card)
 
 proc displayStats(reader: Reader) =
@@ -55,8 +46,8 @@ proc displayStats(reader: Reader) =
   echo "Balance: $", currentCard.balance
   
 when isMainModule:
-  var card = newCard("5555555555555555", "Ray Perry")
-  var reader = newReader()
+  var card = Card(number: "5555555555555555", cardholderName: "Ray Perry")
+  var reader = Reader()
 
   reader.insertCard(card)
   reader.chargeCard(10.1, 0.79)
