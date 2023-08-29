@@ -1,4 +1,4 @@
-import std/[times]
+import std/[math, strformat, times]
 import options
 
 type Card = ref object
@@ -12,31 +12,36 @@ type ReaderEventType = enum
 
 type ReaderEvent = ref object
   eventType: ReaderEventType
-  timestamp: int64 = getTime().toUnix()
+  timestamp: int64
   payload: string
 
+proc newEvent(eventType: ReaderEventType, payload: string): ReaderEvent =
+  ReaderEvent(eventType: eventType, timestamp: getTime().toUnix(), payload: payload)
+  
+proc `$`(event: ReaderEvent): string = fmt"{event.timestamp} - {event.eventType} - {event.payload}"
+        
 type Reader = ref object
   currentCard: Option[Card] = none(Card)
   events: seq[ReaderEvent] = @[]
 
 proc insertCard(reader: Reader, card: Card) =
-  reader.events.add(ReaderEvent(eventType: INSERTED, payload: card.cardholderName))
+  reader.events.add(newEvent(INSERTED, card.cardholderName))
   reader.currentCard = some(card)
 
 proc chargeCard(reader: Reader, ouncesPoured: float, pricePerOunce: float) =
   var
-    newCharge = ouncesPoured * pricePerOunce
+    newCharge = round(ouncesPoured * pricePerOunce, 2)
     currentCard = reader.currentCard.get()
 
-  reader.events.add(ReaderEvent(eventType: CHARGED, payload: $newCharge))
-  currentCard.ouncesPoured += ouncesPoured
+  reader.events.add(newEvent(CHARGED, fmt"${newCharge}"))
+  currentCard.ouncesPoured += round(ouncesPoured, 2)
   currentCard.balance += newCharge
   
 proc removeCard(reader: Reader, card: Card) =
   if reader.currentCard.isNone:
     return
     
-  reader.events.add(ReaderEvent(eventType: REMOVED, payload: reader.currentCard.get().cardholderName))
+  reader.events.add(newEvent(REMOVED, reader.currentCard.get().cardholderName))
   reader.currentCard = none(Card)
 
 proc displayStats(reader: Reader) =
@@ -44,6 +49,9 @@ proc displayStats(reader: Reader) =
   echo "Cardholder name: ", currentCard.cardholderName
   echo "Ounces poured: ", currentCard.ouncesPoured
   echo "Balance: $", currentCard.balance
+
+  for event in reader.events:
+    echo event
   
 when isMainModule:
   var card = Card(number: "5555555555555555", cardholderName: "Ray Perry")
