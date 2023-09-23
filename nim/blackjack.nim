@@ -45,7 +45,7 @@ proc reset(deck: var BlackjackDeck) =
 proc hit(deck: var BlackjackDeck): Card =
   deck.cards.pop()
   
-proc main =
+proc main() =
   var playerHand = BlackjackHand(cards: @[], total: [0, 0])
   var deck = BlackjackDeck(cards: @[], startingHandSize: 2)
   deck.reset()

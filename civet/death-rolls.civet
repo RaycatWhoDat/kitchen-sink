@@ -1,0 +1,16 @@
+numberOfPlayers .= 0
+
+class Player
+  name = `Player ${++numberOfPlayers}`;
+  lastRoll = 1000
+  roll(startingNumber: number): number
+    return = @lastRoll = Math.floor (Math.random() * startingNumber) + 1
+    console.log `Random! ${@name} rolls a ${@lastRoll} (out of ${startingNumber}).`
+
+[currentPlayer, otherPlayer] .= [new Player, new Player]
+
+until otherPlayer.lastRoll === 1
+  currentPlayer.roll otherPlayer.lastRoll
+  [currentPlayer, otherPlayer] = [otherPlayer, currentPlayer]
+
+console.log `Game over! ${currentPlayer.name} wins!`
