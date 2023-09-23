@@ -47,3 +47,7 @@ raku/**/.precomp
 
 ## Odin
 odin/**/*.bin
+
+## Civet
+civet/**/*.js
+civet/**/*.ts
