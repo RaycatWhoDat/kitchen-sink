@@ -1,0 +1,76 @@
+startingHandSize := 2
+
+class BlackjackValues
+  displayValue: string
+  values: integer[2]
+  @(@displayValue: string, firstValue: integer, secondValue: integer)
+    @values = [firstValue, secondValue]
+
+class BlackjackDeck
+  cards: BlackjackValues[]
+
+  @()
+    @reset()
+
+  hit(): BlackjackValues
+    [nextCard] := @cards.splice(Math.floor(Math.random(@cards.length)), 1)
+    return nextCard
+
+  reset()
+    values := ["2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A"]
+    suits := ["♥", "♠", "♦", "♣"]
+    @cards = []
+    for suit of suits
+      for value of values
+        let firstValue, secondValue
+        switch value
+          when "A"
+            firstValue = 1
+            secondValue = 11
+          else
+            firstValue = (value |> Number |> Number.isNaN) ? 10 : Number value
+            secondValue = firstValue
+        @cards.push new BlackjackValues(`${value}${suit}`, firstValue, secondValue)
+    @cards.sort () => Number(Math.random() >= 0.5) - 0.5
+
+  deal()
+    return = []
+    for let index = 0; index < startingHandSize; index++
+      return.value.push @hit()
+      @hit()
+
+class BlackjackHand
+  cards: BlackjackValues[]
+  total: BlackjackValue
+
+  @(@cards: BlackjackValues[] = [])
+    @total = new BlackjackValues('', 0, 0)
+    for card of @cards
+      @total.values[0] += card.values[0]
+      @total.values[1] += card.values[1]
+
+  hit(deck: BlackjackDeck)
+    return if deck.cards.length === 0
+    nextCard := deck.hit()
+    @cards.push nextCard
+    @total.values[0] += nextCard.values[0]
+    @total.values[1] += nextCard.values[1]
+
+  status()
+    cards := []
+    for card of @cards
+      cards.push card.displayValue
+    console.log cards.join ' '
+    console.log `Total value: ${@total.values[0]}, ${@total.values[1]}`
+
+  isBusted(): boolean
+    @total.values[0] > 21 and @total.values[1] > 21
+
+deck := new BlackjackDeck
+playerHand := new BlackjackHand()
+until playerHand.isBusted()
+  playerHand.hit(deck)
+  playerHand.status()
+
+console.log "You've busted!"
+  
