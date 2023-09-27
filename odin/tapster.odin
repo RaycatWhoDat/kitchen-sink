@@ -37,12 +37,12 @@ insert_card :: proc (reader: ^Reader, card: ^Card) {
 remove_card :: proc (reader: ^Reader) {
   using reader
   append(&events, new_reader_event(.REMOVED, current_card.cardholder_name))
-  current_card = {}
+  current_card = nil
 }
 
 charge_card :: proc (reader: ^Reader, ounces_poured: f32, price_per_ounce: f32) {
   using reader
-  if current_card == {} {
+  if current_card == nil {
     return
   }
 
@@ -54,7 +54,7 @@ charge_card :: proc (reader: ^Reader, ounces_poured: f32, price_per_ounce: f32) 
 
 display_stats :: proc (reader: ^Reader) {
   using reader
-  if current_card != {} {
+  if current_card != nil {
     fmt.printf("Cardholder: %s\n", current_card.cardholder_name)
     fmt.printf("Total Amount: $%.2f\n", current_card.balance)
     fmt.printf("Ounces Poured: %.2f\n", current_card.ounces_poured)
