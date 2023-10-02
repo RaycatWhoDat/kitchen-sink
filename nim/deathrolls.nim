@@ -21,9 +21,9 @@ var
   currentPlayer = newPlayer()
   otherPlayer = newPlayer()
 
-while currentPlayer.lastRoll != 1:
-  if currentPlayer.roll(otherPlayer.lastRoll) != 1:
-    swap(currentPlayer, otherPlayer)
+while otherPlayer.lastRoll != 1:
+  discard currentPlayer.roll(otherPlayer.lastRoll)
+  swap(currentPlayer, otherPlayer)
 
 echo &"Game over! {currentPlayer.name} wins!"
 

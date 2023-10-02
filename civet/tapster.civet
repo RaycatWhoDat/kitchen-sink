@@ -1,0 +1,49 @@
+class Card
+  balance = 0.00
+  ouncesPoured = 0.00
+  @(@number: string, @cardholderName: string)
+    
+enum ReaderEventType
+  INSERTED = "INSERTED"
+  CHARGED = "CHARGED"
+  REMOVED = "REMOVED"
+
+class ReaderEvent
+  timestamp = Date.now()
+  @(@eventType: ReaderEventType, @payload: string)
+
+class Reader
+  currentCard: Card? = null
+  events: ReaderEvent[] = []
+
+  insertCard(card: Card): void
+    @events.push(new ReaderEvent(ReaderEventType.INSERTED, card.cardholderName))
+    @currentCard = card
+
+  chargeCard(ouncesPoured: number, pricePerOunce: number): void
+    return unless @currentCard
+    charge := ouncesPoured * pricePerOunce
+    @events.push(new ReaderEvent(ReaderEventType.CHARGED, charge))
+    @currentCard.ouncesPoured += ouncesPoured
+    @currentCard.balance += charge
+
+  removeCard(): void
+    @events.push(new ReaderEvent(ReaderEventType.REMOVED, @currentCard.cardholderName))
+    @currentCard = null
+
+  displayStats(): void
+    if @currentCard
+      console.log(`Cardholder: ${@currentCard.cardholderName}`);
+      console.log(`Total Amount: ${@currentCard.balance}`);
+      console.log(`Ounces Poured: ${@currentCard.ouncesPoured}`);
+    for event of @events
+      console.log(event)
+
+card := new Card("5555555555555555", "Ray Perry")
+reader := new Reader
+
+reader.insertCard(card)
+reader.chargeCard(10.1, 0.79)
+reader.removeCard()
+reader.insertCard(card)
+reader.displayStats()
