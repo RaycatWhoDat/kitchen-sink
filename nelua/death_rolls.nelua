@@ -1,0 +1,34 @@
+require "string"
+require "math"
+
+math.randomseed()
+
+local number_of_players: integer
+
+local Player = @record {
+  name: string,
+  last_roll: integer
+}
+
+function Player.new(): Player
+  number_of_players = number_of_players + 1
+  return (@Player){
+    name = "Player " .. tostring(number_of_players),
+    last_roll = 1000
+  }
+end
+
+function Player:roll(starting_number: integer)
+  self.last_roll = math.random(1, starting_number)
+  print("Random! " .. self.name .. " rolls a " .. tostring(self.last_roll) .. " (out of " .. tostring(starting_number) .. ").")
+end
+
+local current_player = Player.new()
+local other_player = Player.new()
+
+while other_player.last_roll ~= 1 do
+  current_player:roll(other_player.last_roll)
+  current_player, other_player = other_player, current_player
+end
+
+print("Game over! " .. current_player.name .. " wins!")
