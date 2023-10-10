@@ -13,6 +13,6 @@ class Player {
 my ($current-player, $other-player) = Player.new, Player.new;
 until $current-player.last-roll == 1 {
     $current-player.death-roll: $other-player.last-roll;
-    ($current-player, $other-player) = ($other-player, $current-player);
+    ($current-player, $other-player) .= reverse;
 }
 say "Game over! {$current-player.name} wins!";
