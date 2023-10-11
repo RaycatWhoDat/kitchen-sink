@@ -22,15 +22,11 @@ As a web dev, a lot of my time is spent working and building the same sort of ap
 
 (If a language doesn't fulfill at least two items on this list, it probably does something neat.)
 
-## Languages I'm Aware Of But Never Tried
-Haskell, F#
-
 With that out of the way, let's get started.
 
 ## Top 20 Languages
 
 ### 20. [Kotlin](https://kotlinlang.org/)
-#### Previously: #17 -> #19 -> #20
 Kotlin is sweet. There are a lot of niceties in here that make me adore the language. Honestly, I wouldn't mind specializing in this language because of how straight-forward it was to write. Having access to the rest of the JVM ecosystem helps, too.
 
 ```kotlin
@@ -65,7 +61,6 @@ fun main(args: Array<String>) {
 ```
 
 ### 19. [TCL](https://www.tcl-lang.org/)
-#### Previously: #15 -> #14 -> #16 -> #19
 TCL (pronounced "tickle") is a neat homoiconic language with a pretty cool concurrency model. The story here is that "everything is a string" so, naturally, I had to try it out. I found it to be only slightly more expressive than Lua which is both good and bad. The real killer came from the deployment/portability aspect. Unless you had a go-to Starkit (pre-packaged TCL distribution), you didn't really have a clean way to move your scripts around.
 
 ```tcl
@@ -109,7 +104,6 @@ list_files $argv 0
 ```
 
 ### 18. [Janet](https://janet-lang.org/)
-#### Previously: #16 -> #15 -> #17 -> #18
 Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The difference betweent the two is that this implements its own VM instead of leveraging Lua's. I like quite a few of the constructs in here but I found it lacking compared to later dialects. Wouldn't mind writing more of it, though.
 
 ```clojure
@@ -141,7 +135,6 @@ Janet is a Lisp made by the person who made Fennel, a Lisp dialect for Lua. The 
 ```
 
 ### 17. [Common Lisp](https://common-lisp.net/) ([SBCL](http://www.sbcl.org/))
-#### Previously: #13 -> #12 -> #15 -> #17
 Ah, yes. Common Lisp. I have gone back and forth on this language because it's kinda a jack of all trades. Bitrot is almost non-existent here and there are a lot of battle-tested libraries. Originally, I thought you had to keep the car running here but it seems like you could do something like `sbcl --script get-files.lisp` and get the results you want. I need to revisit this and work with the language with that in mind.  
 
 ```lisp
@@ -162,7 +155,6 @@ Ah, yes. Common Lisp. I have gone back and forth on this language because it's k
 ```
 
 ### 16. [TXR](http://nongnu.org/txr/)
-#### Previously: #2 -> #6 -> #12 -> #14 -> #16
 This language is very weird because it's really two separate ones mashed together. There's TXR the pattern matching dialect, and TXR Lisp the Lisp dialect. Between these two, they handle almost every problem I have with regards to data munging.
 
 #### TXR Pattern Matching
@@ -204,7 +196,6 @@ Date of Birth: @dob
 ```
 
 ### 15. [Python](https://www.python.org/)
-#### Previously: #12 -> #11 -> #13 -> #15
 It's Python. Language is good. What else is there to talk about?
 
 ```python
@@ -229,7 +220,6 @@ printFiles('..')
 ```
 
 ### 14/13. [REBOL](http://www.rebol.com/)/[Red](https://www.red-lang.org/)
-#### Previously: #11/#10 -> #10/#9 -> #12/#11 -> #14/13
 Now, we're getting into the nitty-gritty. REBOL and Red are sharing a line because of how similar they are. They're both homoiconic languages that take the block-and-word-based approach to programming, with Red being the most actively-developed language. The concept of "no reserved keywords" is always interesting to me because they're treating the words like a spoken language. The meaning of a word changes based on the context which has interesting effects when interweaving dialects. Can't wait for the cross-platform kinks to get worked out.
 
 ```red
@@ -261,7 +251,6 @@ get-files either (length? system/options/args) > 0 [last system/options/args][".
 ```
 
 ### 12. [D](https://dlang.org/)
-#### Previously: #7 -> #9 -> #12
 This language does something that I have yet to see in any non-Lisp language: it allows you to write high-level, almost-script-like code and tune performance with lower constructs when needed. In my travels, I haven't seen a language do it quite like D.
 
 ```d
@@ -319,7 +308,6 @@ void main(string[] args) {
 ```
 
 ### 11. [Nim](https://nim-lang.org/)
-#### Previously: #8 -> #10 -> #11
 Nim, Nim, Nim. I have a few gripes about how UFCS works here and there's no variadic `zip` but overall, this language is sweet. No two ways about it. They even have these source code filters which I think are super cool. 
 
 ```nim
@@ -342,7 +330,6 @@ printFiles(initialDirectory)
 ```
 
 ### 10. [Haxe](https://haxe.org/)
-#### Previously: #5 -> #6 -> #8 -> #10
 Hello, old friend. Haxe is a... uh... yeah, how do you describe this language? It's a cross-platform, cross-language toolkit that leverages the libraries and platforms of the target programming language. It sounds weird but that's the best way to describe it. 
 
 ```haxe
@@ -375,7 +362,6 @@ function main() {
 ```
 
 ### 9. [Rust](https://www.rust-lang.org/)
-#### Previously: #4 -> #5 -> #7 -> #9
 *Sigh.* Let's talk about Rust.
 
 I do not like Rust's syntax and I don't like how verbose it can get. However, if there's one thing I can count on, it's the community behind it. You simply don't count out peoples' passion to make cool things.
@@ -431,7 +417,6 @@ fn main() -> Result<()> {
 ```
 
 ### 8. [Emacs](https://www.gnu.org/software/emacs/) Lisp
-#### Previously: #3 -> #4 -> #6 -> #8
 I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for making text-based applications that live in Emacs.
 
 ```elisp
@@ -482,7 +467,6 @@ I use Emacs, so Emacs Lisp is a logical tool in the belt here. It's my go-to for
 ```
 
 ### 7. [Ruby](https://ruby-lang.org/en/)
-#### Previously: #2 -> #5 -> #7
 Ruby is a fantastic language. I'm upset it took me this long to get on the train. I've been playing around with it for a while now and 90% of the things I can do in Raku, I can do in Ruby with more consistency. However, I don't love it as much as Raku.
 ```ruby
 Dir.glob("../**/**").each do |listing|
@@ -498,7 +482,6 @@ It's C. It does the thing.
 ```
 
 ### 5. [Raku](https://raku.org/)
-#### Previously: #2 -> #3 -> #1 -> #5
 I adore Raku. There are so many nice things it gives you. There's a sweet MOP in here, there's lazy lists, sequences, reactive programming... and it goes on and on. The ONLY problems I have with it is that speed is rough and I need a more expressive way to do data munging.
 
 ```raku
@@ -596,7 +579,6 @@ list_dir_recursive("..")
 ```
 
 ### 3. [Lua](http://www.lua.org/)
-#### Previously: #14 -> #13
 Lua is another language people love to complain about. For all the good bites, people only remember the 1-indexed arrays (even though arrays aren't really a construct here; we accept tables as valid currency)? The language does what it needs to do and it's super-embeddable. There's a metric tonne of games out there that use Lua. Writing the example here was a bit more explicit than I'd like but the language is neat.
 
 ```lua
@@ -713,7 +695,6 @@ main :: proc () {
 ```
 
 ### 1. JavaScript ([MDN](https://developer.mozilla.org/en-US/docs/Web/javascript))
-#### Previously: #1 -> #2 -> #1
 I'm a web dev. Did you think there would be another language up here?
 
 ```js
