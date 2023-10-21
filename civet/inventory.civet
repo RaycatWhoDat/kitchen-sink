@@ -1,0 +1,50 @@
+class InventoryItem
+  price = 0.00
+  @(@id: string, @name: string)
+
+enum StoreEventType
+  PURCHASED = "PURCHASED"
+  REFUNDED = "REFUNDED"
+
+class StoreEvent
+  @(@eventType: StoreEventType, @payload: string)
+    @timestamp = Date.now()
+
+class Store
+  openingTime = 900
+  closingTime = 1700
+  stock: Record<string, number> = {}
+  events: StoreEvent[] = []
+  @(@name: string)
+
+  updateItemQuantity(item: InventoryItem, amount: number)
+    @stock[item.id] = amount
+
+  purchaseItem(item: InventoryItem)
+    return if @stock[item.id] <= 0
+    @events.push(new StoreEvent(StoreEventType.PURCHASED, item.id))
+    @updateItemQuantity(item, @stock[item.id] - 1)
+
+  refundItem(item: InventoryItem)
+    @events.push(new StoreEvent(StoreEventType.REFUNDED, item.id))
+    @updateItemQuantity(item, @stock[item.id] + 1)
+
+item1 := new InventoryItem("1", "Item 1 - A", 500)
+item2 := new InventoryItem("2", "Item 2 - B", 750)
+item3 := new InventoryItem("3", "Item 3 - C", 1000)
+
+store := new Store("Bob's Shop")
+
+store.updateItemQuantity(item1, 10)
+store.updateItemQuantity(item2, 7)
+store.updateItemQuantity(item3, 5)
+
+store.purchaseItem(item1)
+store.purchaseItem(item2)
+store.purchaseItem(item3)
+store.refundItem(item1)
+
+console.log(store.stock)
+
+for event of store.events
+  console.log(event)
