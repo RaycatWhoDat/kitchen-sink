@@ -1,0 +1,54 @@
+require "math"
+require "os"
+require "string"
+
+math.randomseed(os.time())
+math.random()
+
+local Suit = @enum { Hearts = 0, Spades, Diamonds, Clubs }
+
+local Card = @record {
+  suit: Suit,
+  value: integer
+}
+
+function Card:__tostring(): string
+  local suits: []string = { "♥", "♠", "♦", "♣" }
+  local faces: []string = { "A", "K", "Q", "J" }
+  local number: string
+  if self.value > 10 then
+    number = faces[14 - self.value]
+  else
+    number = tostring(self.value)
+  end
+
+  return number .. suits[self.suit]
+end
+
+local Player = @record {
+  bets: [4]integer,
+  cards: [7]Card,
+  hands: [3][7]Card
+}
+
+function Player:deal(cards: [7]Card)
+  self.cards = cards
+end
+
+function Player:status()
+  for i = 0, 6 do
+     print(self.cards[i])
+  end
+end
+
+--------------------
+
+local player1: Player
+local cards: [7]Card
+
+for i = 0, 6 do
+   cards[i] = Card { suit = math.random(0, 3), value = math.random(2, 14) }
+end
+
+player1:deal(cards)
+player1:status()
