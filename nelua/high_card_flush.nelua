@@ -15,12 +15,16 @@ local Card = @record {
 function Card:__tostring(): string
   local suits: []string = { "♥", "♠", "♦", "♣" }
   local faces: []string = { "A", "K", "Q", "J" }
-  local number: string
-  if self.value > 10 then
-    number = faces[14 - self.value]
-  else
-    number = tostring(self.value)
-  end
+
+  local number = (do
+    local res: string
+    if self.value > 10 then
+      res = faces[14 - self.value]
+    else
+      res = tostring(self.value)
+    end
+    in res
+  end)
 
   return number .. suits[self.suit]
 end
