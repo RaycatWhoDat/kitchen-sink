@@ -1,0 +1,16 @@
+(defstruct player nil
+  (:static number-of-players 0)
+  (name "")
+  (last-roll 1000)
+  (:init (self)
+    (set self.name (fmt "Player ~d" (inc self.number-of-players))))
+  (:method death-roll (self starting-number)
+    (set self.last-roll (+ (rand starting-number (make-random-state nil)) 1))
+    (pprinl (fmt "Random! ~a rolls a ~d (out of ~d)." self.name self.last-roll starting-number))))
+
+(let ((current-player (new player))
+       (other-player (new player)))
+  (until (= other-player.last-roll 1)
+    current-player.(death-roll other-player.last-roll)
+    (swap current-player other-player))
+  (pprinl (fmt "Game over! ~a wins!" current-player.name)))
