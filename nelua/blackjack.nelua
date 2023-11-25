@@ -2,13 +2,11 @@ require "sequence"
 require "iterators"
 require "string"
 require "math"
-require "os"
 
 local starting_hand_size <const> = 2
 local number_of_players <const> = 1
 
-math.randomseed(os.time())
-math.random()
+math.randomseed()
 
 local BlackjackValue = @record {
    display_value: string,
@@ -32,14 +30,14 @@ end
 function BlackjackHand:status()
    local card_listing = ""
    for _, card in pairs(self.cards) do
-      card_listing = card_listing .. " " .. card.display_value 
+      card_listing = card_listing .. " " .. card.display_value
    end
-   
+
    print(card_listing)
    print(
-      "Total value: " 
-      .. tostring(self.total.first_value) 
-      .. (self.total.second_value ~= self.total.first_value and (", " .. tostring(self.total.second_value)) or "")
+      "Total value: "
+      .. self.total.first_value
+      .. (self.total.second_value ~= self.total.first_value and (", " .. self.total.second_value) or "")
    )
 end
 
@@ -49,10 +47,6 @@ function BlackjackHand:hit(deck: BlackjackDeck)
    self.cards:push(next_card)
    self.total.first_value = self.total.first_value + next_card.first_value
    self.total.second_value = self.total.second_value + next_card.second_value
-end
-
-function BlackjackHand:is_busted()
-   return self.total.first_value > 21 and self.total.second_value > 21
 end
 
 function BlackjackHand.new(cards: sequence(BlackjackValue))
@@ -88,7 +82,7 @@ local function generate_deck()
                 second_value = first_value
             end
 
-            table.insert(cards, aster.value({ 
+            table.insert(cards, aster.value({
                 display_value = value .. suit,
                 first_value = first_value,
                 second_value = second_value
@@ -121,6 +115,6 @@ player_hand:status()
 repeat
    player_hand:hit(deck)
    player_hand:status()
-until player_hand:is_busted()
+until player_hand.total.first_value > 21
 
 print("You've busted!")

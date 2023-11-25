@@ -1,3 +1,4 @@
+require "iterators"
 require "math"
 require "os"
 require "string"
@@ -35,13 +36,15 @@ local Player = @record {
   hands: [3][7]Card
 }
 
-function Player:deal(cards: [7]Card)
-  self.cards = cards
+function Player:deal()
+  for _, card in mipairs(self.cards) do
+    $card = Card { suit = math.random(0, 3), value = math.random(2, 14) }
+  end
 end
 
 function Player:status()
-  for i = 0, 6 do
-     print(self.cards[i])
+  for _, card in ipairs(self.cards) do
+     print(card)
   end
 end
 
@@ -50,9 +53,5 @@ end
 local player1: Player
 local cards: [7]Card
 
-for i = 0, 6 do
-   cards[i] = Card { suit = math.random(0, 3), value = math.random(2, 14) }
-end
-
-player1:deal(cards)
+player1:deal()
 player1:status()
