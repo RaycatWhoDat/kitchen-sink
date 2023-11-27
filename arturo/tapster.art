@@ -1,0 +1,60 @@
+define :card [
+    number
+    cardholderName
+    balance
+    ouncesPoured
+][]
+
+define :readerEvent [
+    eventType
+    payload
+][
+    init: [
+        this\timestamp: now\nanosecond
+    ]
+
+    print: [
+        ~"|this\timestamp| - |this\eventType| - |this\payload|"
+    ]
+]    
+
+define :reader [
+    currentCard
+    events
+][]
+
+insertCard: function [this card][
+    this\events: append this\events to :readerEvent ["INSERTED" card\cardholderName]
+    this\currentCard: card
+]
+
+removeCard: function [this card][
+    this\events: append this\events to :readerEvent ["REMOVED" card\cardholderName]
+    this\currentCard: null
+]
+
+chargeCard: function [this ouncesPoured pricePerOunce][
+    if null? this\currentCard [return]
+    charge: round.to:2 (ouncesPoured * pricePerOunce)
+    this\events: append this\events to :readerEvent ["CHARGED" charge]
+    this\currentCard\ouncesPoured: this\currentCard\ouncesPoured + ouncesPoured
+    this\currentCard\balance: this\currentCard\balance + charge
+]
+
+displayStats: function [this][
+    print ~"Cardholder: |this\currentCard\cardholderName|"
+    print ~"Total Amount: |this\currentCard\balance|"
+    print ~"Ounces Poured: |this\currentCard\ouncesPoured|"
+    loop this\events 'event [
+        print event
+    ]
+]
+
+myCard: to :card ["5555555555555555" "Ray Perry" 0.0 0.0]
+myReader: to :reader [null []]
+
+insertCard myReader myCard
+chargeCard myReader 10.2 0.79
+removeCard myReader myCard
+insertCard myReader myCard
+displayStats myReader
