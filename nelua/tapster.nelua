@@ -11,17 +11,6 @@ local Card = @record {
    ounces_poured: number
 }
 
-function Card.new(card_number: string, cardholder_name: string, balance: number, ounces_poured: number)
-   local first, last = string.find(card_number, "%d+")
-   assert(first == 1 and last == 16, "Card number needs to be 16 digits long.")
-   return (@Card){
-      =card_number,
-      =cardholder_name,
-      =balance,
-      =ounces_poured
-  }
-end
-
 function Card:__tostring()
    return string.format("%s, %s, %s, %s", self.cardholder_name, self.card_number, self.balance, self.ounces_poured)
 end
@@ -34,8 +23,8 @@ local ReaderEvent = @record {
    payload: string
 }
 
-function ReaderEvent.new(event_type: ReaderEventType, payload: string)
-   return (@ReaderEvent){
+function ReaderEvent.new(event_type: ReaderEventType, payload: string): ReaderEvent
+   return {
       =event_type,
       timestamp = os.date("%c"),
       =payload
@@ -58,20 +47,16 @@ function Reader:insert_card(card: *Card)
 end
 
 function Reader:charge_card(ounces_poured: number, price_per_ounce: number)
-   if self.current_card == nilptr then
-      return
-   end
+   check(self.current_card ~= nilptr, "Reader:charge_card called without card!")
 
    local charge_amount = ounces_poured * price_per_ounce
-   self.events:push(ReaderEvent.new(ReaderEventType.CHARGED, tostring(charge_amount)))
+   self.events:push(ReaderEvent.new(ReaderEventType.CHARGED, string.format("%.2f", charge_amount)))
    self.current_card.ounces_poured = self.current_card.ounces_poured + ounces_poured
    self.current_card.balance = self.current_card.balance + charge_amount
 end
 
 function Reader:remove_card()
-   if self.current_card == nilptr then
-      return
-   end
+   check(self.current_card ~= nilptr, "Reader:remove_card called without card!")
 
    self.events:push(ReaderEvent.new(ReaderEventType.REMOVED, self.current_card.cardholder_name))
    self.current_card = nilptr
@@ -80,8 +65,8 @@ end
 function Reader:display_stats()
    if self.current_card ~= nilptr then
       io.printf("Cardholder: %s\n", self.current_card.cardholder_name)
-      io.printf("Total Amount: $%.2d\n", self.current_card.balance)
-      io.printf("Ounces Poured: %.2d\n\n", self.current_card.ounces_poured)
+      io.printf("Total Amount: $%.2f\n", self.current_card.balance)
+      io.printf("Ounces Poured: %.2f\n\n", self.current_card.ounces_poured)
    end
 
    io.print("Events:")
@@ -91,10 +76,11 @@ function Reader:display_stats()
    end
 end
 
-local card = Card.new("5555555555555555", "John Smith")
+local card = Card { "5555555555555555", "John Smith" }
 local reader: Reader
 
 reader:insert_card(card)
-reader:charge_card(10, 0.50)
+reader:charge_card(10.31, 0.79)
 reader:remove_card()
+reader:insert_card(card)
 reader:display_stats()

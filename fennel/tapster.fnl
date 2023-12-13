@@ -1,4 +1,4 @@
-(fn pp [value] (print ((. (require :fennel) :view) value)))
+(local pp (-> (require :utils) (. :pp)))
 
 (local Class {})
 (fn Class.new [new-self new-obj]

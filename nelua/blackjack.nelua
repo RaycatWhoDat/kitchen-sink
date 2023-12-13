@@ -59,7 +59,7 @@ function BlackjackHand.new(cards: sequence(BlackjackValue))
 end
 
 ##[[
-local function generate_deck()
+function generate_deck()
     local cards = aster.InitList({
         pattr = {
             desiredtype = types.ArrayType(BlackjackValue.value, 52)
