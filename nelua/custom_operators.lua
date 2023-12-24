@@ -11,7 +11,13 @@ grammar = grammar:gsub(
 
 grammar = grammar:gsub(
    "Assign%s*<== vars `=` @exprs",
-   "Assign <== vars `=` @exprs\nAddAssign <== var `+=` @expr\nSubAssign <== var `-=` @expr\nMulAssign <== var `*=` @expr\nDivAssign <== var `/=` @expr"
+   [[
+   Assign <== vars `=` @exprs
+   AddAssign <== var `+=` @expr
+   SubAssign <== var `-=` @expr
+   MulAssign <== var `*=` @expr
+   DivAssign <== var `/=` @expr
+   ]]
 )
 
 aster.register_syntax({
@@ -24,11 +30,12 @@ aster.register_syntax({
 local optypes = { 'Add', 'Sub', 'Mul', 'Div' }
 
 for _, optype in ipairs(optypes) do
-   aster.register(optype .. "Assign", { shaper.Node, shaper.Node })
+   local operator = optype .. "Assign"
+   aster.register(operator, { shaper.Node, shaper.Node })
 
-   analyzer.visitors[optype .. "Assign"] = function (context, node)
-    context:transform_and_traverse_node(node,
-      aster.Assign{{node[1]:clone()}, {aster.BinaryOp{node[1], optype:lower(), node[2]}}}
-    )
+   analyzer.visitors[operator] = function (context, node)
+      context:transform_and_traverse_node(node,
+         aster.Assign{{node[1]:clone()}, {aster.BinaryOp{node[1], optype:lower(), node[2]}}}
+      )
   end
 end
