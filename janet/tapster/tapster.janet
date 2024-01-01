@@ -52,10 +52,11 @@
 (defn make-reader []
   (table/setproto @{} Reader))
 
-(def my-card (make-card "5555555555555555" "Ray Perry"))
-(def my-reader (make-reader))
-
-(:insert-card my-reader my-card)
-(:charge-card my-reader 10.1 0.79)
-(:display-stats my-reader)
-(:remove-card my-reader)
+(defn main [& args]
+  (def my-card (make-card "5555555555555555" "Ray Perry"))
+  (def my-reader (make-reader))
+  
+  (:insert-card my-reader my-card)
+  (:charge-card my-reader 10.1 0.79)
+  (:display-stats my-reader)
+  (:remove-card my-reader))

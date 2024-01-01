@@ -1,7 +1,8 @@
 (def csv-record
   '{
-    :graph (* (+ :w :s (set "!@#$%^&*()./")))
-    :main (some (* (<- (some :graph)) (? ",")))
+    :unquoted-value (some (* (+ :w :s (set "!@#$%^&*()./"))))
+    :quoted-value (* "\"" (some (+ :unquoted-value ",")) "\"")
+    :main (some (* (<- (+ :quoted-value :unquoted-value)) (? ",")))
    })
 
 (defn read-lines [path] (string/split "\n" (slurp path)))
@@ -12,4 +13,3 @@
   (print "Last Name: " last-name)
   (print "Email: " email)
   (print "Date of Birth: " dob "\n"))
-    
