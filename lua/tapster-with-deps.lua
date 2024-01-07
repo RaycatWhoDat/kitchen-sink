@@ -1,15 +1,15 @@
-local class = require "pl.class"
+local Object = require "classic"
 
-local Card = class.Card()
-function Card:_init(number, cardholder_name)
+local Card = Object:extend()
+function Card:new(number, cardholder_name)
    self.number = number
    self.cardholder_name = cardholder_name
    self.balance = 0.0
    self.ounces_poured = 0.0
 end
 
-local ReaderEvent = class.ReaderEvent()
-function ReaderEvent:_init(event_type, payload)
+local ReaderEvent = Object:extend()
+function ReaderEvent:new(event_type, payload)
    self.event_type = event_type
    self.timestamp = os.date("%c")
    self.payload = payload
@@ -19,8 +19,8 @@ function ReaderEvent:__tostring()
    return string.format("%s - %s - %s", self.timestamp, self.event_type, self.payload)
 end  
 
-local Reader = class.Reader()
-function Reader:_init()
+local Reader = Object:extend()
+function Reader:new()
    self.events = {}
 end
 

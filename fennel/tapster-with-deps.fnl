@@ -1,13 +1,14 @@
-(local class (require :pl.class))
+(local Object (require :classic))
 
-(local Card (class.Card))
-(fn Card._init [self number cardholder-name] (set self.number number)
+(local Card (Object:extend))
+(fn Card.new [self number cardholder-name]
+  (set self.number number)
   (set self.cardholder_name cardholder-name)
   (set self.balance 0.0)
   (set self.ounces_poured 0.0))
 
-(local ReaderEvent (class.ReaderEvent))
-(fn ReaderEvent._init [self event-type payload]
+(local ReaderEvent (Object:extend))
+(fn ReaderEvent.new [self event-type payload]
   (set self.event_type event-type)
   (set self.timestamp (os.date "%c"))
   (set self.payload payload))
@@ -15,8 +16,8 @@
 (fn ReaderEvent.__tostring [self]
   (string.format "%s - %s - %s" self.timestamp self.event_type self.payload))
 
-(local Reader (class.Reader))
-(fn Reader._init [self] (set self.events {}))
+(local Reader (Object:extend))
+(fn Reader.new [self] (set self.events {}))
 
 (fn Reader.insert_card [self card]
   (table.insert self.events (ReaderEvent :CHARGED card.cardholder_name))
@@ -42,7 +43,7 @@
   (each [_ event (ipairs self.events)]
     (print event)))
 
-(local card (Card :5555555555555555 "Ray Perry"))
+(local card (Card "5555555555555555" "Ray Perry"))
 (doto (Reader)
   (: :insert_card card)
   (: :charge_card 10.1 0.79)
