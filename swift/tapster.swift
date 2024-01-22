@@ -18,7 +18,7 @@ enum ReaderEventType {
 
 struct ReaderEvent: CustomStringConvertible {
     var eventType: ReaderEventType
-    var timestamp: Date = Date()
+    var timestamp = Int(Date().timeIntervalSince1970 * 1000)
     var payload: String
 
     public var description: String {
@@ -68,7 +68,7 @@ var card = Card("5555555555555555","Ray Perry")
 var reader = Reader()
 
 reader.insertCard(&card)
-reader.chargeCard(10, 0.50)
+reader.chargeCard(10.1, 0.79)
 reader.removeCard()
 reader.insertCard(&card)
 reader.displayStats()

@@ -18,10 +18,10 @@ func decode(_ code: String) -> Int {
       .compactMap {
           let startIndex = code.index(code.startIndex, offsetBy: $0)
           let endIndex = code.index(startIndex, offsetBy: 5)
-          if let range = morseCodeKey.range(of: code[startIndex ..< endIndex]) {
-              return String(morseCodeKey.distance(from: morseCodeKey.startIndex, to: range.lowerBound))
+          return if let range = morseCodeKey.range(of: code[startIndex ..< endIndex]) {
+              String(morseCodeKey.distance(from: morseCodeKey.startIndex, to: range.lowerBound))
           } else {
-              return nil
+              nil
           }
       }
       .joined()
