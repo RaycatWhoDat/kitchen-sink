@@ -1,9 +1,7 @@
 local RecordA = @record { x: number, y: number }
 local RecordB = @record { x: number, y: number }
 
-function RecordB.__convert(recordA: RecordA): RecordB
-   return { recordA.x, recordA.y }
-end
-
 local a: RecordA = { 1, 2 }
-local b: RecordB = (@RecordB)(a)
+local b: RecordB = $(@*RecordB)(&a)
+
+print(b.x)

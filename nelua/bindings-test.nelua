@@ -1,0 +1,47 @@
+##[==[
+local nldecl = require 'nelua.plugins.nldecl'
+local fs = require 'nelua.utils.fs'
+local lib_name = 'zpl'
+if not fs.isfile(lib_name .. '-bindings.nelua') then
+  nldecl.generate_bindings_file {
+    output_file = lib_name .. '-bindings.nelua',
+    include_dirs = {'.'},
+    parse_includes = { lib_name .. '.h'},
+    typedefs = lib_name,
+    include_names = {'^zpl', '^ZPL'},
+  }
+end
+
+cdefine 'ZPL_IMPLEMENTATION'
+cdefine 'ZPL_NANO'
+
+cinclude 'zpl.h'
+]==]
+require 'io'
+require 'traits'
+require 'zpl-bindings'
+
+-- Time to be a little obtuse.
+##[[
+local function list_literal(str)
+  return aster.InitList { aster.Call{{aster.String{str}},aster.Paren{aster.Type{aster.Id{"cstring"}}}} }
+end
+]]
+
+local s: zpl_list
+local head, cursor = &s, &s
+
+local a: zpl_list = { (@cstring)("hello") }
+cursor = zpl_list_add(cursor, &a)
+
+local b: zpl_list = { (@cstring)("world") }
+cursor = zpl_list_add(cursor, &b)
+
+local c: zpl_list = #[list_literal("!!! OK")]#
+cursor = zpl_list_add(cursor, &c)
+
+local l: *zpl_list = head
+while l.next do
+   l = l.next
+   io.printf("%s ", (@cstring)(l.ptr))
+end
