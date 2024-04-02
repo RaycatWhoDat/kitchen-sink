@@ -18,8 +18,8 @@ typedef struct {
 } DYN_VALUE;
 
 typedef struct {
+  int capacity;
   int length;
-  int offset;
   DYN_VALUE *data;
 } DYN_ARRAY;
 
@@ -49,10 +49,6 @@ DYN_VALUE make_dynamic_value(void *value, DYN_VALUE_TYPE type) {
   return new_value;
 }
 
-int get_type(DYN_VALUE *dyn_value) {
-  return dyn_value->type;
-}
-
 void *get_value(DYN_VALUE *dyn_value) {
   switch (dyn_value->type) {
   case NUMBER:
@@ -65,40 +61,51 @@ void *get_value(DYN_VALUE *dyn_value) {
 }
 
 DYN_ARRAY make_dynamic_array() {
-  DYN_ARRAY arr = { .length = 1, .offset = 0, .data = calloc(1, sizeof(DYN_VALUE)) };
+  DYN_ARRAY arr = { .capacity = 1, .length = 0, .data = calloc(1, sizeof(DYN_VALUE)) };
   return arr;
 }
 
 void insert_into_array(DYN_ARRAY *arr, void *value, DYN_VALUE_TYPE type) {
-  if (arr->offset + 1 >= arr->length) {
-    arr->length *= 2;
-    arr->data = realloc(arr->data, arr->length * sizeof(DYN_VALUE));
-  }
+  arr->data[arr->length] = make_dynamic_value(value, type);
+  arr->length += 1;
 
-  arr->data[arr->offset] = make_dynamic_value(value, type);
-  arr->offset += 1;
+  if (arr->length >= arr->capacity) {
+    arr->capacity *= 2;
+    arr->data = realloc(arr->data, arr->capacity * sizeof(DYN_VALUE));
+  }
 }
 
-void remove_from_array(DYN_ARRAY *arr) {
-  if (arr->offset <= 0) return;
-  
-  arr->data[arr->offset] = make_dynamic_value(NULL, NONE);
-  arr->offset -= 1;
+void insert_number(DYN_ARRAY *arr, void *value) {
+  insert_into_array(arr, value, NUMBER);
+}
 
-  if (arr->offset < arr->length / 2) {
-    arr->length /= 2;
-    arr->data = realloc(arr->data, arr->length * sizeof(DYN_VALUE));
+void insert_string(DYN_ARRAY *arr, void *value) {
+  insert_into_array(arr, value, STRING);
+}
+
+void remove_value(DYN_ARRAY *arr) {
+  if (arr->length <= 0) return;
+  
+  arr->data[arr->length] = make_dynamic_value(NULL, NONE);
+  arr->length -= 1;
+
+  if (arr->length < (arr->capacity / 2)) {
+    arr->capacity /= 2;
+    arr->data = realloc(arr->data, arr->capacity * sizeof(DYN_VALUE));
   }
 }
 
 void print_each(DYN_ARRAY *arr) {
   for (int i = 0; i < arr->length; i++) {
-    if (get_type(&arr->data[i]) == NUMBER) {
+    if (arr->data[i].type == NONE) continue;
+    
+    printf("[%d] ", i);
+    if (arr->data[i].type == NUMBER) {
       float *number_value = get_value(&arr->data[i]);
       printf("%f\n", *number_value);
     }
     
-    if (get_type(&arr->data[i]) == STRING) {
+    if (arr->data[i].type == STRING) {
       char *string_value = get_value(&arr->data[i]);
       printf("%s\n", string_value);
     } 
@@ -116,15 +123,40 @@ int main() {
   float test_numbers[] = { 1.0, 100.0, 100000.0 };
 
   DYN_ARRAY test_cases = make_dynamic_array();
-  insert_into_array(&test_cases, test_strings[0], STRING);
-  insert_into_array(&test_cases, test_strings[1], STRING);
-  insert_into_array(&test_cases, &test_numbers[0], NUMBER);
-  insert_into_array(&test_cases, &test_numbers[1], NUMBER);
-  insert_into_array(&test_cases, test_strings[2], STRING);
-  insert_into_array(&test_cases, &test_numbers[2], NUMBER);
-  insert_into_array(&test_cases, test_strings[3], STRING);
-
+  insert_string(&test_cases, test_strings[0]);
+  insert_string(&test_cases, test_strings[1]);
+  insert_number(&test_cases, &test_numbers[0]);
+  insert_number(&test_cases, &test_numbers[1]);
+  insert_string(&test_cases, test_strings[2]);
+  insert_number(&test_cases, &test_numbers[2]);
+  insert_string(&test_cases, test_strings[3]);
+  remove_value(&test_cases);
+  remove_value(&test_cases);
+  insert_string(&test_cases, test_strings[0]);
+  insert_string(&test_cases, test_strings[1]);
+  remove_value(&test_cases);
+  remove_value(&test_cases);
+  remove_value(&test_cases);
+  insert_string(&test_cases, test_strings[0]);
+  insert_string(&test_cases, test_strings[1]);
+  insert_string(&test_cases, test_strings[3]);
+  insert_number(&test_cases, &test_numbers[0]);
+  insert_number(&test_cases, &test_numbers[1]);
+  insert_number(&test_cases, &test_numbers[2]);
+  insert_number(&test_cases, &test_numbers[0]);
+  insert_number(&test_cases, &test_numbers[1]);
+  insert_number(&test_cases, &test_numbers[2]);
+  insert_number(&test_cases, &test_numbers[0]);
+  insert_number(&test_cases, &test_numbers[1]);
+  insert_number(&test_cases, &test_numbers[2]);
+  remove_value(&test_cases);
+  remove_value(&test_cases);
+  remove_value(&test_cases);
+  remove_value(&test_cases);
+  
   print_each(&test_cases);
+  printf("\nTotal capacity of array: %d\n", test_cases.capacity);
+  printf("Length of array: %d\n", test_cases.length);
   
   return 0;
 }
