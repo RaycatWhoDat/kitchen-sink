@@ -1,0 +1,8 @@
+require 'string'
+
+local function is_valid(input: string)
+   return string.match(input, "%d%d%a%a%a%d%d%d%d%d")
+end
+
+local user_id: string = "42NJD03193"
+print(string.format("User ID is %s.\n", is_valid(user_id) and "valid" or "invalid"))

@@ -1,0 +1,28 @@
+require "string"
+require "iterators"
+
+local UserType = @enum {
+  GUEST = 0,
+  CUSTOMER,
+  ADMIN
+}
+
+local User = @record {
+  name: string,
+  type: UserType
+}
+
+function User:__tostring()
+   local userTypeMapping: []string = { "GUEST", "CUSTOMER", "ADMIN" }
+   return string.format("%s | %s", self.name, userTypeMapping[self.type])
+end
+
+local allUsers: []User = {
+  { "Adam", UserType.GUEST },
+  { "Ben", UserType.CUSTOMER },
+  { "Charlie", UserType.ADMIN }
+}
+
+for _, user in ipairs(allUsers) do
+  print(user)
+end

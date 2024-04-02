@@ -83,9 +83,10 @@ proc printCard(card: Card) =
   var bgColor = bgBlack
   var fgColor = fgWhite
   var value: string
-  case card.color:
-    of Some(@color):
-      bgColor = parseEnum[BackgroundColor]("bg" & $color)
+  if card.color.isSome:
+    var color = card.color.get
+    bgColor = parseEnum[BackgroundColor]("bg" & $color)
+    if color == Yellow:
       fgColor = fgBlack
 
   case card.effect:
