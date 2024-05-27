@@ -1,5 +1,9 @@
 import std/[math, strformat, times]
 import options
+from std/strutils import startsWith
+
+when not startsWith(NimVersion, "2"):
+  {.fatal: "This can only be run with Nim 2.x and greater." }
 
 type Card = ref object
   number: string
@@ -37,7 +41,7 @@ proc chargeCard(reader: Reader, ouncesPoured: float, pricePerOunce: float) =
   currentCard.ouncesPoured += round(ouncesPoured, 2)
   currentCard.balance += newCharge
   
-proc removeCard(reader: Reader, card: Card) =
+proc removeCard(reader: Reader) =
   if reader.currentCard.isNone:
     return
     
@@ -45,10 +49,11 @@ proc removeCard(reader: Reader, card: Card) =
   reader.currentCard = none(Card)
 
 proc displayStats(reader: Reader) =
-  var currentCard = reader.currentCard.get()
-  echo "Cardholder name: ", currentCard.cardholderName
-  echo "Ounces poured: ", currentCard.ouncesPoured
-  echo "Balance: $", currentCard.balance
+  if not reader.currentCard.isNone:
+    var currentCard = reader.currentCard.get()
+    echo "Cardholder name: ", currentCard.cardholderName
+    echo "Ounces poured: ", currentCard.ouncesPoured
+    echo "Balance: $", currentCard.balance
 
   for event in reader.events:
     echo event
@@ -59,6 +64,7 @@ when isMainModule:
 
   reader.insertCard(card)
   reader.chargeCard(10.1, 0.79)
+  reader.removeCard()
+  reader.insertCard(card)
   reader.displayStats()
-  reader.removeCard(card)
   

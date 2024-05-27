@@ -3,12 +3,24 @@
 #include <string.h>
 #include <time.h>
 
+char * dtos(double number) {
+  int len = snprintf(NULL, 0, "%f", number);
+  char * result = malloc(len + 1);
+  snprintf(result, len + 1,  "%f", number);
+  return result;
+}
+
 typedef struct {
   char * number;
   char * cardholder_name;
   double balance;
   double ounces_poured;
 } Card;
+
+Card new_card(const char * number, const char * cardholder_name) {
+  Card c = { ((char *) number), ((char *) cardholder_name), 0.0, 0.0 };
+  return c;
+}
 
 typedef enum {
   INSERTED = 0,
@@ -24,6 +36,11 @@ typedef struct {
   char * payload;
 } ReaderEvent;
 
+ReaderEvent new_reader_event(ReaderEventType event_type, char * payload) {
+  ReaderEvent re = { event_type, (int) time(NULL), payload };
+  return re;
+}
+
 typedef struct {
   void * current_card;
   ReaderEvent events[100];
@@ -31,14 +48,14 @@ typedef struct {
 } Reader;
 
 void insert_card(Reader * r, Card * card) {
-  ReaderEvent new_event = { INSERTED, (int) time(NULL), card->cardholder_name };
+  ReaderEvent new_event = new_reader_event(INSERTED, card->cardholder_name);
   r->events[r->number_of_events] = new_event;
   r->number_of_events += 1;
   r->current_card = card;
 } 
 
 void remove_card(Reader * r) {
-  ReaderEvent new_event = { REMOVED, (int) time(NULL), ((Card *) r->current_card)->cardholder_name };
+  ReaderEvent new_event = new_reader_event(REMOVED, ((Card *) r->current_card)->cardholder_name);
   r->events[r->number_of_events] = new_event;
   r->number_of_events += 1; 
   r->current_card = NULL;
@@ -47,9 +64,8 @@ void remove_card(Reader * r) {
 void charge_card(Reader * r, double ounces_poured, double price_per_ounce) {
   if (r->current_card == NULL) return;
   double charge = ounces_poured * price_per_ounce;
-  char payload[32];
-  sprintf(payload, "%f", charge);
-  ReaderEvent new_event = { CHARGED, (int) time(NULL), payload };
+  char * payload = dtos(charge);
+  ReaderEvent new_event = new_reader_event(CHARGED, payload);
   r->events[r->number_of_events] = new_event;
   r->number_of_events += 1;
   ((Card *) r->current_card)->balance += charge;
@@ -73,7 +89,7 @@ void display_stats(Reader * r) {
 }
 
 int main(void) {
-  Card card = { ((char *) "5555555555555555"), ((char *) "Ray Perry"), 0.0, 0.0 };
+  Card card = new_card("5555555555555555", "Ray Perry");
   Reader reader;
 
   insert_card(&reader, &card);
@@ -87,5 +103,5 @@ int main(void) {
 }
 
 // Local Variables:
-// compile-command: "gcc -std=c11 -Wall -Wextra -Wpedantic -Wformat=2 -Wno-unused-parameter -Wshadow -Wwrite-strings -Wstrict-prototypes -Wold-style-definition -Wredundant-decls -Wnested-externs -Wmissing-include-dirs -o ./tapster tapster.c && ./tapster"
+// compile-command: "gcc -g -std=c11 -Wall -Wextra -Wpedantic -Wformat=2 -Wno-unused-parameter -Wshadow -Wwrite-strings -Wstrict-prototypes -Wold-style-definition -Wredundant-decls -Wnested-externs -Wmissing-include-dirs -o ./tapster tapster.c && ./tapster"
 // End:
