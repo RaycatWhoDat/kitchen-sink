@@ -1,5 +1,6 @@
 import time
 
+@[heap]
 struct Card {
 	number          string
 	cardholder_name string
@@ -25,16 +26,16 @@ struct ReaderEvent {
 }
 
 fn new_reader_event(event_type ReaderEventType, payload string) ReaderEvent {
-	return ReaderEvent{event_type, time.now().days_from_unix_epoch(), payload}
+	return ReaderEvent{event_type, time.now().unix_milli(), payload}
 }
 
 struct Reader {
 mut:
-	current_card ?Card
+	current_card ?&Card
 	events       []ReaderEvent
 }
 
-fn (mut r Reader) insert_card(card Card) {
+fn (mut r Reader) insert_card(card &Card) {
 	r.events << new_reader_event(ReaderEventType.inserted, card.cardholder_name)
 	r.current_card = card
 }
@@ -50,13 +51,8 @@ fn (mut r Reader) charge_card(ounces_poured f32, price_per_ounce f32) {
 	}
 	charge := ounces_poured * price_per_ounce
 	r.events << new_reader_event(ReaderEventType.charged, '${charge}')
-	//    /tmp/v_1000/tapster.873035007828648538.tmp.c:15245: error: field not found: ounces_poured
-	//    builder error:
-	//    ==================
-	//    C error. This should never happen.
-
-	// r.current_card?.ounces_poured += ounces_poured
-	// r.current_card?.balance += charge
+	r.current_card?.ounces_poured += ounces_poured
+	r.current_card?.balance += charge
 }
 
 fn (r Reader) display_stats() {
