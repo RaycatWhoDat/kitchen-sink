@@ -15,12 +15,18 @@ fn main() {
 
 	for question in questions {
 		println(question.text)
-		answer := read_line('')!.trim_space().to_upper()[0]
-
-		if answer == question.answer[0] {
-			correct_answers++
+		mut valid_answer := false
+		for !valid_answer {
+			answer := read_line('Please enter your answer (A, B, C, etc.): ')!.trim_space().to_upper()
+			if answer.len == 1 && answer[0] in [`A`, `B`, `C`] {
+				valid_answer = true
+				if answer[0] == question.answer[0] {
+					correct_answers++
+				}
+			} else {
+				println('Invalid input. Please enter a valid answer (A, B, C, etc.).')
+			}
 		}
-		1
 	}
 
 	println('${correct_answers} out of ${questions.len} correct')
