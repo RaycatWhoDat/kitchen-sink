@@ -1,0 +1,92 @@
+public class Card {
+    string Number;
+    string CardholderName;
+    double Balance;
+    double OuncesPoured;
+    
+    public string GetNumber() { return Number; }
+    public string GetCardholderName() { return CardholderName; }
+    public double GetBalance() { return Balance; }
+    public double GetOuncesPoured() { return OuncesPoured; }
+    
+    public void SetBalance!(double b) { Balance = b; }
+    public void SetOuncesPoured!(double o) { OuncesPoured = o; }
+}
+
+enum ReaderEventType {
+    Inserted,
+    Charged,
+    Removed
+}
+
+public class ReaderEvent {
+    ReaderEventType EventType;
+    int Timestamp;
+    string Payload;
+    
+    public string GetEventType() {
+        switch (EventType) {
+            case ReaderEventType.Inserted:
+                return "INSERTED";
+            case ReaderEventType.Charged:
+                return "CHARGED";
+            case ReaderEventType.Removed:
+                return "REMOVED";
+        }
+    }
+    public int GetTimestamp() { return Timestamp; }
+    public string GetPayload() { return Payload; }
+}
+
+public class Reader {
+    Card!? CurrentCard;
+    List<ReaderEvent>() Events;
+    
+    public Card? GetCurrentCard() { return CurrentCard; }
+    public List<ReaderEvent> GetEvents() { return Events; }
+
+    void InsertCard!(Card() card) {
+        ReaderEvent# e = new ReaderEvent {
+            EventType = ReaderEventType.Inserted,
+            Timestamp = 0,
+            Payload = card.GetCardholderName()
+        };
+        
+        Events.Add(e);
+        CurrentCard = card;
+    }
+
+    void RemoveCard!() {
+        ReaderEvent# e = new ReaderEvent {
+            EventType = ReaderEventType.Removed,
+            Timestamp = 0,
+            Payload = CurrentCard.GetCardholderName()
+        };
+
+        Events.Add(e);
+        CurrentCard = null;
+    }
+
+    void ChargeCard!(double ouncesPoured, double pricePerOunce) {
+        if (CurrentCard == null) return;
+        double charge = ouncesPoured * pricePerOunce;
+        ReaderEvent# e = new ReaderEvent {
+            EventType = ReaderEventType.Charged,
+            Timestamp = 0,
+            Payload = $"{charge}"
+        };
+        Events.Add(e);
+        CurrentCard.SetBalance(charge);
+        CurrentCard.SetOuncesPoured(ouncesPoured);
+    }
+
+    void DisplayStats() {
+        Console.WriteLine($"Cardholder: {CurrentCard.GetCardholderName()}");
+        Console.WriteLine($"Total Amount: {CurrentCard.GetBalance()}");
+        Console.WriteLine($"Ounces Poured: {CurrentCard.GetOuncesPoured()}");
+        Console.WriteLine("");
+        foreach (ReaderEvent e in Events) {
+            Console.WriteLine($"{e.GetEventType()} - {e.GetTimestamp()} - {e.GetPayload()}");
+        }
+    }
+}
