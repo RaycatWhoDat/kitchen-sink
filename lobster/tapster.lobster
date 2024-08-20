@@ -35,12 +35,12 @@ class Reader:
         current_card = card
 
     def remove_card():
-        if current_card:
-            events.push(ReaderEvent(removed, current_card.cardholder_name))
-            current_card = nil
+        if not current_card: return
+        events.push(ReaderEvent(removed, current_card.cardholder_name))
+        current_card = nil
 
     def charge_card(ounces_poured, price_per_ounce):
-        if current_card == nil: return
+        if not current_card: return
         let charge = ounces_poured * price_per_ounce
         events.push(ReaderEvent(charged, string(charge)))
         current_card.ounces_poured += ounces_poured
