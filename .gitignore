@@ -51,3 +51,5 @@ odin/**/*.bin
 ## Civet
 civet/**/*.js
 civet/**/*.ts
+
+**/.DS_Store

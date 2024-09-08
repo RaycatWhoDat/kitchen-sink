@@ -1,32 +1,44 @@
-local range = function (number1, number2)
-   local range_index = 0
-   local current_number = number2 ~= nil and number1 - 1 or -1
+local InputRange = {
+   frontIndex = 1,
+   backIndex = 1,
+   keys = {}
+   values = {}
+}
 
-   if number2 == nil then
-      number2 = number1
-   end
-
-   return function ()
-      range_index = range_index + 1
-      current_number = current_number + 1
-      if current_number <= number2 then
-         return current_number
-      end
-   end
+function InputRange:new(obj)
+   obj = obj or {}
+   local newRange = setmetatable(obj, self)
+   self.__index = self
+   return newRange
 end
 
-local zip_ranges = function (iter1, iter2)
-   local new_table = {}
-   local item1 = iter1()
-   local item2 = iter2()
-   while item1 ~= nil or item2 ~= nil do
-      new_table[#new_table + 1] = { item1, item2 }
-      item1 = iter1()
-      item2 = iter2()
-   end
-   return new_table
+function InputRange:isEmpty()
+   return self.frontIndex > self.backIndex or self.backIndex < self.frontIndex
 end
 
-for _, items in ipairs(zip_ranges(range(10), range(10, 20))) do
-   print(items[1], items[2])
+function InputRange:front()
+   return self.values[self.keys[self.frontIndex]]
 end
+
+function InputRange:popFront()
+   self.frontIndex = self.frontIndex + 1
+end
+
+local ForwardRange = InputRange:new({ saved = {} })
+
+function ForwardRange:save()
+   self.saved = self.keys
+   return self
+end
+
+local BidirectionalRange = ForwardRange:new()
+
+function BidirectionalRange:back()
+   return self.values[self.keys[self.backIndex]]
+end
+
+function BidirectionalRange:popBack()
+   self.backIndex = self.backIndex - 1
+end
+
+local RandomAccessRange = ForwardRange:new({ length = 0 })
