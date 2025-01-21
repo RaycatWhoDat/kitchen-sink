@@ -1,7 +1,16 @@
-#[derive(Debug)]
+use std::fmt::{Display, Formatter, Result};
+use rand::seq::SliceRandom;
+
+#[derive(Clone, Debug)]
 struct Card {
     display_string: String,
     value: [usize; 2]
+}
+
+impl Display for Card {
+     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+         write!(f, "{}", self.display_string)
+    }
 }
 
 impl Card {
@@ -32,12 +41,44 @@ impl Card {
     }
 }
 
+struct Hand {
+    current_value: [usize; 2],
+    cards: Vec<Card>
+}
+
+impl Hand {
+    fn new(cards: Vec<Card>) -> Self {
+        let mut hand = Hand { current_value: [0, 0], cards: vec![] };
+        for card in cards {
+            hand.add_card(card);
+        }
+        hand
+    }
+    
+    fn add_card(&mut self, card: Card) {
+        self.current_value[0] += card.value[0];
+        self.current_value[1] += card.value[1];
+        self.cards.push(card);
+    }
+    
+    fn print_cards(&self) {
+        for card in &self.cards {
+            print!("{} ", card);
+        }
+        println!();
+    }
+
+    fn print_current_value(&self) {
+        println!("Total value: {} ({})", self.current_value[0], self.current_value[1]);
+    }
+}
+
 struct Deck {
     cards: Vec<Card>
 }
 
 impl Deck {
-    fn new() -> Deck {
+    fn new() -> Self {
         let mut deck = Deck { cards: vec![] };
         deck.generate();
         deck
@@ -51,6 +92,9 @@ impl Deck {
 }
 
 fn main() {
+    let mut rng = &mut rand::thread_rng();
     let deck = Deck::new();
-    println!("{:?}", deck.cards[13]);
+    let hand = Hand::new(deck.cards.choose_multiple(&mut rng, 2).cloned().collect());
+    hand.print_current_value();
+    hand.print_cards();
 }

@@ -43,7 +43,10 @@ fn main() {
             .read_line(&mut guess)
             .expect("Failed to read line");
 
-        let guess = guess.trim().parse::<i32>().unwrap();
+        let guess = match guess.trim().parse::<i32>() {
+            Ok(guess) => guess,
+            Err(_) => continue
+        };
         
         if let Guess::Equal = secret_number.compare_guess(guess) {
             println!("You guessed it!");
