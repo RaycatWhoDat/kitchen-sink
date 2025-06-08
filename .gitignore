@@ -53,3 +53,4 @@ civet/**/*.js
 civet/**/*.ts
 
 **/.DS_Store
+.aider*
