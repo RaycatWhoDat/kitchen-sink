@@ -2,12 +2,12 @@ startingHandSize := 2
 
 class BlackjackValues
   displayValue: string
-  values: integer[2]
-  @(@displayValue: string, firstValue: integer, secondValue: integer)
+  values: number[]
+  @(@displayValue: string, firstValue: number, secondValue: number)
     @values = [firstValue, secondValue]
 
 class BlackjackDeck
-  cards: BlackjackValues[]
+  cards: BlackjackValues[] = []
 
   @()
     @reset()
