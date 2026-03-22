@@ -1,0 +1,63 @@
+Kintsugi []
+
+Card: object [
+  cardholder-name [string!]
+  number [string!]
+  balance [money!] @default $0.00
+  ounces-poured [float!] @default 0.00
+]
+
+reader-event-type!: @type/enum ['INSERTED | 'CHARGED | 'REMOVED]
+
+ReaderEvent: object [
+  event-type [reader-event-type!]
+  payload [any-type!]
+  timestamp [time!] @default time/now
+]
+
+Reader: object [
+  current-card [card!] @default none
+  events [block!] @default []
+
+  insert-card: function [card [card!]] [
+    append self/events make-reader-event 'INSERTED card/number
+    self/current-card: card
+  ]
+
+  charge-card: function [
+    ounces-poured [float!]
+    price-per-ounce [money!]
+  ] [
+    charge: to money! ounces-poured * price-per-ounce
+    append self/events make-reader-event 'CHARGED charge
+    self/current-card/ounces-poured: self/current-card/ounces-poured + ounces-poured
+    self/current-card/balance: self/current-card/balance + charge
+  ]
+  
+  remove-card: does [
+    append self/events make-reader-event 'REMOVED self/current-card/number
+    self/current-card: none
+  ]
+
+  display-stats: does [
+    unless none? self/current-card [
+      print rejoin ["Cardholder: " self/current-card/cardholder-name]
+      print rejoin ["Total Amount: " self/current-card/balance]
+      print rejoin ["Ounces Poured: " self/current-card/ounces-poured]
+    ]
+    print "Events: "
+    loop [
+      for [event] in reader/events
+      do [print rejoin [event/timestamp " - " event/event-type " - " event/payload]]
+    ]
+  ]
+]
+
+card: make-card "Ray Perry" "5555555555555555"
+reader: make-reader
+
+reader/insert-card card
+reader/charge-card 9.79 $0.58
+reader/remove-card
+reader/insert-card card
+reader/display-stats
