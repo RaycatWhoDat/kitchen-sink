@@ -1,23 +1,37 @@
 Kintsugi []
 
 Card: object [
-  cardholder-name [string!]
-  number [string!]
-  balance [money!] @default $0.00
-  ounces-poured [float!] @default 0.00
+  fields [
+    required [
+      cardholder-name [string!]
+      number [string!]
+    ]
+    optional [
+      balance [money!] $0.00
+      ounces-poured [float!] 0.00
+    ]
+  ]
 ]
 
 reader-event-type!: @type/enum ['INSERTED | 'CHARGED | 'REMOVED]
 
 ReaderEvent: object [
-  event-type [reader-event-type!]
-  payload [any-type!]
-  timestamp [time!] @default time/now
+  fields [
+    required [
+      event-type [reader-event-type!]
+      payload [any-type!]
+    ]
+    optional [timestamp [time!] now]
+  ]
 ]
 
 Reader: object [
-  current-card [card!] @default none
-  events [block!] @default []
+  fields [
+    optional [
+      current-card [card!] none
+      events [block!] []
+    ]
+  ]
 
   insert-card: function [card [card!]] [
     append self/events make-reader-event 'INSERTED card/number
@@ -34,12 +48,12 @@ Reader: object [
     self/current-card/balance: self/current-card/balance + charge
   ]
   
-  remove-card: does [
+  remove-card: function [] [
     append self/events make-reader-event 'REMOVED self/current-card/number
     self/current-card: none
   ]
 
-  display-stats: does [
+  display-stats: function [] [
     unless none? self/current-card [
       print rejoin ["Cardholder: " self/current-card/cardholder-name]
       print rejoin ["Total Amount: " self/current-card/balance]
